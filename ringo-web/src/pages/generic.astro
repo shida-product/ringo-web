@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ジェネリック薬について">
+	<div class="page-header">
+		<div class="container">
+			<h1>ジェネリック薬について</h1>
+		</div>
+	</div>
+
+	<section class="container page-content">
+		<div class="glass-panel main-content">
+            <h2 class="sub-title">ジェネリック医薬品とは</h2>
+			<p>ジェネリック医薬品は、「後発医薬品」とも呼ばれているものです。<br>医療用薬品には、「先発医薬品」と「後発医薬品（ジェネリック医薬品）」があります。<br>日本では製薬会社の利益を守るために、「最初に発売される医薬品は、一定期間（5年～10年程度）は、それを販売した製薬会社がその販売を独占できる」という決まりがあります。逆にいえば、その期間を過ぎれば、同じ成分の薬品をほかの製薬会社も販売できるようになるのです。<br>医薬品の開発には多額の費用がかかりますが、先発医薬品の後を追うことになるジェネリック医薬品はその開発費用を抑制できます。そのため、ジェネリック医薬品は先発医薬品に比べて、販売価格が安くなります。</p>
+            
+            <h2 class="sub-title">ジェネリック医薬品の安全性</h2>
+			<p>ジェネリック医薬品も、先発医薬品同様、国の定めた薬機法を遵守して作られています。また、品質再評価（品質を担保するために行われる再評価システム）による管理も受けるため、その品質は確かなものです。</p>
+
+            <h2 class="sub-title">ジェネリック医薬品に関するよくあるご質問</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h4>ジェネリック医薬品の効き目や安全性は、先発医薬品と同じですか?</h4>
+                    <p>ジェネリック医薬品は、先発医薬品と同等の試験を行いリリースされるものであるため、その効き目や安全性は先発医薬品とほとんど変わりありません。多くの人が使ってきた先発医薬品の特許満了を待って使われるようになるのが「ジェネリック医薬品」ですから、「ジェネリック医薬品だから効果が低い」「ジェネリック医薬品だから信頼が置けない」ということはありません。</p>
+                </div>
+                <div class="faq-item">
+                    <h4>ジェネリック医薬品に変更すれば、お薬代が必ず安くなりますか?</h4>
+                    <p>ジェネリック医薬品は、先発医薬品に比べて開発費用が安く抑えられます。そのため、これを選ぶと、基本的には先発医薬品を選んだときよりも薬代は安く済みます。<br>しかし薬によっては、先発医薬品との差がほとんど見られないこともあります。</p>
+                </div>
+                <div class="faq-item">
+                    <h4>ジェネリック医薬品への変更が不可となるケースはありますか？</h4>
+                    <p>医師による許可がない場合は、ジェネリック医薬品への変更はできません。これは、処方箋の右下の「署名又は記名・押印」欄に、医師の署名があるかどうかで判断できます。<br>また、薬の種類によっては、ジェネリック医薬品が使えなかったり、そもそもジェネリック医薬品が存在しなかったりすることもあります。</p>
+                </div>
+            </div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+	.page-header { background: var(--color-primary); color: white; padding: 1rem 0; margin-bottom: 1.5rem; text-align: center; }
+	.page-header h1 { color: white; margin: 0; }
+	.page-content { margin-bottom: 5rem; }
+    .sub-title { margin-top: 3rem; padding-bottom: 1rem; border-bottom: 2px solid var(--color-background); }
+    .faq-list { display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem; }
+    .faq-item h4 { color: var(--color-primary); margin-bottom: 0.5rem; }
+</style>

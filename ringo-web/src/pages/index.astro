@@ -1,0 +1,338 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ホーム">
+	<section class="hero-slider">
+        <!-- 背景スライド群 -->
+        <div class="slide slide-1"></div>
+        <div class="slide slide-2"></div>
+        <div class="slide slide-3"></div>
+
+		<div class="hero-content">
+            <img src="/ringo_logo/★HP用②.png" alt="りんごちゃん薬局" class="hero-logo-img" />
+			<h1 style="color: white;">荒川区荒川、町屋の薬局<br><span style="color: #FFB3BA;">土曜日・日曜日も営業</span></h1>
+			<p style="color: #F8F9FA;">当薬局は、地域密着型のトータルヘルスケアができる薬局を目指しています。<br>疾病に対する薬物提供のみならず、予防や健康の維持・増進といった幅広いステージにて地域貢献を行っていきます。</p>
+			<div class="hero-actions">
+				<a href="#" class="button-accent">LINEでお薬を受け取る</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="features container">
+		<div class="glass-panel feature-card text-center">
+            <div class="feature-icon"><i data-lucide="heart-handshake"></i></div>
+			<h3>地域密着のかかりつけ薬局</h3>
+			<p>重複投与や過去の服薬状況の確認といった専門的なアドバイスや、より良いサービスを提供する調剤薬局づくりに取り組んでいます。</p>
+		</div>
+		<div class="glass-panel feature-card text-center">
+            <div class="feature-icon"><i data-lucide="hospital"></i></div>
+			<h3>近隣医療機関と連携した調剤</h3>
+			<p>お薬を正しく服用していただくためのアドバイスを行い、お薬に対する疑問や不安にお答えいたします。</p>
+		</div>
+		<div class="glass-panel feature-card text-center">
+            <div class="feature-icon"><i data-lucide="pill"></i></div>
+			<h3>一般市販薬の取り扱い</h3>
+			<p>一般市販薬もお取扱いしています。薬剤師が毎日常駐しておりますので、お悩みの際などいつでもお声がけください。</p>
+		</div>
+	</section>
+
+	<section class="news-section container">
+		<h2 class="section-title">お知らせ</h2>
+		<div class="glass-panel news-list">
+			<div class="news-item">
+				<span class="news-date">2025/10/06</span>
+				<span class="news-body">りんごちゃん薬局 LINE公式アカウント開設。LINEから待たずにお薬を受け取れます。</span>
+			</div>
+			<div class="news-item">
+				<span class="news-date">2025/06/27</span>
+				<span class="news-body">ホームページを公開いたしました。今後ともよろしくお願いいたします。</span>
+			</div>
+		</div>
+	</section>
+
+	<section class="info-grid container">
+		<div class="glass-panel info-box">
+			<h2 class="section-title">営業時間</h2>
+            <div class="schedule-wrapper">
+                <table class="schedule-table" aria-label="営業時間">
+                    <thead>
+                        <tr>
+                            <th>時間</th>
+                            <th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th style="color:#0288D1">土</th><th style="color:#D32F2F">日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>9:00～12:30</th>
+                            <td>〇</td><td>〇</td><td>〇</td><td>〇</td><td>〇</td><td class="sat">〇</td><td class="sun">〇</td>
+                        </tr>
+                        <tr>
+                            <th>12:30～13:00</th>
+                            <td>〇</td><td>〇</td><td>〇</td><td>〇</td><td>〇</td><td class="sat">〇</td><td class="sun closed">休</td>
+                        </tr>
+                        <tr>
+                            <th>13:00～18:30</th>
+                            <td>〇</td><td>〇</td><td>〇</td><td>〇</td><td>〇</td><td class="sat closed">休</td><td class="sun closed">休</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+			<p class="holiday-info">【定休日】無し<br><small>※GW、お盆、年末年始はお休み</small></p>
+		</div>
+		<div class="glass-panel info-box">
+			<h2 class="section-title">アクセス</h2>
+			<p><strong>町屋駅より徒歩5分</strong></p>
+			<p>千代田線、さくらトラム（都電荒川線）</p>
+			<p>
+                〒116-0002<br>
+                <a href="https://maps.google.com/?q=東京都荒川区荒川5-11-18" target="_blank" rel="noopener noreferrer" class="info-link">
+                    東京都荒川区荒川5-11-18 <i data-lucide="external-link" class="inline-icon"></i>
+                </a>
+            </p>
+			<div class="map-embed">
+				<iframe src="https://maps.google.com/maps?q=%E3%82%8A%E3%82%93%E3%81%94%E3%81%A1%E3%82%83%E3%82%93%E8%96%AC%E5%B1%80%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%8D%92%E5%B7%9D%E5%8C%BA%E8%8D%92%E5%B7%9D5-11-18&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+	}
+	.section-title {
+		text-align: center;
+		font-size: 1.75rem;
+		margin-bottom: 2.5rem;
+		position: relative;
+	}
+	.section-title::after {
+		content: '';
+		position: absolute;
+		bottom: -10px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 40px;
+		height: 3px;
+		background: var(--color-accent);
+		border-radius: 4px;
+	}
+	
+	.hero-slider {
+		position: relative;
+		height: 40vh; /* さらに縮小 */
+		min-height: 320px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		margin-bottom: 2rem;
+        /* アーチ状のカーブで切り抜く */
+        clip-path: ellipse(120% 100% at 50% 0%);
+	}
+	.slide {
+		position: absolute;
+		top: 0; left: 0; width: 100%; height: 100%;
+		background-size: cover;
+		background-position: center;
+		opacity: 0;
+		animation: fadeZoom 15s infinite; /* 5秒表示 × 3枚 = 15秒 */
+	}
+	/* 文字を読みやすくするための暗いフィルター */
+	.slide::after {
+		content: '';
+		position: absolute;
+		top: 0; left: 0; width: 100%; height: 100%;
+		background: rgba(0,0,0,0.45);
+	}
+	/* 各スライドの順番とタイミング */
+	.slide-1 { background-image: url('/images/Exterior_01.jpg'); animation-delay: 0s; }
+	.slide-2 { background-image: url('/images/Exterior_02.jpg'); animation-delay: 5s; }
+	.slide-3 { background-image: url('/images/Introspection.jpg'); animation-delay: 10s; }
+
+	@keyframes fadeZoom {
+		0%   { opacity: 0; transform: scale(1.05); }   /* ズームアウト開始 */
+		10%  { opacity: 1; transform: scale(1.03); }   /* フェードイン完了 */
+		33%  { opacity: 1; transform: scale(1.01); }   /* 表示維持 */
+		43%  { opacity: 0; transform: scale(1.00); }   /* フェードアウト完了 */
+		100% { opacity: 0; transform: scale(1.00); }
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 10;
+		text-align: center;
+		max-width: 900px;
+		padding: 0 2rem;
+	}
+    .hero-logo-img {
+        max-width: 90%;
+        max-height: 120px; /* 縦幅短縮に合わせてロゴ最大サイズも微調整 */
+        width: auto;
+        margin: 0 auto 1.25rem;
+        display: block;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+	.hero-content h1 {
+		font-size: clamp(1.8rem, 5vw + 1rem, 2.8rem);
+		color: var(--color-text);
+		line-height: 1.3;
+		margin-bottom: 1.5rem;
+	}
+	.hero-content h1 span {
+		color: var(--color-primary);
+		font-size: clamp(1.4rem, 4vw + 0.5rem, 2.2rem);
+	}
+	.hero-content p {
+		font-size: clamp(0.95rem, 2vw + 0.5rem, 1.1rem);
+		color: var(--color-text-light);
+		max-width: 700px;
+		margin: 0 auto 2.5rem;
+        padding: 0 1rem;
+	}
+
+	.features {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 2rem;
+		margin-top: 2rem; /* 写真と被らないように完全分離 */
+		margin-bottom: 6rem;
+		position: relative;
+		z-index: 10;
+	}
+    .text-center {
+        text-align: center;
+    }
+    .feature-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-primary);
+        margin-bottom: 1.5rem;
+    }
+    .feature-icon svg {
+        width: 48px;
+        height: 48px;
+        stroke-width: 1.5px;
+    }
+	.feature-card h3 {
+		font-size: 1.15rem;
+		margin-bottom: 1rem;
+		color: var(--color-text);
+	}
+	.feature-card p {
+		color: var(--color-text-light);
+		font-size: 0.95rem;
+	}
+
+	.news-section {
+		margin-bottom: 6rem;
+	}
+	.news-item {
+		display: flex;
+		gap: 2rem;
+		padding: 1.5rem 0;
+		border-bottom: 1px solid rgba(0,0,0,0.05);
+	}
+	.news-item:last-child {
+		border-bottom: none;
+	}
+	.news-date {
+		font-weight: bold;
+		color: var(--color-primary);
+		flex-shrink: 0;
+	}
+
+	.info-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+		margin-bottom: 5rem;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+	}
+    .schedule-wrapper {
+        overflow-x: auto;
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: center;
+    }
+	.schedule-table {
+		width: 100%;
+        max-width: 800px;
+		border-collapse: collapse;
+		text-align: center;
+		font-size: 0.95rem;
+		min-width: 320px;
+	}
+	.schedule-table th, .schedule-table td {
+		border: 1px solid rgba(0,0,0,0.1);
+		padding: 0.5rem 0.2rem;
+	}
+	.schedule-table thead th {
+		background: var(--color-background);
+		font-weight: bold;
+	}
+	.schedule-table tbody th {
+		background: var(--color-background);
+		font-weight: normal;
+		font-size: 0.85rem;
+	}
+	.schedule-table td.sat { color: #0288D1; font-weight: bold; }
+	.schedule-table td.sun { color: #D32F2F; font-weight: bold; }
+	.schedule-table td.closed {
+		color: var(--color-text-light);
+		background: rgba(0,0,0,0.03);
+        font-weight: normal;
+	}
+	.holiday-info {
+		margin-top: 1.5rem;
+		color: var(--color-accent);
+		font-weight: bold;
+		text-align: center;
+	}
+	.info-box .section-title {
+		margin-bottom: 1.5rem;
+	}
+	.map-embed {
+		height: 380px; /* 横幅がいっぱいになったので高さも大きくする */
+		width: 100%;
+		border-radius: 8px;
+		overflow: hidden;
+		margin-top: 1.5rem;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+	}
+
+	/* モバイルの最適化設定 */
+	@media (max-width: 768px) {
+		.hero-slider {
+			height: 35vh;
+			min-height: 280px;
+		}
+		.features {
+			margin-top: 1.5rem; /* 分離設定 */
+			gap: 1.5rem;
+		}
+        .hero-logo-img {
+            max-height: 100px;
+        }
+        .btn-line-large {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+            padding: 1.25rem 1rem;
+            width: 100%;
+        }
+		.news-item {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+        .map-embed {
+            height: 280px; /* モバイルでは少し低めに */
+        }
+	}
+</style>
