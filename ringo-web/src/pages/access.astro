@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { SITE } from '../data/site';
 ---
 
-<Layout title="交通案内">
+<Layout title="交通案内" description="りんごちゃん薬局までの交通アクセス。町屋駅徒歩5分、千代田線・都電荒川線をご利用ください。">
 	<div class="page-header">
 		<div class="container">
 			<h1>交通案内</h1>
@@ -11,39 +12,77 @@ import Layout from '../layouts/Layout.astro';
 
 	<section class="container page-content">
 		<div class="glass-panel main-content">
-            <h2 class="sub-title">電車でお越しの方</h2>
+			<h2 class="sub-title">電車でお越しの方</h2>
 			<p>千代田線、さくらトラム（都電荒川線）町屋駅より徒歩5分</p>
 
-            <div class="store-info">
-                <h3>りんごちゃん薬局</h3>
-                <p>〒116-0002<br>
-                    <a href="https://maps.google.com/?q=東京都荒川区荒川5-11-18" target="_blank" rel="noopener noreferrer" class="info-link">
-                        東京都荒川区荒川5-11-18 <i data-lucide="external-link" class="inline-icon"></i>
-                    </a>
-                </p>
-                <p class="phone-number">
-                    <a href="tel:0356049995" class="info-link tel-link">
-                        TEL: 03-5604-9995 <i data-lucide="phone" class="inline-icon"></i>
-                    </a>
-                </p>
-            </div>
-			
+			<div class="store-info">
+				<h3>{SITE.name}</h3>
+				<p>
+					{SITE.postalCode}<br>
+					<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="info-link">
+						{SITE.address} <i data-lucide="external-link" class="inline-icon"></i>
+					</a>
+				</p>
+				<p class="phone-number">
+					<a href={SITE.telLink} class="info-link tel-link">
+						TEL: {SITE.tel} <i data-lucide="phone" class="inline-icon"></i>
+					</a>
+				</p>
+			</div>
+
 			<div class="map-embed">
-				<iframe src="https://maps.google.com/maps?q=%E3%82%8A%E3%82%93%E3%81%94%E3%81%A1%E3%82%83%E3%82%93%E8%96%AC%E5%B1%80%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%8D%92%E5%B7%9D%E5%8C%BA%E8%8D%92%E5%B7%9D5-11-18&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+				<iframe
+					src="https://maps.google.com/maps?q=%E3%82%8A%E3%82%93%E3%81%94%E3%81%A1%E3%82%83%E3%82%93%E8%96%AC%E5%B1%80%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%8D%92%E5%B7%9D%E5%8C%BA%E8%8D%92%E5%B7%9D5-11-18&t=&z=16&ie=UTF8&iwloc=&output=embed"
+					title="りんごちゃん薬局 地図"
+					width="100%" height="100%" style="border:0;"
+					allowfullscreen="" loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade"></iframe>
 			</div>
 		</div>
 	</section>
 </Layout>
 
 <style>
-	.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-	.page-header { background: var(--color-primary); color: white; padding: 1rem 0; margin-bottom: 1.5rem; text-align: center; }
-	.page-header h1 { color: white; margin: 0; }
-	.page-content { margin-bottom: 5rem; text-align: center; }
-    .sub-title { padding-bottom: 1rem; border-bottom: 2px solid var(--color-background); margin-bottom: 2rem; }
-    .store-info { margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.02); border-radius: 8px; display: inline-block; text-align: left; }
-    .store-info h3 { margin-bottom: 0.5rem; font-size: 1.1rem; }
-    .store-info p { margin-bottom: 0; line-height: 1.8; }
-    .phone-number { margin-top: 0.75rem !important; font-size: 1.25rem; font-weight: bold; }
-	.map-embed { height: 400px; width: 100%; border-radius: 8px; overflow: hidden; margin-top: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+	.main-content { text-align: center; }
+	.sub-title {
+		margin-bottom: 1.5rem;
+		text-align: center;
+	}
+	.store-info {
+		margin-top: 2rem;
+		padding: 1.25rem 1.5rem;
+		background: rgba(0,0,0,0.02);
+		border-radius: 8px;
+		display: inline-block;
+		text-align: left;
+	}
+	.store-info h3 {
+		margin-bottom: 0.5rem;
+		font-size: 1.1rem;
+	}
+	.store-info p {
+		margin-bottom: 0;
+		line-height: 1.8;
+	}
+	.phone-number {
+		margin-top: 0.75rem !important;
+		font-size: 1.25rem;
+		font-weight: bold;
+	}
+	.map-embed {
+		height: 400px;
+		width: 100%;
+		border-radius: 8px;
+		overflow: hidden;
+		margin-top: 2rem;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+	}
+
+	@media (max-width: 768px) {
+		.store-info {
+			width: 100%;
+			padding: 1rem;
+		}
+		.map-embed { height: 300px; }
+	}
 </style>

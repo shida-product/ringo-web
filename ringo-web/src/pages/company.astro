@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { SITE } from '../data/site';
 ---
 
-<Layout title="会社案内">
+<Layout title="会社案内" description="株式会社りんご・りんごちゃん薬局の代表挨拶と会社概要。荒川区荒川5-11-18にて営業中。">
 	<div class="page-header">
 		<div class="container">
 			<h1>会社案内</h1>
@@ -12,93 +13,126 @@ import Layout from '../layouts/Layout.astro';
 	<section class="container page-content">
 		<div class="glass-panel main-content">
 			<div class="rep-section">
-                <div class="rep-image">
-                    <img src="/images/Representative.jpg" alt="代表 鈴木怜那" />
-                </div>
-                <div class="rep-text">
-                    <h2 class="sub-title">代表挨拶</h2>
-                    <p>「商品が充実している」それだけでは足りない。</p>
-                    <p>当薬局の従業員一人ひとりが“会社の代表である”責任と誇りを持ち、常に医療サービスの向上に努め、信頼される「街のかかりつけ薬局」を目指します。</p>
-                    <p>医薬分業の現在において、スタッフ全員がカウンセリング能力を高めることで、安心・納得して商品を買っていただける、今後もそんな薬局でありつづけるため、邁進いたします。</p>
-                    <p>ぜひ、地域の皆様のかかりつけ薬局として、ご愛顧を賜りますよう、宜しくお願いします。</p>
-                    <p class="rep-signature">株式会社りんご代表　鈴木　怜那</p>
-                </div>
-            </div>
-            
-            <h2 class="sub-title" style="margin-top: 4rem;">会社概要</h2>
-            <table class="company-table">
-                <tbody>
-                    <tr>
-                        <th>会社名</th>
-                        <td>株式会社りんご</td>
-                    </tr>
-                    <tr>
-                        <th>代表者名</th>
-                        <td>鈴木 怜那</td>
-                    </tr>
-                    <tr>
-                        <th>設立</th>
-                        <td>2025年1月27日</td>
-                    </tr>
-                    <tr>
-                        <th>創業</th>
-                        <td>2025年1月27日</td>
-                    </tr>
-                    <tr>
-                        <th>所在地</th>
-                        <td>〒116-0002<br>
-                            <a href="https://maps.google.com/?q=東京都荒川区荒川5-11-18" target="_blank" rel="noopener noreferrer" class="info-link">
-                                東京都荒川区荒川5-11-18 <i data-lucide="external-link" class="inline-icon"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>電話番号</th>
-                        <td>
-                            <a href="tel:0356049995" class="info-link tel-link">
-                                03-5604-9995 <i data-lucide="phone" class="inline-icon"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>事業内容</th>
-                        <td>医療機関の発行する処方箋に基づき、一般患者に医薬の調剤を行う<br>保険薬局の経営および医薬品の販売ならびにこれに付帯する業務</td>
-                    </tr>
-                    <tr>
-                        <th>従業員数</th>
-                        <td>6名（2025年5月現在）</td>
-                    </tr>
-                    <tr>
-                        <th>店舗数</th>
-                        <td>1</td>
-                    </tr>
-                </tbody>
-            </table>
+				<div class="rep-image">
+					<img src="/images/Representative.jpg" alt="代表 鈴木怜那" />
+				</div>
+				<div class="rep-text">
+					<h2 class="sub-title">代表挨拶</h2>
+					<p class="text-pretty">「商品が充実している」それだけでは足りない。</p>
+					<p class="text-pretty">当薬局の従業員一人ひとりが“会社の代表である”責任と誇りを持ち、常に医療サービスの向上に努め、信頼される「街のかかりつけ薬局」を目指します。</p>
+					<p class="text-pretty">医薬分業の現在において、スタッフ全員がカウンセリング能力を高めることで、安心・納得して商品を買っていただける、今後もそんな薬局でありつづけるため、邁進いたします。</p>
+					<p class="text-pretty">ぜひ、地域の皆様のかかりつけ薬局として、ご愛顧を賜りますよう、宜しくお願いします。</p>
+					<p class="rep-signature">株式会社りんご代表　鈴木　怜那</p>
+				</div>
+			</div>
+
+			<h2 class="sub-title section-divider">会社概要</h2>
+			<table class="company-table">
+				<tbody>
+					<tr><th>会社名</th><td>株式会社りんご</td></tr>
+					<tr><th>代表者名</th><td>鈴木 怜那</td></tr>
+					<tr><th>設立</th><td>2025年1月27日</td></tr>
+					<tr><th>創業</th><td>2025年1月27日</td></tr>
+					<tr>
+						<th>所在地</th>
+						<td>
+							{SITE.postalCode}<br>
+							<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="info-link">
+								{SITE.address} <i data-lucide="external-link" class="inline-icon"></i>
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<th>電話番号</th>
+						<td>
+							<a href={SITE.telLink} class="info-link tel-link">
+								{SITE.tel} <i data-lucide="phone" class="inline-icon"></i>
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<th>事業内容</th>
+						<td class="text-pretty">医療機関の発行する処方箋に基づき、一般患者に医薬の調剤を行う保険薬局の経営および医薬品の販売ならびにこれに付帯する業務</td>
+					</tr>
+					<tr><th>従業員数</th><td>6名（2025年5月現在）</td></tr>
+					<tr><th>店舗数</th><td>1</td></tr>
+				</tbody>
+			</table>
 		</div>
 	</section>
 </Layout>
 
 <style>
-	.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-	.page-header { background: var(--color-primary); color: white; padding: 1rem 0; margin-bottom: 1.5rem; text-align: center; }
-	.page-header h1 { color: white; margin: 0; }
-	.page-content { margin-bottom: 5rem; }
-    .sub-title { padding-bottom: 1rem; border-bottom: 2px solid var(--color-background); margin-bottom: 1.5rem; color: var(--color-primary); text-align: center; }
-    .rep-section { display: flex; gap: 3rem; align-items: center; }
-    .rep-image { flex: 0 0 300px; }
-    .rep-image img { width: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    .rep-text p { margin-bottom: 1rem; color: var(--color-text-light); }
-    .rep-signature { font-size: 1.25rem; font-weight: bold; color: var(--color-text) !important; margin-top: 2rem; text-align: right; }
-    
-    .company-table { width: 100%; border-collapse: collapse; }
-    .company-table th, .company-table td { padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); text-align: left; }
-    .company-table th { width: 25%; font-weight: bold; color: var(--color-primary); }
-    
-    @media (max-width: 768px) {
-        .rep-section { flex-direction: column; }
-        .rep-image { flex: 1 1 auto; width: 100%; }
-        .company-table th, .company-table td { display: block; width: 100%; }
-        .company-table th { border-bottom: none; padding-bottom: 0.25rem; }
-        .company-table td { padding-top: 0; }
-    }
+	.sub-title {
+		text-align: center;
+		color: var(--color-primary);
+	}
+	.section-divider { margin-top: 4rem; }
+
+	.rep-section {
+		display: flex;
+		gap: 3rem;
+		align-items: center;
+	}
+	.rep-image { flex: 0 0 300px; }
+	.rep-image img {
+		width: 100%;
+		border-radius: 8px;
+		box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+	}
+	.rep-text p {
+		margin-bottom: 1rem;
+		color: var(--color-text-light);
+	}
+	.rep-signature {
+		font-size: 1.15rem;
+		font-weight: bold;
+		color: var(--color-text) !important;
+		margin-top: 2rem;
+		text-align: right;
+	}
+
+	.company-table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 1.5rem;
+	}
+	.company-table th, .company-table td {
+		padding: 1rem;
+		border-bottom: 1px solid rgba(0,0,0,0.05);
+		text-align: left;
+		vertical-align: top;
+	}
+	.company-table th {
+		width: 25%;
+		font-weight: bold;
+		color: var(--color-primary);
+	}
+
+	@media (max-width: 768px) {
+		.rep-section {
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+		.rep-image {
+			flex: 1 1 auto;
+			width: 100%;
+			max-width: 280px;
+			margin: 0 auto;
+		}
+		.company-table th, .company-table td {
+			display: block;
+			width: 100%;
+			padding: 0.5rem 0.75rem;
+		}
+		.company-table th {
+			border-bottom: none;
+			padding-bottom: 0.25rem;
+			background: rgba(0,0,0,0.02);
+		}
+		.company-table td {
+			padding-top: 0.5rem;
+			border-bottom: 1px solid rgba(0,0,0,0.06);
+		}
+	}
 </style>
