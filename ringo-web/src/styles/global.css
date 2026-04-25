@@ -1,16 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
 /* =========================================================
-   ブレイクポイント / 共通変数
+   設計トークン
    ========================================================= */
 :root {
-  /* Theme A: Apple Medical（既定） */
+  /* テーマカラー（医療スタンダード） */
   --color-primary: #2A9D8F;
   --color-accent: #E63946;
   --color-background: #F8F9FA;
   --color-surface: #FFFFFF;
   --color-text: #2B2D42;
   --color-text-light: #6c757d;
+
+  /* タイポグラフィ */
   --font-family: 'Noto Sans JP', sans-serif;
   --transition-speed: 0.3s;
 
@@ -18,28 +20,12 @@
   --container-max: 1200px;
   --container-pad-x: 2rem;
 
-  /* タップターゲット最低サイズ（Apple/Google基準） */
+  /* タップターゲット最低サイズ */
   --tap-min: 44px;
-}
 
-:root[data-theme="theme-b"] {
-  /* Theme B: Warm Natural */
-  --color-primary: #606C38;
-  --color-accent: #BC6C25;
-  --color-background: #FEFAE0;
-  --color-surface: #FFFDF0;
-  --color-text: #283618;
-  --color-text-light: #8E9A7B;
-}
-
-:root[data-theme="theme-c"] {
-  /* Theme C: Trust Navy */
-  --color-primary: #1D3557;
-  --color-accent: #E63946;
-  --color-background: #F1FAEE;
-  --color-surface: #FFFFFF;
-  --color-text: #112233;
-  --color-text-light: #457B9D;
+  /* ブレイクポイント（MQ内では値として参照不可だが、設計意図のドキュメント兼用） */
+  --bp-sm: 768px;
+  --bp-md: 1024px;
 }
 
 /* =========================================================
@@ -60,7 +46,6 @@ body {
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: 1.75;
-  /* 文節単位の自然折返し（Chrome/Safariが対応） */
   word-break: auto-phrase;
   line-break: strict;
   transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
@@ -129,7 +114,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* =========================================================
-   改行ユーティリティ（本文への <br> 直書きをやめ、ここで制御）
+   改行ユーティリティ（本文への <br> 直書き禁止）
    ========================================================= */
 .br-pc-only { display: inline; }
 .br-sp-only { display: none; }
@@ -139,13 +124,8 @@ img { max-width: 100%; display: block; }
   .br-sp-only { display: inline; }
 }
 
-/* 文節単位できれいに折り返したい段落 */
-.text-balance {
-  text-wrap: balance;
-}
-.text-pretty {
-  text-wrap: pretty;
-}
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }
 
 /* =========================================================
    ボタン（最低 44×44px のタップターゲット確保）
@@ -192,7 +172,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* =========================================================
-   Glassmorphism（インタラクション/重要要素のみで使用）
+   Glassmorphism（情報ブロック・重要要素のみ）
    ========================================================= */
 .glass-panel {
   background: var(--color-surface);
@@ -204,51 +184,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* =========================================================
-   テーマスイッチャー
-   ========================================================= */
-.theme-switcher {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--color-surface);
-  padding: 12px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border: 1px solid rgba(0,0,0,0.05);
-  font-family: var(--font-family);
-  max-width: 180px;
-}
-.theme-switcher h4 {
-  font-size: 0.85rem;
-  margin-bottom: 0;
-  color: var(--color-text-light);
-}
-.theme-btn {
-  border: 1px solid rgba(0,0,0,0.1);
-  background: transparent;
-  padding: 0.5rem 0.75rem;
-  min-height: var(--tap-min);
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--color-text);
-  transition: all 0.2s;
-  text-align: left;
-}
-.theme-btn:hover, .theme-btn.is-active {
-  background: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-}
-
-/* =========================================================
-   リンク（住所・電話番号など）
+   リンク（住所・電話番号）
    ========================================================= */
 .info-link {
   color: var(--color-text);
@@ -272,12 +208,10 @@ img { max-width: 100%; display: block; }
 .inline-icon { width: 18px; height: 18px; stroke-width: 2px; }
 
 /* =========================================================
-   モバイル微調整
+   モバイル
    ========================================================= */
 @media (max-width: 768px) {
-  :root {
-    --container-pad-x: 1rem;
-  }
+  :root { --container-pad-x: 1rem; }
   .section-title { font-size: 1.4rem; margin-bottom: 2rem; }
   .button-accent { padding: 0.85rem 1.5rem; width: 100%; max-width: 320px; }
   .glass-panel { padding: 1.25rem; border-radius: 12px; }

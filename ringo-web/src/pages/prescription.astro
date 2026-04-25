@@ -1,11 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import heroBanner from '../assets/logo/hero-banner.png';
+import imageSignboard from '../assets/images/Signboard_01.jpg';
 ---
 
 <Layout title="処方箋の受付" description="病院でもらった処方箋の受付方法と、受付からお会計までの流れをご案内します。">
-	<div class="page-header">
+	<div class="prescription-banner">
 		<div class="container">
-			<h1>処方箋の受付</h1>
+			<Image src={heroBanner} alt="処方せん受付 りんごちゃん薬局" class="banner-img" widths={[480, 800, 1200]} sizes="(max-width: 768px) 100vw, 800px" />
 		</div>
 	</div>
 
@@ -13,7 +16,7 @@ import Layout from '../layouts/Layout.astro';
 		<div class="glass-panel main-content">
 			<div class="intro-section">
 				<div class="intro-image">
-					<img src="/images/Signboard_01.jpg" alt="処方箋の受付" />
+					<Image src={imageSignboard} alt="りんごちゃん薬局 看板" class="intro-img" widths={[400, 700]} sizes="(max-width: 768px) 100vw, 350px" />
 				</div>
 				<div class="intro-text">
 					<p class="text-pretty">病院でもらった処方箋をお持ちください。当薬局では、専門知識を持つ薬剤師が薬の量や飲み合わせに間違いがないかを確認したうえで、正確に調剤します。</p>
@@ -74,6 +77,19 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
+	.prescription-banner {
+		background: var(--color-surface);
+		padding: 2rem 0;
+		margin-bottom: 1.5rem;
+		text-align: center;
+	}
+	.banner-img {
+		max-width: 800px;
+		width: 100%;
+		height: auto;
+		margin: 0 auto;
+	}
+
 	.intro-section {
 		display: flex;
 		gap: 3rem;
@@ -86,7 +102,7 @@ import Layout from '../layouts/Layout.astro';
 		overflow: hidden;
 		box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 	}
-	.intro-image img {
+	.intro-img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -140,6 +156,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	@media (max-width: 768px) {
+		.prescription-banner { padding: 1.25rem 0; }
 		.intro-section {
 			flex-direction: column;
 			gap: 1.5rem;
@@ -151,7 +168,6 @@ import Layout from '../layouts/Layout.astro';
 			max-height: 220px;
 		}
 		.step {
-			flex-direction: row;
 			gap: 1rem;
 		}
 		.step-num {

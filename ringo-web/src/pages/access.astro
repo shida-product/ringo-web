@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import { SITE } from '../data/site';
+import imageSignboard from '../assets/images/Signboard_02.jpg';
 ---
 
 <Layout title="交通案内" description="りんごちゃん薬局までの交通アクセス。町屋駅徒歩5分、千代田線・都電荒川線をご利用ください。">
@@ -14,6 +16,11 @@ import { SITE } from '../data/site';
 		<div class="glass-panel main-content">
 			<h2 class="sub-title">電車でお越しの方</h2>
 			<p>千代田線、さくらトラム（都電荒川線）町屋駅より徒歩5分</p>
+
+			<div class="signboard-image">
+				<Image src={imageSignboard} alt="りんごちゃん薬局の店舗外観" class="signboard-img" widths={[600, 1000, 1400]} sizes="(max-width: 768px) 100vw, 800px" />
+				<p class="signboard-caption">この看板が目印です</p>
+			</div>
 
 			<div class="store-info">
 				<h3>{SITE.name}</h3>
@@ -48,6 +55,23 @@ import { SITE } from '../data/site';
 		margin-bottom: 1.5rem;
 		text-align: center;
 	}
+	.signboard-image {
+		margin: 2rem auto 1.5rem;
+		max-width: 800px;
+	}
+	.signboard-img {
+		width: 100%;
+		height: auto;
+		max-height: 380px;
+		object-fit: cover;
+		border-radius: 8px;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+	}
+	.signboard-caption {
+		margin-top: 0.75rem;
+		font-size: 0.95rem;
+		color: var(--color-text-light);
+	}
 	.store-info {
 		margin-top: 2rem;
 		padding: 1.25rem 1.5rem;
@@ -79,10 +103,8 @@ import { SITE } from '../data/site';
 	}
 
 	@media (max-width: 768px) {
-		.store-info {
-			width: 100%;
-			padding: 1rem;
-		}
+		.signboard-img { max-height: 240px; }
+		.store-info { width: 100%; padding: 1rem; }
 		.map-embed { height: 300px; }
 	}
 </style>

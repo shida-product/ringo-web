@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import { SITE } from '../data/site';
+import imageRepresentative from '../assets/images/Representative.jpg';
+import imageSupport from '../assets/images/Support.jpg';
 ---
 
 <Layout title="会社案内" description="株式会社りんご・りんごちゃん薬局の代表挨拶と会社概要。荒川区荒川5-11-18にて営業中。">
@@ -14,7 +17,7 @@ import { SITE } from '../data/site';
 		<div class="glass-panel main-content">
 			<div class="rep-section">
 				<div class="rep-image">
-					<img src="/images/Representative.jpg" alt="代表 鈴木怜那" />
+					<Image src={imageRepresentative} alt="代表 鈴木怜那" class="rep-img" widths={[400, 700]} sizes="(max-width: 768px) 100vw, 300px" />
 				</div>
 				<div class="rep-text">
 					<h2 class="sub-title">代表挨拶</h2>
@@ -24,6 +27,11 @@ import { SITE } from '../data/site';
 					<p class="text-pretty">ぜひ、地域の皆様のかかりつけ薬局として、ご愛顧を賜りますよう、宜しくお願いします。</p>
 					<p class="rep-signature">株式会社りんご代表　鈴木　怜那</p>
 				</div>
+			</div>
+
+			<div class="support-section">
+				<Image src={imageSupport} alt="スタッフによる接客の様子" class="support-img" widths={[600, 1000, 1400]} sizes="(max-width: 768px) 100vw, 900px" />
+				<p class="support-caption">スタッフ一同、地域の皆様の健康をサポートいたします。</p>
 			</div>
 
 			<h2 class="sub-title section-divider">会社概要</h2>
@@ -75,8 +83,9 @@ import { SITE } from '../data/site';
 		align-items: center;
 	}
 	.rep-image { flex: 0 0 300px; }
-	.rep-image img {
+	.rep-img {
 		width: 100%;
+		height: auto;
 		border-radius: 8px;
 		box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 	}
@@ -90,6 +99,25 @@ import { SITE } from '../data/site';
 		color: var(--color-text) !important;
 		margin-top: 2rem;
 		text-align: right;
+	}
+
+	.support-section {
+		margin-top: 3rem;
+		text-align: center;
+	}
+	.support-img {
+		width: 100%;
+		max-width: 900px;
+		height: auto;
+		max-height: 360px;
+		object-fit: cover;
+		border-radius: 12px;
+		box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+	}
+	.support-caption {
+		margin-top: 0.75rem;
+		font-size: 0.95rem;
+		color: var(--color-text-light);
 	}
 
 	.company-table {
@@ -120,6 +148,8 @@ import { SITE } from '../data/site';
 			max-width: 280px;
 			margin: 0 auto;
 		}
+		.support-img { max-height: 240px; }
+
 		.company-table th, .company-table td {
 			display: block;
 			width: 100%;

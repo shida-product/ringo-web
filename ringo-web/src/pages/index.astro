@@ -1,16 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import { SITE } from '../data/site';
+import heroMark from '../assets/logo/hero-mark.png';
+import slideExterior01 from '../assets/images/Exterior_01.jpg';
+import slideExterior02 from '../assets/images/Exterior_02.jpg';
+import slideIntrospection from '../assets/images/Introspection.jpg';
+import imageProducts from '../assets/images/Products.jpg';
+import imageSupport from '../assets/images/Support.jpg';
 ---
 
 <Layout title="ホーム">
 	<section class="hero-slider">
-		<div class="slide slide-1"></div>
-		<div class="slide slide-2"></div>
-		<div class="slide slide-3"></div>
+		<Image src={slideExterior01} alt="" class="slide slide-1" loading="eager" widths={[800, 1200, 1920]} sizes="100vw" />
+		<Image src={slideExterior02} alt="" class="slide slide-2" loading="lazy" widths={[800, 1200, 1920]} sizes="100vw" />
+		<Image src={slideIntrospection} alt="" class="slide slide-3" loading="lazy" widths={[800, 1200, 1920]} sizes="100vw" />
 
 		<div class="hero-content">
-			<img src="/ringo_logo/★HP用②.png" alt={SITE.name} class="hero-logo-img" />
+			<Image src={heroMark} alt={SITE.name} class="hero-logo-img" widths={[200, 400]} densities={[1, 2]} />
 			<h1 class="hero-title text-balance">
 				荒川区荒川、町屋の薬局<br class="br-pc-only">
 				<span class="hero-subtitle">土曜日・日曜日も営業</span>
@@ -27,20 +34,34 @@ import { SITE } from '../data/site';
 	</section>
 
 	<section class="features container">
-		<div class="glass-panel feature-card text-center">
+		<div class="feature-card text-center">
 			<div class="feature-icon"><i data-lucide="heart-handshake"></i></div>
 			<h3>地域密着のかかりつけ薬局</h3>
 			<p>重複投与や過去の服薬状況の確認といった専門的なアドバイスを提供し、より良いサービスの調剤薬局づくりに取り組んでいます。</p>
 		</div>
-		<div class="glass-panel feature-card text-center">
+		<div class="feature-card text-center">
 			<div class="feature-icon"><i data-lucide="hospital"></i></div>
 			<h3>近隣医療機関と連携した調剤</h3>
 			<p>お薬を正しく服用していただくためのアドバイスを行い、お薬に対する疑問や不安にお答えいたします。</p>
 		</div>
-		<div class="glass-panel feature-card text-center">
+		<div class="feature-card text-center">
 			<div class="feature-icon"><i data-lucide="pill"></i></div>
 			<h3>一般市販薬の取り扱い</h3>
 			<p>一般市販薬もお取扱いしています。薬剤師が毎日常駐しておりますので、お悩みの際などいつでもお声がけください。</p>
+		</div>
+	</section>
+
+	<section class="store-gallery container">
+		<h2 class="section-title">店内のご紹介</h2>
+		<div class="gallery-grid">
+			<figure class="gallery-item">
+				<Image src={imageProducts} alt="店内の市販薬陳列棚" class="gallery-img" widths={[400, 800]} sizes="(max-width: 768px) 100vw, 50vw" />
+				<figcaption>市販薬・日用品も豊富に取り揃え</figcaption>
+			</figure>
+			<figure class="gallery-item">
+				<Image src={imageSupport} alt="薬剤師による服薬相談の様子" class="gallery-img" widths={[400, 800]} sizes="(max-width: 768px) 100vw, 50vw" />
+				<figcaption>お薬や健康のご相談、丁寧にお応えします</figcaption>
+			</figure>
 		</div>
 	</section>
 
@@ -123,7 +144,7 @@ import { SITE } from '../data/site';
 	.hero-slider {
 		position: relative;
 		min-height: 420px;
-		padding: 3rem var(--container-pad-x) 4.5rem; /* コンテンツに合わせて伸縮、楕円下端の食い込みも考慮 */
+		padding: 3rem var(--container-pad-x) 4.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -134,20 +155,23 @@ import { SITE } from '../data/site';
 	.slide {
 		position: absolute;
 		inset: 0;
-		background-size: cover;
-		background-position: center;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 		opacity: 0;
 		animation: fadeZoom 15s infinite;
 	}
-	.slide::after {
+	/* 暗いオーバーレイ（読みやすさ向上） */
+	.hero-slider::after {
 		content: '';
 		position: absolute;
 		inset: 0;
 		background: rgba(0,0,0,0.45);
+		z-index: 1;
 	}
-	.slide-1 { background-image: url('/images/Exterior_01.jpg'); animation-delay: 0s; }
-	.slide-2 { background-image: url('/images/Exterior_02.jpg'); animation-delay: 5s; }
-	.slide-3 { background-image: url('/images/Introspection.jpg'); animation-delay: 10s; }
+	.slide-1 { animation-delay: 0s; }
+	.slide-2 { animation-delay: 5s; }
+	.slide-3 { animation-delay: 10s; }
 
 	@keyframes fadeZoom {
 		0%   { opacity: 0; transform: scale(1.05); }
@@ -191,49 +215,88 @@ import { SITE } from '../data/site';
 	}
 
 	/* =====================================================
-	   特徴カード
+	   特徴セクション（引き算デザイン：カード装飾を外し、余白と区切り線で表現）
 	   ===================================================== */
 	.features {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 2rem;
-		margin-top: 2rem;
+		gap: 0;
+		margin-top: 3rem;
 		margin-bottom: 6rem;
 		position: relative;
 		z-index: 10;
+		max-width: 1100px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.feature-card {
+		padding: 1.5rem 1.75rem;
+		transition: transform 0.3s ease;
+	}
+	.feature-card + .feature-card {
+		border-left: 1px solid rgba(0, 0, 0, 0.08);
+	}
+	.feature-card:hover {
+		transform: translateY(-2px);
 	}
 	.feature-icon {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		color: var(--color-primary);
-		margin-bottom: 1.25rem;
+		margin-bottom: 1rem;
 	}
 	.feature-icon svg {
-		width: 48px;
-		height: 48px;
+		width: 44px;
+		height: 44px;
 		stroke-width: 1.5px;
 	}
 	.feature-card h3 {
-		font-size: 1.15rem;
-		margin-bottom: 0.75rem;
+		font-size: 1.05rem;
+		margin-bottom: 0.6rem;
 		color: var(--color-text);
 	}
 	.feature-card p {
 		color: var(--color-text-light);
 		font-size: 0.95rem;
+		line-height: 1.7;
+	}
+
+	/* =====================================================
+	   店内ギャラリー
+	   ===================================================== */
+	.store-gallery {
+		margin-bottom: 6rem;
+	}
+	.gallery-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem;
+	}
+	.gallery-item {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.gallery-img {
+		width: 100%;
+		height: 280px;
+		object-fit: cover;
+		border-radius: 12px;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+	}
+	.gallery-item figcaption {
+		font-size: 0.95rem;
+		color: var(--color-text-light);
+		text-align: center;
 	}
 
 	/* =====================================================
 	   お知らせ
 	   ===================================================== */
-	.news-section {
-		margin-bottom: 6rem;
-	}
-	.news-list {
-		max-width: 900px;
-		margin: 0 auto;
-	}
+	.news-section { margin-bottom: 6rem; }
+	.news-list { max-width: 900px; margin: 0 auto; }
 	.news-item {
 		display: flex;
 		gap: 2rem;
@@ -274,15 +337,8 @@ import { SITE } from '../data/site';
 		border: 1px solid rgba(0,0,0,0.1);
 		padding: 0.5rem 0.2rem;
 	}
-	.schedule-table thead th {
-		background: var(--color-background);
-		font-weight: bold;
-	}
-	.schedule-table tbody th {
-		background: var(--color-background);
-		font-weight: normal;
-		font-size: 0.85rem;
-	}
+	.schedule-table thead th { background: var(--color-background); font-weight: bold; }
+	.schedule-table tbody th { background: var(--color-background); font-weight: normal; font-size: 0.85rem; }
 	.th-sat, .schedule-table td.sat { color: #0288D1; }
 	.th-sun, .schedule-table td.sun { color: #D32F2F; }
 	.schedule-table td.sat, .schedule-table td.sun { font-weight: bold; }
@@ -319,6 +375,14 @@ import { SITE } from '../data/site';
 	   ===================================================== */
 	@media (max-width: 1024px) {
 		.features { grid-template-columns: repeat(2, 1fr); }
+		/* 2カラムでは3枚目が左端（折り返し）に来るので左borderを除去し、上に区切り線 */
+		.feature-card:nth-child(3) {
+			border-left: none;
+			border-top: 1px solid rgba(0, 0, 0, 0.08);
+			grid-column: 1 / -1;
+			padding-top: 2rem;
+			margin-top: 0.5rem;
+		}
 		.hero-title { font-size: 2rem; }
 		.hero-subtitle { font-size: 1.6rem; }
 	}
@@ -330,28 +394,36 @@ import { SITE } from '../data/site';
 		.hero-slider {
 			min-height: 380px;
 			padding: 2.5rem var(--container-pad-x) 3rem;
-			clip-path: none; /* スマホでは矩形に */
+			clip-path: none;
 		}
 		.hero-logo-img { max-height: 90px; }
-		.hero-title {
-			font-size: 1.5rem;
-			line-height: 1.4;
-		}
-		.hero-subtitle {
-			font-size: 1.15rem;
-			margin-top: 0.25rem;
-		}
-		.hero-lead {
-			font-size: 0.95rem;
-			line-height: 1.7;
-		}
+		.hero-title { font-size: 1.5rem; line-height: 1.4; }
+		.hero-subtitle { font-size: 1.15rem; margin-top: 0.25rem; }
+		.hero-lead { font-size: 0.95rem; line-height: 1.7; }
 
 		.features {
 			grid-template-columns: 1fr;
-			gap: 1rem;
-			margin-top: 1.5rem;
+			gap: 0;
+			margin-top: 2rem;
 			margin-bottom: 4rem;
 		}
+		/* モバイル：縦並びなので区切りを横線へ切り替え */
+		.feature-card + .feature-card {
+			border-left: none;
+			border-top: 1px solid rgba(0, 0, 0, 0.08);
+			padding-top: 2rem;
+			margin-top: 0;
+		}
+		.feature-card:nth-child(3) {
+			grid-column: auto;
+		}
+
+		.gallery-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+		.gallery-img { height: 220px; }
+		.store-gallery { margin-bottom: 4rem; }
 
 		.news-section { margin-bottom: 4rem; }
 		.news-item {
@@ -360,12 +432,9 @@ import { SITE } from '../data/site';
 			padding: 1rem 0;
 		}
 
-		/* 営業時間：縦リスト型に切替（横スクロールを廃止） */
+		/* 営業時間：縦リスト型に切替 */
 		.schedule-wrapper { display: block; }
-		.schedule-table {
-			display: block;
-			max-width: 100%;
-		}
+		.schedule-table { display: block; max-width: 100%; }
 		.schedule-table thead { display: none; }
 		.schedule-table tbody { display: block; }
 		.schedule-table tr {
@@ -390,7 +459,6 @@ import { SITE } from '../data/site';
 			border: 1px solid rgba(0,0,0,0.08);
 			padding: 0.4rem 0.2rem;
 			font-size: 0.85rem;
-			position: relative;
 		}
 		.schedule-table tbody tr td:nth-child(2)::before { content: '月'; }
 		.schedule-table tbody tr td:nth-child(3)::before { content: '火'; }

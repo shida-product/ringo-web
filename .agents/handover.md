@@ -1,73 +1,110 @@
 # 引継ぎメモ — りんごちゃん薬局HP リファクタ
 
-最終更新: 2026-04-25
+最終更新: 2026-04-25（フェーズ2完了）
 
-## 経緯
-- `implementation_plan.md.resolved`（レスポンシブ／ボタン／改行）を出発点に、追加課題を含む3フェーズの再設計を提案・合意。
-- 本セッションで**フェーズ1（共通基盤の整備）**を完了。
+## 全体方針
+- `implementation_plan.md.resolved`（レスポンシブ／ボタン／改行）から派生して、3フェーズの再設計を進行中。
+- フェーズ1：共通基盤の整備（完了）
+- フェーズ2：テーマ確定・画像最適化・新規アセット配置（完了）
+- フェーズ3：構造化データ等（任意・未着手）
 
-## フェーズ1で実施した内容
+---
 
-### 新規追加
-- [ringo-web/src/data/site.ts](ringo-web/src/data/site.ts) — サイト共通定数（LINE URL、住所、電話、SNSなど）。各ページの重複ベタ書きを集約。
+## フェーズ2で実施した内容（このセッション）
 
-### リファクタ
-- [ringo-web/src/styles/global.css](ringo-web/src/styles/global.css)
-  - `--container-max` `--container-pad-x` `--tap-min` などの設計トークンを追加。
-  - 共通ユーティリティ `.container` `.page-header` `.section-title` `.sub-title` `.text-center` `.text-balance` `.text-pretty` を集約。
-  - **改行ユーティリティ `.br-pc-only` / `.br-sp-only`** を導入（本文中の `<br>` 直書きを廃止）。
-  - **ボタン仕様を `min-height: 44px` 基準に再定義**（`.button-accent` `.button-line`）。`.btn-line` → `.button-line` にリネーム。
-  - `body { word-break: auto-phrase; line-break: strict; }` で文節折返しを既定化。
+### 1. テーマ「医療スタンダード」確定
+- テーマスイッチャーUI（HTMLウィジェット + JSロジック）を [Layout.astro](ringo-web/src/layouts/Layout.astro) から削除。
+- [global.css](ringo-web/src/styles/global.css) からテーマb/c用 `:root[data-theme]` 変数、`.theme-switcher`、`.theme-btn` を全削除。
+- Layout.astro 側の `:root[data-theme="theme-b/c"] .header.is-scrolled`、モバイル用 `.theme-switcher` レスポンシブも除去。
 
-- [ringo-web/src/layouts/Layout.astro](ringo-web/src/layouts/Layout.astro)
-  - `<meta viewport>` に `initial-scale=1.0` を追加。
-  - `description` を `Astro.props` 経由で各ページから差し込めるように。
-  - **テーマスイッチャーのウィジェットを実装**（既存3テーマ + localStorage永続化 + `is-active` 表示）。
-  - **ヘッダーの blur をスクロール時のみ適用**（`is-scrolled` クラス）。中位機の常時リペイント対策。
-  - ハンバーガーボタンを `44×44px` 化、`aria-expanded` `aria-controls` 付与。
-  - フッター/ヘッダーの値を `SITE` 定数経由に。
+### 2. ブレイクポイント変数の本格導入
+- [global.css](ringo-web/src/styles/global.css) `:root` に `--bp-sm: 768px` `--bp-md: 1024px` を追加（CSSの `@media` ではvar()展開できないため、設計意図のドキュメント兼用）。
 
-- [ringo-web/src/pages/index.astro](ringo-web/src/pages/index.astro)
-  - **ヒーローCTAの `href="#"` を `SITE.lineUrl` に修正**（リンク切れ解消）。
-  - 本文の `<br>` を全廃、ヒーロー見出しのみ `.br-pc-only` を採用。
-  - **営業時間テーブルのモバイル表示を縦リスト型に切替**（`overflow-x` 横スクロール廃止、`::before` で曜日ラベル）。
-  - 重複していた `.container` `.section-title` を削除（global集約）。
-  - 地図 iframe に `title` 属性追加。
+### 3. 画像最適化（astro:assets採用）
+- 画像を `public/` から `src/assets/` に移動して **`<Image>` コンポーネント経由のビルド時最適化** を全面適用。
+  - **`public/images/` → `src/assets/images/`**（8枚のJPG）
+  - **`public/ringo_logo/` → `src/assets/logo/`**（3枚のPNG、英数字へリネーム）
+- リネーム：
+  - `★HP用②.png` → `hero-mark.png`（特殊記号によるimport不可を回避）
+  - `header_logo.png` → `header-logo.png`
+  - `Hero_logo.png` → `hero-banner.png`
+- すべての `<img>` を `<Image>` に置換し、`widths`／`sizes`／`densities` を指定してレスポンシブ生成（WebP/AVIF対応はAstroが自動）。
+- ヒーロースライドの `background-image: url()` を `<Image class="slide">` の絶対配置 + `object-fit: cover` に変更。暗いオーバーレイは `.hero-slider::after` に統合。
 
-- [ringo-web/src/pages/prescription.astro](ringo-web/src/pages/prescription.astro)
-  - **`<br>` 4連発の `<p>` を段落分割**。step内の箇条書きは `<ul>` 化。
-  - 重複CSS削除。決済手段リストを段落 + slash区切り表記に整理。
+### 4. 旧式アセットの新規配置
+| ファイル | 配置先 | 役割 |
+|---|---|---|
+| `hero-banner.png`（旧 Hero_logo.png） | [prescription.astro](ringo-web/src/pages/prescription.astro) 上部の `.prescription-banner` | 「処方せん受付」アイキャッチ（page-headerを置き換え） |
+| `Products.jpg` | [index.astro](ringo-web/src/pages/index.astro) 新規セクション「店内のご紹介」1枚目 | 市販薬陳列棚 |
+| `Support.jpg` | index.astro「店内のご紹介」2枚目 ＋ [company.astro](ringo-web/src/pages/company.astro) `.support-section` | 接客風景 |
+| `Signboard_02.jpg` | [access.astro](ringo-web/src/pages/access.astro) `.signboard-image`（地図上部） | 「この看板が目印です」案内画像 |
 
-- [ringo-web/src/pages/generic.astro](ringo-web/src/pages/generic.astro)
-  - 本文の `<br>` を段落分割に置換、FAQ整形。
-
-- [ringo-web/src/pages/access.astro](ringo-web/src/pages/access.astro)
-  - `SITE` 定数経由に統一、地図 iframe に `title` 追加、モバイル余白調整。
-
-- [ringo-web/src/pages/company.astro](ringo-web/src/pages/company.astro)
-  - `SITE` 定数経由に統一、`text-pretty` 適用。
+---
 
 ## 動作確認TODO（ユーザー側）
-- [ ] `npm run dev` を起動し、Chrome DevToolsの iPhone SE / iPhone 14 Pro / iPad / PC で表示確認。
-- [ ] テーマ切替（医療スタンダード／ナチュラル／トラストネイビー）が動作するか。
-- [ ] ヘッダーの「LINE予約」とヒーローCTAが LINE URL に飛ぶか。
-- [ ] スマホで営業時間が縦リスト表示になり、横スクロールが発生しないか。
-- [ ] スクロール時にヘッダー背景が「白→半透明blur」に切り替わるか。
+1. `cd ringo-web && npm run dev` で起動。
+2. `astro:assets` のビルド時、**sharp** が必要。エラーが出る場合は `npm install sharp` を実行。
+3. 各ページで以下を確認：
+   - [ ] トップ：ヒーロースライド3枚がアニメーション表示、特徴カード下に「店内のご紹介」が2枚並びで表示される。
+   - [ ] 処方箋：上部に「処方せん受付 りんごちゃん薬局」のロゴバナー、その下に看板画像。
+   - [ ] 交通案内：地図の上に「Signboard_02」の看板写真と「この看板が目印です」キャプション。
+   - [ ] 会社案内：代表挨拶下に「Support.jpg」のスタッフ画像。
+   - [ ] DevToolsのNetworkタブで、画像が **WebP/AVIF** で配信され、**数百KB〜1MB程度** にビルド最適化されていること（元は10〜15MB）。
 
-## 次フェーズの予定
+---
 
-### フェーズ2（要合意済）
-- ブレイクポイント変数 `--bp-sm` / `--bp-md` の本格導入と、`clamp()` 多用箇所の段階的置換。
-- ヒーローのモバイル時楕円クリップは index.astro で既に解除済 → 他のレイアウト調整。
-- glass-panel の適用範囲縮小（ニュース・特徴カードは線＋余白で表現に変更）。
-- フッター/ヘッダーの整理（必要に応じ）。
+## glass-panel 適用範囲の縮小（実施済み）
+- `.feature-card`（特徴カード3枚）から `.glass-panel` を外し、**カード間の細い区切り線（border-left）+ 余白**だけで構成する引き算デザインに刷新。
+  - PC（3カラム）：縦の細線で区切り
+  - タブレット（2カラム）：3枚目は `grid-column: 1 / -1` で全幅に展開、上に細線
+  - モバイル（1カラム）：横の細線で区切り
+- `.news-list` は元から glass-panel が外れていたため変更なし（線+余白で完成済み）。
+- `.info-box`（営業時間・アクセス）と各下層ページの `.main-content` は情報密度が高いため glass-panel を継続維持。
 
-### フェーズ3（任意）
-- `LocalBusiness` JSON-LD 構造化データの追加。
-- スライド画像のWebP化と loading 戦略最適化。
-- `★HP用②.png` などのファイル名を英数字化。
+## フェーズ3で実施した内容（最新セッション）
 
-## 既知の留意事項
-- `word-break: auto-phrase` は Chrome/Edge/Safari 17+ で対応。Firefoxは未対応のため通常折返しにフォールバック（実害なし）。
-- `text-wrap: balance` / `pretty` も同様にモダンブラウザのみ。Progressive enhancementの設計。
-- `★HP用②.png` のファイル名は今回そのまま据え置き（フェーズ3で対応予定）。
+### 1. SEO / OGP 強化
+- [Layout.astro](ringo-web/src/layouts/Layout.astro) frontmatter で `getImage` を使い、`Exterior_01.jpg` から **OGP用1200×630画像** をビルド時生成。
+- 全ページに以下を自動付与：
+  - `<link rel="canonical">`
+  - Open Graph（`og:title` `og:description` `og:image` `og:url` `og:type` `og:locale` `og:site_name`）
+  - Twitter Card（`summary_large_image`）
+
+### 2. Schema.org `Pharmacy` 構造化データ
+- `<script type="application/ld+json">` を Layout に追加。`@type: Pharmacy` で住所・電話・SNS（X/Instagram）・営業時間（月〜金 9:00-18:30 / 土 9:00-13:00 / 日 9:00-12:30）を構造化。
+- Googleの「営業中／定休日」表示や Knowledge Panel に乗りやすくなる。
+
+### 3. lucide アイコンを CDN → npm へ移行
+- `<script src="https://unpkg.com/lucide@latest">` を撤廃。
+- `lucide` を npm install し、Astroのbundler-script から **使用アイコン7個のみ tree-shake import** する形に。
+  - Smartphone / Menu / ExternalLink / Phone / HeartHandshake / Hospital / Pill
+- バージョン固定 + 攻撃面縮小 + Astroのhash付きアセット配信に統合。
+
+### 4. その他クリーンアップ
+- `<html data-theme="theme-a">` の不要 `data-theme` 属性を削除（テーマ単独構成のため）。
+
+---
+
+## 動作確認TODO（ユーザー側）
+1. `npm run dev` で起動。
+2. ページソースで `<script type="application/ld+json">` が出力されているか確認。
+3. アイコンが正しく表示されているか（lucide CDN廃止後）。
+4. 各ページHTMLヘッダーに OGP / Twitter Card メタが出ているか。
+5. **本番ビルド検証**：`npm run build && npm run preview` を実行し、`/_astro/` ディレクトリにOGP画像が最適化されて吐き出されるか。
+6. Schema.org構造化データの妥当性は **[Rich Results Test](https://search.google.com/test/rich-results)** で検証可能（公開後）。
+
+---
+
+## 残作業（次セッション以降）
+
+### 任意の改善
+- **Lighthouse計測**：DevTools → Lighthouse → 「Mobile」で性能・SEO・アクセシビリティ・ベストプラクティス計測。
+- **正確なgeo座標**：Schema.org JSON-LD に `geo: { latitude, longitude }` を追加するとローカルSEOが強化される。Googleマップで「東京都荒川区荒川5-11-18」の正確な緯度経度を取得して `Layout.astro` の `jsonLd` に追加。
+- **OGP専用画像**：現状はヒーロー写真の流用。専用デザイン画像（タイトル文字付き、1200×630）を用意するとSNSシェア時の見栄え向上。
+- **favicon.svg の用意**：`public/favicon.svg` がまだ無い（404になる）。アップルマークのSVGロゴを準備して配置。
+- **npm audit**：`npm audit` で4件の脆弱性が報告されている（moderate3 / high1）。多くはAstro v4 の依存ツリー由来。`npm audit fix` で対処可能か検証。
+
+### 既知の留意事項
+- `word-break: auto-phrase` / `text-wrap: balance|pretty` はモダンブラウザのみ。Firefoxでは通常折返しにフォールバック（実害なし）。
+- `astro:assets` の最適化対象は **import経由の画像のみ**。`public/SNS_icon/` の3枚は軽量なため最適化対象外（そのまま）。
+- `data/site.ts` の SITE 定数を経由しているので、住所・電話・LINE URL の更新はここ1か所で完結。
