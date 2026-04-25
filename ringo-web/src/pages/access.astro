@@ -15,7 +15,7 @@ import imageSignboard from '../assets/images/Signboard_02.jpg';
 	<section class="container page-content">
 		<div class="glass-panel main-content">
 			<h2 class="sub-title">電車でお越しの方</h2>
-			<p>千代田線、さくらトラム（都電荒川線）町屋駅より徒歩5分</p>
+			<p class="text-pretty access-lead"><strong>町屋駅</strong>より徒歩5分<br class="br-pc-only"><span class="access-lines">千代田線・さくらトラム（都電荒川線）</span></p>
 
 			<div class="signboard-image">
 				<Image src={imageSignboard} alt="りんごちゃん薬局の店舗外観" class="signboard-img" widths={[600, 1000, 1400]} sizes="(max-width: 768px) 100vw, 800px" />
@@ -102,9 +102,20 @@ import imageSignboard from '../assets/images/Signboard_02.jpg';
 		box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 	}
 
+	.access-lead { line-height: 1.8; }
+	.access-lines { color: var(--color-text-light); font-size: 0.95rem; margin-left: 0.4em; }
+
 	@media (max-width: 768px) {
-		.signboard-img { max-height: 240px; }
+		.signboard-img { max-height: 220px; }
+		.signboard-image { margin: 1.5rem auto 1rem; }
+		.signboard-caption { font-size: 0.9rem; }
+		.access-lead { font-size: 1rem; }
+		.access-lines {
+			display: block;
+			margin-left: 0;
+			margin-top: 0.25rem;
+		}
 		.store-info { width: 100%; padding: 1rem; }
-		.map-embed { height: 300px; }
+		.map-embed { height: 260px; margin-top: 1.5rem; }
 	}
 </style>

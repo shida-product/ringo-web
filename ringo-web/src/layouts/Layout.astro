@@ -4,6 +4,9 @@ import { Image, getImage } from 'astro:assets';
 import { SITE } from '../data/site';
 import headerLogo from '../assets/logo/header-logo.png';
 import ogSource from '../assets/images/Exterior_01.jpg';
+import snsIconX from '../assets/SNS_icon/X_logo-Black.png';
+import snsIconInsta from '../assets/SNS_icon/insta_logo.png';
+import snsIconLine from '../assets/SNS_icon/LINE_logo.png';
 
 interface Props {
 	title: string;
@@ -139,15 +142,15 @@ const jsonLd = {
 					<p class="footer-title">公式SNS</p>
 					<div class="sns-list">
 						<a href={SITE.xUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="X (Twitter)">
-							<img src="/SNS_icon/X_logo-Black.png" alt="X" class="sns-icon-img" />
+							<Image src={snsIconX} alt="X" class="sns-icon-img" widths={[32, 64]} />
 							<span class="sns-label">{SITE.xHandle}</span>
 						</a>
 						<a href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="Instagram">
-							<img src="/SNS_icon/insta_logo.png" alt="Instagram" class="sns-icon-img" />
+							<Image src={snsIconInsta} alt="Instagram" class="sns-icon-img" widths={[32, 64]} />
 							<span class="sns-label">{SITE.instagramHandle}</span>
 						</a>
 						<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="LINEでお薬予約">
-							<img src="/SNS_icon/LINE_logo.png" alt="LINE" class="sns-icon-img" />
+							<Image src={snsIconLine} alt="LINE" class="sns-icon-img" widths={[32, 64]} />
 							<span class="sns-label">LINE予約</span>
 						</a>
 					</div>

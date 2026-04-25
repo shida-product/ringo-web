@@ -52,6 +52,15 @@ import Layout from '../layouts/Layout.astro';
 		color: var(--color-primary);
 		margin-bottom: 0.5rem;
 		font-size: 1rem;
+		line-height: 1.5;
 	}
 	.faq-item p { color: var(--color-text-light); }
+
+	@media (max-width: 768px) {
+		.sub-title { margin-top: 2.25rem; }
+		.main-content > p { font-size: 0.95rem; line-height: 1.8; }
+		.faq-list { gap: 1.5rem; }
+		.faq-item h4 { font-size: 0.95rem; }
+		.faq-item p { font-size: 0.9rem; line-height: 1.75; }
+	}
 </style>

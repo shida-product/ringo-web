@@ -140,28 +140,41 @@ import imageSupport from '../assets/images/Support.jpg';
 	@media (max-width: 768px) {
 		.rep-section {
 			flex-direction: column;
-			gap: 1.5rem;
+			gap: 1.25rem;
 		}
 		.rep-image {
 			flex: 1 1 auto;
 			width: 100%;
-			max-width: 280px;
+			max-width: 240px;
 			margin: 0 auto;
 		}
-		.support-img { max-height: 240px; }
+		.rep-text p { margin-bottom: 0.85rem; }
+		.rep-signature {
+			font-size: 1rem;
+			margin-top: 1.5rem;
+		}
+		.support-section { margin-top: 2.25rem; }
+		.support-img { max-height: 220px; }
+		.support-caption { font-size: 0.9rem; }
 
+		.section-divider { margin-top: 3rem; }
+
+		.company-table { margin-top: 1rem; }
+		.company-table tr { display: block; padding: 0.25rem 0; }
 		.company-table th, .company-table td {
 			display: block;
 			width: 100%;
-			padding: 0.5rem 0.75rem;
+			padding: 0;
+			border-bottom: none;
 		}
 		.company-table th {
-			border-bottom: none;
-			padding-bottom: 0.25rem;
-			background: rgba(0,0,0,0.02);
+			padding: 0.5rem 0.75rem;
+			background: rgba(0,0,0,0.03);
+			border-radius: 4px;
+			font-size: 0.85rem;
 		}
 		.company-table td {
-			padding-top: 0.5rem;
+			padding: 0.6rem 0.75rem 0.85rem;
 			border-bottom: 1px solid rgba(0,0,0,0.06);
 		}
 	}

@@ -215,4 +215,10 @@ img { max-width: 100%; display: block; }
   .section-title { font-size: 1.4rem; margin-bottom: 2rem; }
   .button-accent { padding: 0.85rem 1.5rem; width: 100%; max-width: 320px; }
   .glass-panel { padding: 1.25rem; border-radius: 12px; }
+
+  /* 下層ページ共通：page-headerをコンパクトに */
+  .page-header { padding: 0.75rem 0; margin-bottom: 1rem; }
+  .page-header h1 { font-size: 1.3rem; line-height: 1.4; }
+  .sub-title { font-size: 1.05rem; padding-bottom: 0.65rem; margin-bottom: 1.25rem; }
+  .page-content { margin-bottom: 3rem; }
 }

@@ -126,19 +126,22 @@ import imageSignboard from '../assets/images/Signboard_01.jpg';
 		align-items: flex-start;
 	}
 	.step-num {
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 		font-weight: bold;
 		color: var(--color-accent);
-		background: var(--color-background);
+		background: var(--color-surface);
+		border: 2px solid var(--color-background);
 		min-width: 50px;
+		width: 50px;
 		height: 50px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		border-radius: 50%;
 		flex-shrink: 0;
+		letter-spacing: 0.02em;
 	}
-	.step-body { flex: 1; }
+	.step-body { flex: 1; min-width: 0; }
 	.step-body h3 {
 		font-size: 1.15rem;
 		margin-bottom: 0.5rem;
@@ -167,14 +170,24 @@ import imageSignboard from '../assets/images/Signboard_01.jpg';
 			width: 100%;
 			max-height: 220px;
 		}
+		.flow-steps { gap: 1.5rem; }
 		.step {
 			gap: 1rem;
 		}
 		.step-num {
-			min-width: 40px;
-			width: 40px;
-			height: 40px;
-			font-size: 1rem;
+			min-width: 44px;
+			width: 44px;
+			height: 44px;
+			font-size: 0.95rem;
+		}
+		.step-body h3 {
+			font-size: 1.05rem;
+			margin-bottom: 0.4rem;
+			line-height: 1.4;
+		}
+		.step-body p {
+			font-size: 0.95rem;
+			line-height: 1.7;
 		}
 	}
 </style>
