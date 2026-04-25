@@ -122,8 +122,8 @@ import { SITE } from '../data/site';
 	   ===================================================== */
 	.hero-slider {
 		position: relative;
-		height: 40vh;
-		min-height: 320px;
+		min-height: 420px;
+		padding: 3rem var(--container-pad-x) 4.5rem; /* コンテンツに合わせて伸縮、楕円下端の食い込みも考慮 */
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -328,9 +328,8 @@ import { SITE } from '../data/site';
 	   ===================================================== */
 	@media (max-width: 768px) {
 		.hero-slider {
-			height: auto;
-			min-height: 360px;
-			padding: 2.5rem 0;
+			min-height: 380px;
+			padding: 2.5rem var(--container-pad-x) 3rem;
 			clip-path: none; /* スマホでは矩形に */
 		}
 		.hero-logo-img { max-height: 90px; }
