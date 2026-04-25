@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // 設定
+  site: 'https://shida-product.github.io',
+  base: '/ringo-hp',
 });

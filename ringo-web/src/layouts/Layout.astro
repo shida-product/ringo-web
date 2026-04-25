@@ -1,318 +1,353 @@
 ---
 import '../styles/global.css';
+import { SITE } from '../data/site';
 
 interface Props {
 	title: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = SITE.description } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="ja" data-theme="theme-a">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="りんごちゃん薬局 - 荒川区荒川、町屋駅の調剤薬局" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title} | りんごちゃん薬局</title>
-        <script is:inline src="https://unpkg.com/lucide@latest"></script>
+		<title>{title} | {SITE.name}</title>
+		<script is:inline src="https://unpkg.com/lucide@latest"></script>
 	</head>
 	<body>
-        <!-- ヘッダー -->
-        <header class="header">
-            <div class="header-inner">
-                <div class="logo">
-                    <a href="/">
-                        <img src="/ringo_logo/header_logo.png" alt="りんごちゃん薬局" class="header-logo-img" />
-                    </a>
-                </div>
-                <div class="header-right">
-                    <nav class="desktop-nav" id="main-nav">
-                        <ul>
-                            <li><a href="/">ホーム</a></li>
-                            <li><a href="/prescription">処方箋の受付</a></li>
-                            <li><a href="/generic">ジェネリック薬</a></li>
-                            <li><a href="/access">交通案内</a></li>
-                            <li><a href="/company">会社案内</a></li>
-                        </ul>
-                    </nav>
-                    <a href="https://line.me/R/ti/p/@026lwhkh?ts=10061241&oat_content=url" target="_blank" rel="noopener noreferrer" class="btn-line">
-                        <i data-lucide="smartphone" class="line-icon"></i> LINE予約
-                    </a>
-                    <button class="hamburger-btn" id="hamburger-btn" aria-label="メニューを開く">
-                        <i data-lucide="menu"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
+		<!-- ヘッダー -->
+		<header class="header">
+			<div class="header-inner">
+				<div class="logo">
+					<a href="/">
+						<img src="/ringo_logo/header_logo.png" alt={SITE.name} class="header-logo-img" />
+					</a>
+				</div>
+				<div class="header-right">
+					<nav class="desktop-nav" id="main-nav">
+						<ul>
+							<li><a href="/">ホーム</a></li>
+							<li><a href="/prescription">処方箋の受付</a></li>
+							<li><a href="/generic">ジェネリック薬</a></li>
+							<li><a href="/access">交通案内</a></li>
+							<li><a href="/company">会社案内</a></li>
+						</ul>
+					</nav>
+					<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="button-line header-line-btn">
+						<i data-lucide="smartphone" class="line-icon"></i> LINE予約
+					</a>
+					<button class="hamburger-btn" id="hamburger-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="main-nav">
+						<i data-lucide="menu"></i>
+					</button>
+				</div>
+			</div>
+		</header>
 
 		<main>
 			<slot />
 		</main>
 
-        <!-- フッター -->
-        <footer class="footer">
-            <div class="footer-inner">
-                <div class="footer-info">
-                    <h3>りんごちゃん薬局</h3>
-                    <p>
-                        〒116-0002<br>
-                        <a href="https://maps.google.com/?q=東京都荒川区荒川5-11-18" target="_blank" rel="noopener noreferrer" class="info-link footer-link">
-                            東京都荒川区荒川5-11-18 <i data-lucide="external-link" class="inline-icon" style="width:14px;height:14px;"></i>
-                        </a>
-                        <br>
-                        TEL: <a href="tel:0356049995" class="info-link footer-link tel-link" style="color:inherit">
-                            03-5604-9995 <i data-lucide="phone" class="inline-icon" style="width:14px;height:14px;"></i>
-                        </a>
-                    </p>
-                </div>
-                <div class="footer-sns">
-                    <p class="footer-title">公式SNS</p>
-                    <div class="sns-list">
-                        <a href="https://x.com/reinapharma" target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="X (Twitter)">
-                            <img src="/SNS_icon/X_logo-Black.png" alt="X" class="sns-icon-img" />
-                            <span class="sns-label">@reinapharma</span>
-                        </a>
-                        <a href="https://www.instagram.com/s____arakawa?igsh=MTdxZ3drdTl6aGJhaw==" target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="Instagram">
-                            <img src="/SNS_icon/insta_logo.png" alt="Instagram" class="sns-icon-img" />
-                            <span class="sns-label">@s____arakawa</span>
-                        </a>
-                        <a href="https://line.me/R/ti/p/@026lwhkh?ts=10061241&oat_content=url" target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="LINEでお薬予約">
-                            <img src="/SNS_icon/LINE_logo.png" alt="LINE" class="sns-icon-img" />
-                            <span class="sns-label">LINE予約</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-copy">
-                &copy; {new Date().getFullYear()} りんごちゃん薬局 All rights reserved.
-            </div>
-        </footer>
+		<!-- フッター -->
+		<footer class="footer">
+			<div class="footer-inner">
+				<div class="footer-info">
+					<h3>{SITE.name}</h3>
+					<p>
+						{SITE.postalCode}<br>
+						<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="info-link footer-link">
+							{SITE.address} <i data-lucide="external-link" class="inline-icon" style="width:14px;height:14px;"></i>
+						</a>
+						<br>
+						TEL: <a href={SITE.telLink} class="info-link footer-link tel-link">
+							{SITE.tel} <i data-lucide="phone" class="inline-icon" style="width:14px;height:14px;"></i>
+						</a>
+					</p>
+				</div>
+				<div class="footer-sns">
+					<p class="footer-title">公式SNS</p>
+					<div class="sns-list">
+						<a href={SITE.xUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="X (Twitter)">
+							<img src="/SNS_icon/X_logo-Black.png" alt="X" class="sns-icon-img" />
+							<span class="sns-label">{SITE.xHandle}</span>
+						</a>
+						<a href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="Instagram">
+							<img src="/SNS_icon/insta_logo.png" alt="Instagram" class="sns-icon-img" />
+							<span class="sns-label">{SITE.instagramHandle}</span>
+						</a>
+						<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="LINEでお薬予約">
+							<img src="/SNS_icon/LINE_logo.png" alt="LINE" class="sns-icon-img" />
+							<span class="sns-label">LINE予約</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="footer-copy">
+				&copy; {new Date().getFullYear()} {SITE.name} All rights reserved.
+			</div>
+		</footer>
 
-        <script is:inline>
-            // アイコンの生成
-            lucide.createIcons();
-            
-            // ハンバーガーメニューの開閉制御
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const mainNav = document.getElementById('main-nav');
-            if(hamburgerBtn && mainNav) {
-                hamburgerBtn.addEventListener('click', () => {
-                    mainNav.classList.toggle('is-open');
-                });
-            }
-        </script>
+		<!-- テーマスイッチャー -->
+		<div class="theme-switcher" aria-label="テーマ切替">
+			<h4>テーマ</h4>
+			<button type="button" class="theme-btn" data-theme-target="theme-a">医療スタンダード</button>
+			<button type="button" class="theme-btn" data-theme-target="theme-b">ナチュラル</button>
+			<button type="button" class="theme-btn" data-theme-target="theme-c">トラストネイビー</button>
+		</div>
+
+		<script is:inline>
+			// アイコン生成
+			lucide.createIcons();
+
+			// ハンバーガーメニュー開閉
+			const hamburgerBtn = document.getElementById('hamburger-btn');
+			const mainNav = document.getElementById('main-nav');
+			if (hamburgerBtn && mainNav) {
+				hamburgerBtn.addEventListener('click', () => {
+					const isOpen = mainNav.classList.toggle('is-open');
+					hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+				});
+			}
+
+			// テーマ切替（localStorage保存）
+			const root = document.documentElement;
+			const saved = localStorage.getItem('ringo-theme');
+			if (saved) root.setAttribute('data-theme', saved);
+
+			const setActive = (target) => {
+				document.querySelectorAll('.theme-btn').forEach(btn => {
+					btn.classList.toggle('is-active', btn.dataset.themeTarget === target);
+				});
+			};
+			setActive(root.getAttribute('data-theme'));
+
+			document.querySelectorAll('.theme-btn').forEach(btn => {
+				btn.addEventListener('click', () => {
+					const target = btn.dataset.themeTarget;
+					if (!target) return;
+					root.setAttribute('data-theme', target);
+					localStorage.setItem('ringo-theme', target);
+					setActive(target);
+				});
+			});
+
+			// スクロール検出（blurの常時適用を回避）
+			const header = document.querySelector('.header');
+			if (header) {
+				const onScroll = () => {
+					header.classList.toggle('is-scrolled', window.scrollY > 8);
+				};
+				onScroll();
+				window.addEventListener('scroll', onScroll, { passive: true });
+			}
+		</script>
 	</body>
 </html>
 
 <style>
-    .header {
-        background: rgba(255, 255, 255, 0.85); /* 半透明化 */
-        backdrop-filter: blur(12px); /* Glassmorphismですりガラス効果 */
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        position: sticky;
-        top: 0;
-        z-index: 1000; /* 全コンテンツより上に表示 */
-        transition: background 0.3s ease;
-    }
-    /* ダークテーマ等に切り替えた時にも背景がなじむように */
-    :root[data-theme="theme-b"] .header { background: rgba(255, 253, 240, 0.85); }
-    :root[data-theme="theme-c"] .header { background: rgba(255, 255, 255, 0.9); }
+	.header {
+		background: var(--color-surface);
+		box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+		position: sticky;
+		top: 0;
+		z-index: 1000;
+		transition: background var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+	}
+	/* スクロール時のみGlassmorphism適用（モバイル中位機への配慮） */
+	.header.is-scrolled {
+		background: rgba(255, 255, 255, 0.85);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+	}
+	:root[data-theme="theme-b"] .header.is-scrolled { background: rgba(255, 253, 240, 0.85); }
+	:root[data-theme="theme-c"] .header.is-scrolled { background: rgba(255, 255, 255, 0.9); }
 
-    .header-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0.8rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-    }
-    .logo a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-    }
-    .header-logo-img {
-        max-height: 50px;
-        width: auto;
-        display: block;
-        object-fit: contain;
-    }
-    
-    /* ハンバーガーはPCでは非表示 */
-    .hamburger-btn {
-        display: none;
-        background: transparent;
-        border: none;
-        color: var(--color-primary);
-        cursor: pointer;
-        padding: 5px;
-    }
-    .desktop-nav ul {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-    }
-    .desktop-nav a {
-        font-weight: 500;
-        color: var(--color-text);
-        padding: 0.5rem 0;
-        position: relative;
-    }
-    .desktop-nav a::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: var(--color-primary);
-        transition: width var(--transition-speed);
-    }
-    .desktop-nav a:hover::after {
-        width: 100%;
-    }
-    .btn-line {
-        background-color: #06C755; /* LINE公式カラー */
-        color: white;
-        padding: 8px 18px;
-        border-radius: 9999px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        font-size: 0.9rem;
-    }
-    .btn-line:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);
-        opacity: 1; /* a:hoverのopacity上書き */
-    }
-    .line-icon {
-        width: 18px;
-        height: 18px;
-    }
-    .footer {
-        background: var(--color-surface);
-        padding: 4rem 2rem 1.5rem;
-        margin-top: 5rem;
-        border-top: 1px solid rgba(0,0,0,0.05);
-    }
-    .footer-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-    }
-    .footer-info h3 {
-        color: var(--color-accent);
-        margin-bottom: 1rem;
-    }
-    .footer-title {
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: var(--color-text);
-    }
-    .footer-sns {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-    .sns-list {
-        display: flex;
-        flex-direction: row;
-        gap: 24px;
-        align-items: center;
-    }
-    .sns-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        transition: transform 0.2s, opacity 0.2s;
-        text-decoration: none;
-    }
-    .sns-item:hover {
-        transform: translateY(-3px);
-        opacity: 0.8;
-    }
-    .sns-icon-img {
-        width: 32px;
-        height: 32px;
-        object-fit: contain;
-    }
-    .sns-label {
-        font-size: 0.75rem;
-        color: var(--color-text);
-        font-weight: 500;
-        transition: color 0.2s;
-    }
-    .sns-item:hover .sns-label {
-        color: var(--color-accent);
-    }
-    .footer-copy {
-        text-align: center;
-        color: var(--color-text-light);
-        font-size: 0.875rem;
-    }
+	.header-inner {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		padding: 0.75rem var(--container-pad-x);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.header-right {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+	.logo a {
+		display: inline-flex;
+		align-items: center;
+	}
+	.header-logo-img {
+		max-height: 50px;
+		width: auto;
+		object-fit: contain;
+	}
 
-	/* モバイルの最適化設定 */
+	.hamburger-btn {
+		display: none;
+		background: transparent;
+		border: none;
+		color: var(--color-primary);
+		cursor: pointer;
+		width: var(--tap-min);
+		height: var(--tap-min);
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px;
+	}
+	.hamburger-btn:hover { background: rgba(0,0,0,0.04); }
+
+	.desktop-nav ul {
+		display: flex;
+		gap: 1.75rem;
+		list-style: none;
+	}
+	.desktop-nav a {
+		font-weight: 500;
+		color: var(--color-text);
+		padding: 0.5rem 0;
+		position: relative;
+	}
+	.desktop-nav a::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background: var(--color-primary);
+		transition: width var(--transition-speed);
+	}
+	.desktop-nav a:hover::after { width: 100%; }
+
+	.line-icon { width: 18px; height: 18px; }
+
+	.footer {
+		background: var(--color-surface);
+		padding: 4rem var(--container-pad-x) 1.5rem;
+		margin-top: 5rem;
+		border-top: 1px solid rgba(0,0,0,0.05);
+	}
+	.footer-inner {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		gap: 2rem;
+		margin-bottom: 2rem;
+	}
+	.footer-info h3 {
+		color: var(--color-accent);
+		margin-bottom: 1rem;
+	}
+	.footer-title {
+		font-weight: 700;
+		margin-bottom: 1rem;
+		color: var(--color-text);
+	}
+	.footer-sns {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+	.sns-list {
+		display: flex;
+		gap: 24px;
+		align-items: center;
+	}
+	.sns-item {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		min-width: var(--tap-min);
+		min-height: var(--tap-min);
+		transition: transform 0.2s, opacity 0.2s;
+	}
+	.sns-item:hover {
+		transform: translateY(-3px);
+		opacity: 0.8;
+	}
+	.sns-icon-img {
+		width: 32px;
+		height: 32px;
+		object-fit: contain;
+	}
+	.sns-label {
+		font-size: 0.75rem;
+		color: var(--color-text);
+		font-weight: 500;
+		transition: color 0.2s;
+	}
+	.sns-item:hover .sns-label { color: var(--color-accent); }
+
+	.footer-copy {
+		text-align: center;
+		color: var(--color-text-light);
+		font-size: 0.875rem;
+	}
+
+	/* =====================================================
+	   モバイル
+	   ===================================================== */
 	@media (max-width: 768px) {
 		.header-inner {
-            flex-wrap: wrap;
-            padding: 0.8rem 1rem;
-        }
-        .header-right {
-            gap: 0.5rem;
-        }
-        .hamburger-btn {
-            display: block; /* モバイルで表示 */
-        }
-        .desktop-nav {
-            display: none; /* メニューは初期非表示 */
-            width: 100%;
-            order: 3; /* flexコンテナ内でボタンより一段下に強制 */
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0,0,0,0.05);
-        }
-        .desktop-nav.is-open {
-            display: block; /* JSでクラスが付与されたら表示 */
-        }
-        .desktop-nav ul {
-            flex-direction: column;
-            gap: 1.5rem;
-            text-align: center;
-        }
-        .desktop-nav a {
-            font-size: 1.1rem;
-        }
-        .btn-line {
-            padding: 6px 12px;
-            font-size: 0.8rem;
-        }
-        
-        .footer-inner {
-            flex-direction: column;
-            gap: 2rem;
-            text-align: center;
-        }
-        .footer-sns {
-            align-items: center; /* モバイルでは中央揃え */
-        }
-        .sns-list {
-            justify-content: center; /* スマホでは中央揃え */
-            display: flex;
-        }
+			flex-wrap: wrap;
+			padding: 0.6rem var(--container-pad-x);
+		}
+		.header-right { gap: 0.5rem; }
+		.hamburger-btn { display: inline-flex; }
+		.header-line-btn {
+			padding: 0.5rem 1rem;
+			font-size: 0.85rem;
+		}
+		.desktop-nav {
+			display: none;
+			width: 100%;
+			order: 3;
+			margin-top: 0.75rem;
+			padding-top: 0.75rem;
+			border-top: 1px solid rgba(0,0,0,0.05);
+		}
+		.desktop-nav.is-open { display: block; }
+		.desktop-nav ul {
+			flex-direction: column;
+			gap: 0.5rem;
+			text-align: center;
+		}
+		.desktop-nav a {
+			display: block;
+			font-size: 1.05rem;
+			padding: 0.85rem 0; /* タップ領域確保 */
+		}
+
+		.footer {
+			padding: 3rem var(--container-pad-x) 1.5rem;
+			margin-top: 3rem;
+		}
+		.footer-inner {
+			flex-direction: column;
+			gap: 2rem;
+			text-align: center;
+		}
+		.footer-sns { align-items: center; }
+		.sns-list { justify-content: center; }
+
+		.theme-switcher {
+			bottom: 12px;
+			right: 12px;
+			padding: 8px;
+			max-width: 150px;
+		}
+		.theme-btn { font-size: 0.8rem; }
 	}
 </style>
