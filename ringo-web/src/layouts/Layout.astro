@@ -95,33 +95,60 @@ const jsonLd = {
 		<header class="header">
 			<div class="header-inner">
 				<div class="logo">
-					<a href={`${baseUrl}/`}>
+					<a href={baseUrl}>
 						<Image src={headerLogo} alt={SITE.name} class="header-logo-img" densities={[1, 2]} />
 					</a>
 				</div>
 				<div class="header-right">
-					<nav class="desktop-nav" id="main-nav">
+					<!-- PC表示のみナビ -->
+					<nav class="desktop-nav" id="main-nav" aria-label="メインメニュー">
 						<ul>
-							<li><a href={`${baseUrl}/`}>ホーム</a></li>
-							<li><a href={`${baseUrl}/prescription`}>処方箋の受付</a></li>
-							<li><a href={`${baseUrl}/generic`}>ジェネリック薬</a></li>
-							<li><a href={`${baseUrl}/access`}>交通案内</a></li>
-							<li><a href={`${baseUrl}/company`}>会社案内</a></li>
+							<li><a href={baseUrl}>ホーム</a></li>
+							<li><a href={`${baseUrl}prescription`}>処方箋の受付</a></li>
+							<li><a href={`${baseUrl}generic`}>ジェネリック薬</a></li>
+							<li><a href={`${baseUrl}access`}>交通案内</a></li>
+							<li><a href={`${baseUrl}company`}>会社案内</a></li>
 						</ul>
 					</nav>
+					<!-- PC表示のLINEボタン -->
 					<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="button-line header-line-btn">
 						<i data-lucide="smartphone" class="line-icon"></i> LINE予約
 					</a>
-					<button class="hamburger-btn" id="hamburger-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="main-nav">
-						<i data-lucide="menu"></i>
+					<!-- モバイル用ハンバーガーボタン -->
+					<button class="hamburger-btn" id="hamburger-btn" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-drawer">
+						<i data-lucide="menu" id="hamburger-icon"></i>
 					</button>
 				</div>
 			</div>
 		</header>
 
+		<!-- モバイル用フルスクリーンドロワー（ヘッダー外・body直下） -->
+		<div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+			<!-- 閉じるボタン -->
+			<button class="drawer-close-btn" id="drawer-close-btn" aria-label="メニューを閉じる">
+				<i data-lucide="x"></i>
+			</button>
+			<nav aria-label="モバイルメニュー">
+				<ul>
+					<li><a href={baseUrl}>ホーム</a></li>
+					<li><a href={`${baseUrl}prescription`}>処方箋の受付</a></li>
+					<li><a href={`${baseUrl}generic`}>ジェネリック薬</a></li>
+					<li><a href={`${baseUrl}access`}>交通案内</a></li>
+					<li><a href={`${baseUrl}company`}>会社案内</a></li>
+				</ul>
+			</nav>
+		</div>
+		<!-- ドロワー背景オーバーレイ -->
+		<div class="drawer-overlay" id="drawer-overlay"></div>
+
 		<main>
 			<slot />
 		</main>
+
+		<!-- モバイル専用：下部固定LINEボタン -->
+		<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="mobile-line-bar">
+			<i data-lucide="smartphone" class="line-icon"></i> LINE予約
+		</a>
 
 		<!-- フッター -->
 		<footer class="footer">
@@ -168,6 +195,7 @@ const jsonLd = {
 				createIcons,
 				Smartphone,
 				Menu,
+				X,
 				ExternalLink,
 				Phone,
 				HeartHandshake,
@@ -175,22 +203,42 @@ const jsonLd = {
 				Pill,
 			} from 'lucide';
 			createIcons({
-				icons: { Smartphone, Menu, ExternalLink, Phone, HeartHandshake, Hospital, Pill },
+				icons: { Smartphone, Menu, X, ExternalLink, Phone, HeartHandshake, Hospital, Pill },
 			});
 		</script>
 
 		<script is:inline>
-			// ハンバーガーメニュー開閉
+			// ハンバーガーメニュー開閉（ドロワー方式）
 			const hamburgerBtn = document.getElementById('hamburger-btn');
-			const mainNav = document.getElementById('main-nav');
-			if (hamburgerBtn && mainNav) {
-				hamburgerBtn.addEventListener('click', () => {
-					const isOpen = mainNav.classList.toggle('is-open');
-					hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
-				});
+			const drawer = document.getElementById('mobile-drawer');
+			const overlay = document.getElementById('drawer-overlay');
+
+			function openDrawer() {
+				drawer.classList.add('is-open');
+				overlay.classList.add('is-open');
+				hamburgerBtn.setAttribute('aria-expanded', 'true');
+				document.body.style.overflow = 'hidden'; /* スクロール停止 */
+			}
+			function closeDrawer() {
+				drawer.classList.remove('is-open');
+				overlay.classList.remove('is-open');
+				hamburgerBtn.setAttribute('aria-expanded', 'false');
+				document.body.style.overflow = '';
 			}
 
-			// スクロール検出（blurの常時適用を回避）
+			if (hamburgerBtn && drawer && overlay) {
+				hamburgerBtn.addEventListener('click', () => {
+					drawer.classList.contains('is-open') ? closeDrawer() : openDrawer();
+				});
+				overlay.addEventListener('click', closeDrawer);
+				/* 閉じる（×）ボタン */
+				const closeBtn = document.getElementById('drawer-close-btn');
+				if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+				/* ドロワー内リンクをタップしたらメニューを閉じる */
+				drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+			}
+
+			// スクロール検出（Glassmorphism）
 			const header = document.querySelector('.header');
 			if (header) {
 				const onScroll = () => {
@@ -349,48 +397,122 @@ const jsonLd = {
 	}
 
 	/* =====================================================
+	   モバイルドロワー・ボトムバー（PCでは非表示）
+	   ===================================================== */
+	.mobile-drawer,
+	.drawer-overlay,
+	.mobile-line-bar { display: none; }
+
+	/* =====================================================
 	   モバイル
 	   ===================================================== */
 	@media (max-width: 768px) {
-		.header-inner {
-			flex-wrap: wrap;
-			padding: 0.6rem var(--container-pad-x);
-		}
-		.header-right { gap: 0.5rem; }
-		.hamburger-btn { display: inline-flex; }
-		.header-line-btn {
-			padding: 0.5rem 1rem;
-			font-size: 0.85rem;
-		}
-		.desktop-nav {
-			display: none;
-			width: 100%;
-			order: 3;
-			margin-top: 0.75rem;
-			padding-top: 0.75rem;
-			border-top: 1px solid rgba(0,0,0,0.05);
-		}
-		.desktop-nav.is-open { display: block; }
-		.desktop-nav ul {
+		/* ヘッダー：折り返しなし、ロゴ左・ハンバーガー右 */
+		.header-inner { flex-wrap: nowrap; padding: 0.6rem var(--container-pad-x); }
+		.header-right { gap: 0; }
+		.hamburger-btn { display: inline-flex; margin-left: auto; }
+		/* PC用ナビとLINEボタンはモバイルで非表示 */
+		.header-line-btn,
+		.desktop-nav { display: none; }
+
+		/* ======= フルスクリーン ドロワー ======= */
+		.mobile-drawer {
+			display: flex;
 			flex-direction: column;
-			gap: 0.5rem;
-			text-align: center;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--color-surface);
+			z-index: 10000;
+			padding: 5rem 2rem 8rem;
+			overflow-y: auto;
+			transform: translateX(100%);
+			transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			visibility: hidden;
 		}
-		.desktop-nav a {
+		.mobile-drawer.is-open {
+			transform: translateX(0);
+			visibility: visible;
+		}
+		/* 閉じる（×）ボタン：ドロワー右上に固定 */
+		.drawer-close-btn {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			color: var(--color-text);
+			width: var(--tap-min);
+			height: var(--tap-min);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 8px;
+		}
+		.drawer-close-btn:hover { background: rgba(0,0,0,0.05); }
+		.mobile-drawer nav ul {
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+		}
+		.mobile-drawer nav a {
 			display: block;
-			font-size: 1.05rem;
-			padding: 0.85rem 0; /* タップ領域確保 */
+			font-size: 1.2rem;
+			font-weight: 700;
+			color: var(--color-text);
+			padding: 1.1rem 0;
+			border-bottom: 1px solid rgba(0,0,0,0.06);
+			text-align: center;
+			text-decoration: none;
+		}
+		.mobile-drawer nav a:hover { color: var(--color-primary); opacity: 1; }
+
+		/* ドロワー背景オーバーレイ */
+		.drawer-overlay {
+			display: block;
+			position: fixed;
+			inset: 0;
+			background: rgba(0,0,0,0.4);
+			z-index: 9999;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+		}
+		.drawer-overlay.is-open {
+			opacity: 1;
+			pointer-events: auto;
 		}
 
+		/* ======= モバイル専用 ボトムバー ======= */
+		.mobile-line-bar {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 9998;
+			background-color: #06C755;
+			color: white;
+			font-weight: bold;
+			font-size: 1.1rem;
+			padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
+			text-decoration: none;
+			box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+		}
+
+		/* フッター下余白（ボトムバーに被らないよう）*/
 		.footer {
-			padding: 3rem var(--container-pad-x) 1.5rem;
+			padding: 3rem var(--container-pad-x) calc(5rem + env(safe-area-inset-bottom, 0px));
 			margin-top: 3rem;
 		}
-		.footer-inner {
-			flex-direction: column;
-			gap: 2rem;
-			text-align: center;
-		}
+		.footer-inner { flex-direction: column; gap: 2rem; text-align: center; }
 		.footer-sns { align-items: center; }
 		.sns-list { justify-content: center; }
 	}
