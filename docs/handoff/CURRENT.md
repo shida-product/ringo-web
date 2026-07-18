@@ -1,8 +1,10 @@
 # 現在の注力タスク・ブロッカー
 
 ## 現在のフェーズ
-- **商品ページ（microCMS連携）＋SEO強化の実装準備フェーズ**
+- **商品ページのHTML/CSS先行作成フェーズ（実装は別セッションで行う）**
 - 技術方針・アーキテクチャは確定済み（下記）。詳細は `docs/foundation/architecture.md`。
+- **▶ 実装着手時はまず `docs/foundation/products-page-plan.md`（実装計画書）を読むこと。** サンプルデータで静的にUIを先行作成し、後日microCMS連携へ差し替える方針。
+- microCMSの管理画面は自作しない（SaaS提供の編集UIを使う）。本リポジトリは公開側の表示ページのみ。
 
 ## 確定済みの技術方針
 - 商品ページ：microCMS＋Astro（静的生成）
@@ -12,13 +14,16 @@
 - 独自ドメイン：自分名義で取得
 - コスト：月額実質0円（ドメイン年額のみ）
 
-## 次のアクション（実装）
-1. microCMSのコンテンツ型（入力フィールド）設計 ※着手時にたたき台作成
-2. `src/pages/products/index.astro`（一覧）・`products/[slug].astro`（個別）の実装
-3. `getStaticPaths` + microCMS API連携、商品構造化データ（Product/Drug）追加
-4. Netlify自動デプロイ（microCMS Webhook）設定、`astro.config.mjs` の独自ドメイン向け再設定
-5. `@astrojs/sitemap` 導入＋Google Search Console／Googleビジネスプロフィール登録
-6. Instagram表示（無料ウィジェット）※後回し
+## 次のアクション（別セッションで実装）
+`docs/foundation/products-page-plan.md` の「10. 実装チェックリスト」に従う。
+1. `src/data/products.ts`（型＋サンプルデータ）
+2. `src/pages/products/index.astro`（一覧）・`products/[slug].astro`（個別）
+3. `src/components/InstagramFeed.astro`（投稿タイルのプレースホルダ）
+4. `src/layouts/Layout.astro` ナビに「取扱い商品」追加（＋lucideアイコン登録）
+5. `npm run build` 確認・スマホ実機確認
+
+## 後日（ドメイン取得後）
+- microCMS連携への差し替え、Netlify自動デプロイ、sitemap／Search Console／Googleビジネスプロフィール（計画書 §11）。
 
 ## ブロッカー
-- 独自ドメインの取得（取得後に着手が最も効率的）。
+- なし（サンプルデータで先行作成可能）。microCMS実連携は独自ドメイン取得後。
