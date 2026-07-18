@@ -44,5 +44,8 @@
 - **運用体制**：非エンジニアがmicroCMS管理画面で商品を登録・編集・公開。管理画面と公開サイトは完全分離（来訪者は管理画面にアクセス不可）。
 - **コスト**：microCMS Hobby（¥0）＋無料ホスティングで月額実質0円（ドメイン年額のみ）。
 - **SEO方針**：隠しキーワードは不採用（Google規約違反・YMYLで高リスク）。構造化データ（JSON-LD `Pharmacy` は実装済み・`Product`/`Drug`追加予定）＋meta＋alt＋自然な可視文で対応。
-- 詳細比較は `docs/foundation/seo-product-strategy.md` に集約。
-- **未確定（次項でユーザーに確認）**：ホスティング/自動デプロイ基盤、画像配信方式、URL/slug設計、コンテンツ型の具体フィールド、Instagram表示方式。
+- **ホスティング／DNS：Netlify（無料）に確定**。DNSもNetlifyに委任。Vercelは無料プラン非商用限定のため不採用。
+- **画像配信：ビルド時に自社ホスト（Netlify CDN）へ取り込み配信に確定**（Astro画像最適化）。
+- **URL/slug：slug＝ローマ字／画面表示＝正式名称（日本語）に確定**。
+- 詳細・確定した設計判断は `docs/foundation/architecture.md`（技術仕様）と `docs/foundation/seo-product-strategy.md`（SEO・比較）に集約。
+- **後回し（着手時に確定）**：microCMSコンテンツ型の具体フィールド、Instagram表示方式。
