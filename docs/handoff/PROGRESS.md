@@ -33,3 +33,22 @@
 2. `ringo-web/src/pages/products/[slug].astro` の動的ルーティング追加
 3. `getStaticPaths` + microCMS API連携の実装
 4. 自動デプロイパイプラインの設定
+
+## 2026-07-18 ── 商品ページ／SEO方針の確定
+
+- **目的の再定義**：ゴールは「荒川区 ミラグレーン」等の "地域名＋商品名" 検索での自社サイト表示（発見性）。
+- **商品ページ方式：microCMS＋Astro（案B）に確定**。noteおよびWordPressは不採用。
+  - note：資産がnote.com側に貯まりSEO主眼に弱い／構造化管理に不向きのため見送り。
+  - WordPress：月額サーバー費用・永続的な保守/セキュリティ負担が「0円運用」憲章と相反するため不採用。
+- **独自ドメイン：取得予定で確定**（ローカルSEO・信頼性の最重要施策）。
+- **運用体制**：非エンジニアがmicroCMS管理画面で商品を登録・編集・公開。管理画面と公開サイトは完全分離（来訪者は管理画面にアクセス不可）。
+- **コスト**：microCMS Hobby（¥0）＋無料ホスティングで月額実質0円（ドメイン年額のみ）。
+- **SEO方針**：隠しキーワードは不採用（Google規約違反・YMYLで高リスク）。構造化データ（JSON-LD `Pharmacy` は実装済み・`Product`/`Drug`追加予定）＋meta＋alt＋自然な可視文で対応。
+- **ホスティング／DNS：Cloudflare Pages（無料）に確定**。DNSもCloudflareで一元管理。
+  - 不採用：Vercel（無料は非商用限定）／Netlify（2026年よりクレジット制。300クレジット/月・本番デプロイ≒月20回・帯域15GBで、上限到達時にサイト一時停止）。
+  - Cloudflare Pages無料：500ビルド/月・帯域無制限・商用可・停止リスクなしで、公開ごと自動デプロイと相性が良い。
+  - ※2026-07-18のcodexレビュー指摘でNetlifyのクレジット制が判明し、host選定を見直して変更。
+- **画像配信：ビルド時に自社ホストのCDNへ取り込み配信に確定**（Astro画像最適化）。来訪者分はmicroCMS転送量を消費しないが、**ビルド時の画像取得分はmicroCMS転送量に加算**される点に留意（codexレビュー反映）。
+- **URL/slug：slug＝ローマ字／画面表示＝正式名称（日本語）に確定**。
+- 詳細・確定した設計判断は `docs/foundation/architecture.md`（技術仕様）と `docs/foundation/seo-product-strategy.md`（SEO・比較）に集約。
+- **後回し（着手時に確定）**：microCMSコンテンツ型の具体フィールド、Instagram表示方式。

@@ -1,13 +1,29 @@
 # 現在の注力タスク・ブロッカー
 
 ## 現在のフェーズ
-- **実機検証と本番公開準備**
-- PC開発環境における全デザイン・画像・コンテンツ（文章等）の組み込みが100%完了しました。
+- **商品ページのHTML/CSS先行作成フェーズ（実装は別セッションで行う）**
+- 技術方針・アーキテクチャは確定済み（下記）。詳細は `docs/foundation/architecture.md`。
+- **▶ 実装着手時はまず `docs/foundation/products-page-plan.md`（実装計画書）を読むこと。** サンプルデータで静的にUIを先行作成し、後日microCMS連携へ差し替える方針。
+- microCMSの管理画面は自作しない（SaaS提供の編集UIを使う）。本リポジトリは公開側の表示ページのみ。
 
-## 次のアクション
-1. ユーザー（指示者）による、スマートフォン実機での表示テスト・動作テスト（文字サイズ感やリンク挙動の確認）。
-2. 実機テストで出た微修正などの反映。
-3. `npm run build` による本番用静的ファイル（dist）の生成と、既存サーバー環境へのデプロイ（アップロード）。
+## 確定済みの技術方針
+- 商品ページ：microCMS＋Astro（静的生成）
+- ホスティング／DNS：Cloudflare Pages（無料・500ビルド/月・帯域無制限・停止リスクなし）／DNSもCloudflare
+- 画像：ビルド時に自社ホスト取り込み配信
+- URL：slug＝ローマ字／表示＝正式名称（日本語）
+- 独自ドメイン：自分名義で取得
+- コスト：月額実質0円（ドメイン年額のみ）
+
+## 次のアクション（別セッションで実装）
+`docs/foundation/products-page-plan.md` の「10. 実装チェックリスト」に従う。
+1. `src/data/products.ts`（型＋サンプルデータ）
+2. `src/pages/products/index.astro`（一覧）・`products/[slug].astro`（個別）
+3. `src/components/InstagramFeed.astro`（投稿タイルのプレースホルダ）
+4. `src/layouts/Layout.astro` ナビに「取扱い商品」追加（＋lucideアイコン登録）
+5. `npm run build` 確認・スマホ実機確認
+
+## 後日（ドメイン取得後）
+- microCMS連携への差し替え、Cloudflare Pages自動デプロイ（Deploy Hook）、sitemap／Search Console／Googleビジネスプロフィール（計画書 §11）。
 
 ## ブロッカー
-- 特になし（スマホでの実機テスト結果・フィードバック待ち）
+- なし（サンプルデータで先行作成可能）。microCMS実連携は独自ドメイン取得後。
