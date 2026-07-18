@@ -8,7 +8,7 @@
 
 ## 確定済みの技術方針
 - 商品ページ：microCMS＋Astro（静的生成）
-- ホスティング／DNS：Netlify（無料）
+- ホスティング／DNS：Cloudflare Pages（無料・500ビルド/月・帯域無制限・停止リスクなし）／DNSもCloudflare
 - 画像：ビルド時に自社ホスト取り込み配信
 - URL：slug＝ローマ字／表示＝正式名称（日本語）
 - 独自ドメイン：自分名義で取得
@@ -23,7 +23,7 @@
 5. `npm run build` 確認・スマホ実機確認
 
 ## 後日（ドメイン取得後）
-- microCMS連携への差し替え、Netlify自動デプロイ、sitemap／Search Console／Googleビジネスプロフィール（計画書 §11）。
+- microCMS連携への差し替え、Cloudflare Pages自動デプロイ（Deploy Hook）、sitemap／Search Console／Googleビジネスプロフィール（計画書 §11）。
 
 ## ブロッカー
 - なし（サンプルデータで先行作成可能）。microCMS実連携は独自ドメイン取得後。

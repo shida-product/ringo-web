@@ -147,9 +147,9 @@
 
 1. microCMSでコンテンツ型（§4）を作成し、実データ登録。
 2. `getStaticPaths` の取得元を `products.ts` の配列から **microCMS API fetch** に差し替え。
-3. APIキー（読み取り用）を **Netlify環境変数**に設定（Gitに含めない）。
-4. 商品画像をビルド時に自社ホストへ取り込み配信。
-5. microCMS Webhook → **Netlify自動ビルド**を設定。
+3. APIキー（読み取り用）を **Cloudflare Pagesの環境変数**に設定（Gitに含めない）。
+4. 商品画像をビルド時に自社ホストへ取り込み配信（ビルド時のmicroCMS転送量に留意。§4・アーキテクチャ§6参照）。
+5. microCMS Webhook → **Cloudflare PagesのDeploy Hook**で自動ビルドを設定。
 6. `astro.config.mjs` の `site` / `base` を独自ドメイン向けに再設定。
 7. **画面プレビュー**（§12）を実装。
 8. Google Search Console／Googleビジネスプロフィール登録。
@@ -167,7 +167,7 @@
 
 ### Astro（静的サイト）での技術的ポイント
 - Astroは既定でSSG（ビルド時にHTML固定）のため、**そのままでは下書きプレビュー不可**（URLの `draftKey` を実行時に読めない）。
-- 対策：**プレビュー用ルートだけをSSR/ハイブリッドで動かす**（`@astrojs/netlify` アダプタ導入、該当ルートで `export const prerender = false`）。
+- 対策：**プレビュー用ルートだけをSSR/ハイブリッドで動かす**（`@astrojs/cloudflare` アダプタ導入、該当ルートで `export const prerender = false`）。
   - **商品ページ本体は静的（SSG）のまま維持** → 表示速度・SEOは犠牲にしない。
   - プレビュー時は `draftKey` を使ってmicroCMSの下書きコンテンツを取得し、本番と同じテンプレートでレンダリング。
 - 参考：microCMS公式「AstroとmicroCMSを使った画面プレビューを実装する」。
