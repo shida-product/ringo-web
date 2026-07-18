@@ -52,3 +52,13 @@
 - **URL/slug：slug＝ローマ字／画面表示＝正式名称（日本語）に確定**。
 - 詳細・確定した設計判断は `docs/foundation/architecture.md`（技術仕様）と `docs/foundation/seo-product-strategy.md`（SEO・比較）に集約。
 - **後回し（着手時に確定）**：microCMSコンテンツ型の具体フィールド、Instagram表示方式。
+
+## 2026-07-18 ── デザイン刷新準備・商品ページ先行実装
+
+- 取扱い商品ページのサンプル実装を追加（商品データ、一覧ページ、個別ページ、サンプル画像）。
+- 共通レイアウト部品として SiteHeader / SiteFooter / MobileDrawer / FloatingLineCta を分離。
+- 商品表示部品として ProductCard / ProductBadge / LegalNotice を分離。
+- ホームに InstagramFeed プレースホルダを追加。
+- デザイン刷新計画 `docs/foundation/design-refresh-plan.md` を作成し、8パターンの方向性を整理。
+- 実装者向け手順書 `docs/foundation/design-refresh-implementation-guide.md` を作成し、次回以降の実装開始手順を整備。
+- build確認済み（`npm run build`）。

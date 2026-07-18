@@ -1,0 +1,12 @@
+---
+interface Props { label: string; variant?: 'category' | 'class'; }
+const { label, variant = 'category' } = Astro.props;
+---
+
+<span class:list={['badge', variant === 'category' ? 'badge-category' : 'badge-class']}>{label}</span>
+
+<style>
+  .badge { display: inline-flex; align-items: center; border-radius: 9999px; padding: 0.25rem 0.7rem; font-size: 0.78rem; font-weight: 700; }
+  .badge-category { background: color-mix(in srgb, var(--color-primary) 14%, white); color: var(--color-primary); }
+  .badge-class { background: color-mix(in srgb, var(--color-accent) 12%, white); color: var(--color-accent); }
+</style>

@@ -1,0 +1,70 @@
+---
+import LegalNotice from '../../components/LegalNotice.astro';
+import ProductBadge from '../../components/ProductBadge.astro';
+import Layout from '../../layouts/Layout.astro';
+import { SITE } from '../../data/site';
+import sampleImage from '../../assets/images/product-sample.svg';
+import { formatPrice, getAllProducts, productImageAlt } from '../../data/products';
+
+export function getStaticPaths() {
+  return getAllProducts().map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const productUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const imageUrl = new URL(sampleImage.src, Astro.site).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': product.medClass.includes('医薬品') ? 'Drug' : 'Product',
+  name: product.name,
+  description: product.summary,
+  image: imageUrl,
+  url: productUrl,
+  manufacturer: product.maker ? { '@type': 'Organization', name: product.maker } : undefined,
+  offers: product.price ? { '@type': 'Offer', price: product.price, priceCurrency: 'JPY', availability: 'https://schema.org/InStock' } : undefined,
+};
+---
+
+<Layout title={product.name} description={product.summary}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <div class="page-header"><div class="container"><h1>{product.name}</h1></div></div>
+  <article class="container page-content">
+    <nav class="breadcrumb" aria-label="パンくずリスト"><a href={baseUrl}>ホーム</a><span aria-hidden="true">›</span><a href={`${baseUrl}products`}>取扱い商品</a><span aria-hidden="true">›</span><span>{product.name}</span></nav>
+    <section class="product-hero glass-panel">
+      <div class="product-visual"><img src={sampleImage.src} alt={productImageAlt(product)} class="product-image" loading="lazy" /></div>
+      <div class="product-info">
+        <div class="badge-row"><ProductBadge label={product.category} /><ProductBadge label={product.medClass} variant="class" /></div>
+        <h2>{product.name}</h2>
+        <p class="summary text-pretty">{product.summary}</p>
+        <dl class="info-list">{product.maker && <><dt>メーカー</dt><dd>{product.maker}</dd></>}<dt>価格</dt><dd>{formatPrice(product.price)}</dd></dl>
+      </div>
+    </section>
+    <section class="glass-panel detail-panel">
+      {product.description && <><h2 class="sub-title">特徴</h2><p class="text-pretty">{product.description}</p></>}
+      {product.ingredients && <><h2 class="sub-title">成分・分量</h2><p class="text-pretty">{product.ingredients}</p></>}
+      {product.usage && <><h2 class="sub-title">用法・用量</h2><p class="text-pretty">{product.usage}</p></>}
+      {product.caution && <><h2 class="sub-title">使用上の注意</h2><p class="text-pretty">{product.caution}</p></>}
+      <LegalNotice />
+    </section>
+    <div class="cta-row"><a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="button-accent"><i data-lucide="smartphone" aria-hidden="true"></i> お薬の相談をLINEで</a><a href={`${baseUrl}products`} class="back-link">取扱い商品一覧へ戻る</a></div>
+  </article>
+</Layout>
+
+<style>
+  .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1rem; color: var(--color-text-light); font-size: 0.9rem; }
+  .product-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: center; margin-bottom: 1.5rem; }
+  .product-image { width: 100%; border-radius: 14px; aspect-ratio: 3 / 2; object-fit: cover; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .summary { color: var(--color-text-light); margin-bottom: 1.25rem; }
+  .info-list { display: grid; grid-template-columns: 7rem 1fr; gap: 0.6rem 1rem; }
+  .info-list dt { font-weight: 700; color: var(--color-primary); }
+  .detail-panel { margin-bottom: 1.5rem; }
+  .detail-panel > p { margin-bottom: 1.5rem; }
+  .detail-panel .sub-title { margin-top: 2.5rem; }
+  .detail-panel .sub-title:first-child { margin-top: 0; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center; }
+  .button-accent :global(svg) { width: 18px; height: 18px; }
+  .back-link { min-height: var(--tap-min); display: inline-flex; align-items: center; font-weight: 700; }
+  @media (max-width: 768px) { .product-hero { grid-template-columns: 1fr; gap: 1.25rem; } .info-list { grid-template-columns: 1fr; gap: 0.2rem; } .info-list dd { margin-bottom: 0.7rem; } .cta-row { flex-direction: column; } }
+</style>

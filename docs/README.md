@@ -8,6 +8,7 @@
 | 思想の正典 | `docs/foundation/charter.md` | ビジョン・対象ユーザー・体験原則 |
 | 構造の正典 | `docs/foundation/architecture.md` | レイヤ・技術スタック |
 | まとめ先索引 | `docs/foundation/README.md` | 各正典ファイルの対応 |
+| 実装手順 | `docs/foundation/design-refresh-implementation-guide.md` | デザイン刷新を実装者に渡すための手順書 |
 | 日々のメモ | `docs/stack/` | 備忘録や一時的なメモ |
 | 引き継ぎ | `docs/handoff/` | 現状のタスク(`CURRENT.md`)と完了事項(`PROGRESS.md`) |
 | 環境・起動 | `docs/setup/` | ローカル開発・デプロイ手順(`local-development.md`) |

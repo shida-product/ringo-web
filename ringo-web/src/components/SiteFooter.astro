@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import { SITE } from '../data/site';
+import snsIconX from '../assets/SNS_icon/X_logo-Black.png';
+import snsIconInsta from '../assets/SNS_icon/insta_logo.png';
+import snsIconLine from '../assets/SNS_icon/LINE_logo.png';
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-info">
+      <h3>{SITE.name}</h3>
+      <p>
+        {SITE.postalCode}<br>
+        <a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="info-link footer-link">
+          {SITE.address} <i data-lucide="external-link" class="inline-icon" style="width:14px;height:14px;"></i>
+        </a>
+        <br>
+        TEL: <a href={SITE.telLink} class="info-link footer-link tel-link">
+          {SITE.tel} <i data-lucide="phone" class="inline-icon" style="width:14px;height:14px;"></i>
+        </a>
+      </p>
+    </div>
+    <div class="footer-sns">
+      <p class="footer-title">公式SNS</p>
+      <div class="sns-list">
+        <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="X (Twitter)">
+          <Image src={snsIconX} alt="X" class="sns-icon-img" widths={[32, 64]} />
+          <span class="sns-label">{SITE.xHandle}</span>
+        </a>
+        <a href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="Instagram">
+          <Image src={snsIconInsta} alt="Instagram" class="sns-icon-img" widths={[32, 64]} />
+          <span class="sns-label">{SITE.instagramHandle}</span>
+        </a>
+        <a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="sns-item" aria-label="LINEでお薬予約">
+          <Image src={snsIconLine} alt="LINE" class="sns-icon-img" widths={[32, 64]} />
+          <span class="sns-label">LINE予約</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copy">&copy; {new Date().getFullYear()} {SITE.name} All rights reserved.</div>
+</footer>
+
+<style>
+  .footer { background: var(--color-surface); padding: 4rem var(--container-pad-x) 1.5rem; margin-top: 5rem; border-top: 1px solid rgba(0,0,0,0.05); }
+  .footer-inner { max-width: var(--container-max); margin: 0 auto 2rem; display: flex; justify-content: space-between; gap: 2rem; }
+  .footer-info h3 { color: var(--color-accent); margin-bottom: 1rem; }
+  .footer-title { font-weight: 700; margin-bottom: 1rem; color: var(--color-text); }
+  .footer-sns { display: flex; flex-direction: column; align-items: flex-end; }
+  .sns-list { display: flex; gap: 24px; align-items: center; }
+  .sns-item { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: var(--tap-min); min-height: var(--tap-min); transition: transform 0.2s, opacity 0.2s; }
+  .sns-item:hover { transform: translateY(-3px); opacity: 0.8; }
+  .sns-icon-img { width: 32px; height: 32px; object-fit: contain; }
+  .sns-label { font-size: 0.75rem; color: var(--color-text); font-weight: 500; transition: color 0.2s; }
+  .sns-item:hover .sns-label { color: var(--color-accent); }
+  .footer-copy { text-align: center; color: var(--color-text-light); font-size: 0.875rem; }
+
+  @media (max-width: 768px) {
+    .footer { padding: 3rem var(--container-pad-x) calc(5rem + env(safe-area-inset-bottom, 0px)); margin-top: 3rem; }
+    .footer-inner { flex-direction: column; gap: 2rem; text-align: center; }
+    .footer-sns { align-items: center; }
+    .sns-list { justify-content: center; }
+  }
+</style>

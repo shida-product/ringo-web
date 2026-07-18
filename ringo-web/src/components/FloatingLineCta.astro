@@ -1,0 +1,33 @@
+---
+import { SITE } from '../data/site';
+---
+
+<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="mobile-line-bar">
+  <i data-lucide="smartphone" class="line-icon"></i> LINE予約
+</a>
+
+<style>
+  .mobile-line-bar { display: none; }
+  .line-icon { width: 18px; height: 18px; }
+
+  @media (max-width: 768px) {
+    .mobile-line-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9998;
+      background-color: #06C755;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
+      text-decoration: none;
+      box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+    }
+  }
+</style>
