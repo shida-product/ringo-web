@@ -1,0 +1,36 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Wellness Brand
+   - 表現検証案（ブランド寄り）
+   - セージグリーン×オフホワイト、余白多め、英字ラベル
+   - 採用前提ではなく「表現の上限」を確認するための案
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Cormorant+Garamond:wght@500;600&display=swap');
+
+:root[data-cp-theme='wellness-brand'] {
+  --cp-bg: #fafaf7;
+  --cp-surface: #ffffff;
+  --cp-surface-alt: #eef1ea;
+  --cp-text: #34403a;
+  --cp-text-muted: #75837b;
+  --cp-heading: #2c3a33;
+  --cp-primary: #5f7a6a;
+  --cp-primary-contrast: #ffffff;
+  --cp-accent: #a8865c;
+  --cp-accent-contrast: #ffffff;
+  --cp-border: #dfe4dc;
+
+  --cp-font-body: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+  --cp-font-display: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+  --cp-eyebrow-tracking: 0.28em;
+
+  --cp-radius: 10px;
+  --cp-radius-lg: 16px;
+  --cp-shadow: 0 12px 32px rgba(52, 64, 58, 0.08);
+}
+
+/* 英字ラベルだけセリフ体で品よく */
+:root[data-cp-theme='wellness-brand'] .cp-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05em;
+}

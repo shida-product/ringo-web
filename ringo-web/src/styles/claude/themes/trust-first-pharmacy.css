@@ -1,0 +1,24 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Trust First Pharmacy
+   - 本番採用候補（堅実案）
+   - 医療の信頼感：深緑×白、余白広め、大きめの文字
+   - フォントは既存の Noto Sans JP を維持（高齢者可読性優先）
+   ========================================================= */
+
+:root[data-cp-theme='trust-first-pharmacy'] {
+  --cp-bg: #f4f8f6;
+  --cp-surface: #ffffff;
+  --cp-surface-alt: #e7f0ec;
+  --cp-text: #1f2933;
+  --cp-text-muted: #5b6b66;
+  --cp-heading: #0f4c40;
+  --cp-primary: #0f6e5d;
+  --cp-primary-contrast: #ffffff;
+  --cp-accent: #d64545;
+  --cp-accent-contrast: #ffffff;
+  --cp-border: #d5e2dc;
+
+  --cp-radius: 14px;
+  --cp-radius-lg: 20px;
+  --cp-shadow: 0 10px 30px rgba(15, 76, 64, 0.1);
+}

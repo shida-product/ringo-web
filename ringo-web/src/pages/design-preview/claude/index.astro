@@ -1,0 +1,143 @@
+---
+// Claude デザイン試作：パターン一覧（入口ページ)
+// /design-preview/claude/ 配下は Claude が作成した試作。
+// Codex等ほかの実装者の試作とディレクトリを分けて管理する。
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const previewBase = `${baseUrl}design-preview/claude/`;
+
+const patterns = [
+	{
+		slug: 'trust-first-pharmacy',
+		name: 'Trust First Pharmacy',
+		tag: '本番採用候補',
+		concept: '医療の信頼感を最優先した堅実案。深緑×白、大きな文字、チェックリスト型のヒーロー。フォントは既存のNoto Sans JPを維持。',
+	},
+	{
+		slug: 'community-care',
+		name: 'Community Care',
+		tag: '本番採用候補',
+		concept: '「りんごちゃん」の名前に寄せた暖色×丸ゴシック（Zen Maru Gothic）。角丸と有機的な写真枠で、地域のかかりつけ感を出す親しみ案。',
+	},
+	{
+		slug: 'local-editorial',
+		name: 'Local Editorial',
+		tag: '表現検証',
+		concept: '「町屋の健康情報誌」をコンセプトにした雑誌風。生成り背景×明朝見出し（Shippori Mincho）×細罫線。番号付きセクションで読みものらしく。',
+	},
+	{
+		slug: 'wellness-brand',
+		name: 'Wellness Brand',
+		tag: '表現検証',
+		concept: 'セージグリーン×余白×英字ラベルのブランド寄り案。写真フルブリードのヒーローで表現の上限を確認する。採用前提ではない。',
+	},
+];
+---
+
+<ClaudePreviewLayout title="デザイン試作一覧" theme="claude-index">
+	<PreviewPatternNav />
+
+	<section class="cp-container intro">
+		<p class="cp-eyebrow">DESIGN PREVIEW BY CLAUDE</p>
+		<h1>デザイン試作パターン一覧</h1>
+		<p class="lead text-pretty">
+			`docs/foundation/design-refresh-implementation-guide.md`
+			に基づいて、Claudeが作成したデザイン試作です。どのパターンでも営業時間・電話・LINE・処方箋受付・市販薬相談・アクセスの必須情報を維持しています。
+		</p>
+	</section>
+
+	<section class="cp-container grid" aria-label="パターン一覧">
+		{
+			patterns.map((pattern) => (
+				<a class="pattern-card cp-fade-in" href={`${previewBase}${pattern.slug}`}>
+					<span class:list={['tag', { 'is-experimental': pattern.tag === '表現検証' }]}>{pattern.tag}</span>
+					<h2>{pattern.name}</h2>
+					<p class="text-pretty">{pattern.concept}</p>
+					<span class="view">試作を見る →</span>
+				</a>
+			))
+		}
+	</section>
+</ClaudePreviewLayout>
+
+<style>
+	.intro {
+		padding-top: clamp(2.5rem, 6vw, 4rem);
+		margin-bottom: 3rem;
+		max-width: 820px;
+	}
+	.cp-eyebrow {
+		color: var(--cp-primary);
+		font-weight: 700;
+		font-size: 0.8rem;
+		letter-spacing: var(--cp-eyebrow-tracking);
+		margin-bottom: 0.75rem;
+	}
+	h1 {
+		font-size: clamp(1.8rem, 4vw, 2.5rem);
+		margin-bottom: 1rem;
+	}
+	.lead {
+		color: var(--cp-text-muted);
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		margin-bottom: var(--cp-section-gap);
+	}
+	.pattern-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		background: var(--cp-surface);
+		border: 1px solid var(--cp-border);
+		border-radius: var(--cp-radius-lg);
+		box-shadow: var(--cp-shadow);
+		padding: 1.75rem;
+		color: var(--cp-text);
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	.pattern-card:hover {
+		transform: translateY(-4px);
+		opacity: 1;
+	}
+	.tag {
+		align-self: flex-start;
+		background: var(--cp-primary);
+		color: var(--cp-primary-contrast);
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.2rem 0.7rem;
+		border-radius: 9999px;
+	}
+	.tag.is-experimental {
+		background: var(--cp-surface-alt);
+		color: var(--cp-text-muted);
+	}
+	h2 {
+		font-size: 1.35rem;
+		margin: 0;
+	}
+	p {
+		font-size: 0.92rem;
+		color: var(--cp-text-muted);
+		margin: 0;
+	}
+	.view {
+		margin-top: auto;
+		font-weight: 700;
+		color: var(--cp-primary);
+		min-height: var(--tap-min);
+		display: inline-flex;
+		align-items: center;
+	}
+
+	@media (max-width: 768px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

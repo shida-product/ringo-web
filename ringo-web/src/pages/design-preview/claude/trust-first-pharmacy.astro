@@ -1,0 +1,162 @@
+---
+// Claude デザイン試作 1/4：Trust First Pharmacy（本番採用候補・堅実案）
+// コンセプト：医療の信頼感を最優先。深緑×白、大きな文字、迷わない導線。
+import '../../../styles/claude/themes/trust-first-pharmacy.css';
+import { Image } from 'astro:assets';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import SectionHeader from '../../../components/claude/SectionHeader.astro';
+import ActionLinks from '../../../components/claude/ActionLinks.astro';
+import ServiceCards from '../../../components/claude/ServiceCards.astro';
+import HoursPanel from '../../../components/claude/HoursPanel.astro';
+import AccessPanel from '../../../components/claude/AccessPanel.astro';
+import CtaBand from '../../../components/claude/CtaBand.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { getAllProducts } from '../../../data/products';
+import { SITE } from '../../../data/site';
+import photoExterior from '../../../assets/images/Exterior_01.jpg';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+---
+
+<ClaudePreviewLayout title="Trust First Pharmacy" theme="trust-first-pharmacy">
+	<PreviewPatternNav current="trust-first-pharmacy" />
+
+	<section class="hero">
+		<div class="cp-container hero-grid">
+			<div class="hero-copy cp-fade-in">
+				<p class="cp-eyebrow">MACHIYA / ARAKAWA PHARMACY</p>
+				<h1 class="text-balance">
+					町屋で、迷わず<br class="br-pc-only" />相談できる薬局。
+				</h1>
+				<p class="lead text-pretty">
+					{SITE.name}は、荒川区荒川・町屋駅徒歩5分の調剤薬局です。
+					土曜日・日曜日も営業し、LINEからお薬の事前受付ができます。
+				</p>
+				<ul class="hero-points">
+					<li>土日も営業（日曜は午前）</li>
+					<li>LINEで処方箋の事前送信</li>
+					<li>ジェネリック・市販薬の相談</li>
+				</ul>
+			</div>
+			<div class="hero-photo cp-fade-in">
+				<Image
+					src={photoExterior}
+					alt="りんごちゃん薬局の外観"
+					widths={[480, 800, 1200]}
+					sizes="(max-width: 900px) 100vw, 50vw"
+				/>
+			</div>
+		</div>
+		<div class="cp-container hero-actions">
+			<ActionLinks />
+		</div>
+	</section>
+
+	<section class="cp-section cp-container" aria-labelledby="services">
+		<SectionHeader
+			label="SERVICES"
+			title="できること"
+			lead="処方箋の受付から市販薬の相談まで。薬のことはまとめてお任せください。"
+		/>
+		<ServiceCards baseUrl={baseUrl} />
+	</section>
+
+	<section class="cp-section cp-container" aria-labelledby="products">
+		<SectionHeader
+			label="PRODUCTS"
+			title="取扱い商品"
+			lead="店頭で取り扱う市販薬・ヘルスケア商品の一例です。"
+		/>
+		<div class="cp-products">
+			{products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
+		</div>
+		<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<section class="cp-section cp-container info-grid" aria-label="営業時間とアクセス">
+		<HoursPanel />
+		<AccessPanel />
+	</section>
+
+	<CtaBand />
+</ClaudePreviewLayout>
+
+<style>
+	.hero {
+		padding: clamp(2.5rem, 6vw, 4.5rem) 0 3rem;
+		background: linear-gradient(180deg, var(--cp-surface-alt) 0%, var(--cp-bg) 100%);
+		margin-bottom: var(--cp-section-gap);
+	}
+	.hero-grid {
+		display: grid;
+		grid-template-columns: 1.15fr 1fr;
+		gap: 2.5rem;
+		align-items: center;
+		margin-bottom: 2.5rem;
+	}
+	h1 {
+		font-size: clamp(2rem, 5vw, 3.1rem);
+		line-height: 1.3;
+		margin-bottom: 1rem;
+	}
+	.lead {
+		font-size: 1.05rem;
+		margin-bottom: 1.5rem;
+		max-width: 34em;
+	}
+	.cp-eyebrow {
+		color: var(--cp-primary);
+		font-weight: 700;
+		font-size: 0.8rem;
+		letter-spacing: var(--cp-eyebrow-tracking);
+		margin-bottom: 0.75rem;
+	}
+	.hero-points {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.hero-points li {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-weight: 500;
+	}
+	.hero-points li::before {
+		content: '✓';
+		flex-shrink: 0;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: var(--cp-primary);
+		color: var(--cp-primary-contrast);
+		font-size: 0.8rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.hero-photo :global(img) {
+		width: 100%;
+		height: auto;
+		border-radius: var(--cp-radius-lg);
+		box-shadow: var(--cp-shadow);
+	}
+	.info-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		align-items: start;
+	}
+
+	@media (max-width: 900px) {
+		.hero-grid {
+			grid-template-columns: 1fr;
+		}
+		.info-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

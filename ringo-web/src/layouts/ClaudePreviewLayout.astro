@@ -1,0 +1,92 @@
+---
+// Claude デザイン試作専用レイアウト
+// - 本番 Layout.astro を汚さないための独立レイアウト
+// - theme prop を <html data-cp-theme> に付与し、テーマCSSで配色を切り替える
+// - 試作ページのため noindex を付与（検索結果に出さない）
+import '../styles/global.css';
+import '../styles/claude/preview-tokens.css';
+import { SITE } from '../data/site';
+
+interface Props {
+	title: string;
+	description?: string;
+	theme: string;
+}
+
+const { title, description = SITE.description, theme } = Astro.props;
+const fullTitle = `${title}｜デザイン試作（Claude） | ${SITE.name}`;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<!doctype html>
+<html lang="ja" data-cp-theme={theme}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="noindex, nofollow" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{fullTitle}</title>
+	</head>
+	<body class="cp-page">
+		<main>
+			<slot />
+		</main>
+
+		<footer class="cp-preview-footer">
+			<p>
+				このページは <strong>Claude</strong> が作成したデザイン試作です。掲載内容の一部はサンプルです。
+			</p>
+			<a href={baseUrl}>現行サイトのトップへ戻る</a>
+		</footer>
+
+		<!-- lucide アイコン（試作で使う分のみ） -->
+		<script>
+			import {
+				createIcons,
+				Phone,
+				MessageCircle,
+				MapPin,
+				Clock,
+				Hospital,
+				Pill,
+				HeartHandshake,
+				ShoppingBag,
+				ChevronRight,
+				ExternalLink,
+			} from 'lucide';
+			createIcons({
+				icons: {
+					Phone,
+					MessageCircle,
+					MapPin,
+					Clock,
+					Hospital,
+					Pill,
+					HeartHandshake,
+					ShoppingBag,
+					ChevronRight,
+					ExternalLink,
+				},
+			});
+		</script>
+	</body>
+</html>
+
+<style>
+	.cp-preview-footer {
+		border-top: 1px solid var(--cp-border);
+		padding: 2rem var(--container-pad-x) 3rem;
+		text-align: center;
+		font-size: 0.9rem;
+		color: var(--cp-text-muted);
+	}
+	.cp-preview-footer a {
+		display: inline-block;
+		margin-top: 0.5rem;
+		color: var(--cp-primary);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		min-height: var(--tap-min);
+	}
+</style>

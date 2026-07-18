@@ -1,0 +1,119 @@
+---
+// Claude デザイン試作：薬局サービス一覧カード
+// 処方箋受付・ジェネリック相談・市販薬相談・取扱い商品の4本柱
+interface Props {
+	baseUrl: string;
+}
+
+const { baseUrl } = Astro.props;
+
+const services = [
+	{
+		icon: 'hospital',
+		title: '処方箋の受付',
+		body: '医療機関で受け取った処方箋にもとづき、お薬をお渡しします。LINEでの事前送信で待ち時間を短縮できます。',
+		href: `${baseUrl}prescription`,
+	},
+	{
+		icon: 'pill',
+		title: 'ジェネリック薬の相談',
+		body: 'お薬代を抑えたい方は、ジェネリック医薬品への変更を薬剤師にご相談ください。',
+		href: `${baseUrl}generic`,
+	},
+	{
+		icon: 'heart-handshake',
+		title: '市販薬・健康相談',
+		body: 'かぜ薬やビタミン剤の選び方、日々の体調のお悩みなど、お気軽に店頭でご相談ください。',
+	},
+	{
+		icon: 'shopping-bag',
+		title: '取扱い商品',
+		body: '市販薬やヘルスケア用品を取り扱っています。店頭にない商品もお取り寄せをご相談いただけます。',
+		href: `${baseUrl}products`,
+	},
+] as const;
+---
+
+<div class="cp-service-cards">
+	{
+		services.map((service) => (
+			<article class="card cp-fade-in">
+				<span class="icon-wrap">
+					<i data-lucide={service.icon} aria-hidden="true" />
+				</span>
+				<h3>{service.title}</h3>
+				<p class="text-pretty">{service.body}</p>
+				{'href' in service && service.href && (
+					<a class="more" href={service.href}>
+						詳しく見る <i data-lucide="chevron-right" aria-hidden="true" />
+					</a>
+				)}
+			</article>
+		))
+	}
+</div>
+
+<style>
+	.cp-service-cards {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.25rem;
+	}
+	.card {
+		background: var(--cp-surface);
+		border: 1px solid var(--cp-border);
+		border-radius: var(--cp-radius);
+		box-shadow: var(--cp-shadow);
+		padding: 1.6rem 1.4rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.7rem;
+	}
+	.icon-wrap {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		background: var(--cp-surface-alt);
+		color: var(--cp-primary);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.icon-wrap :global(svg) {
+		width: 26px;
+		height: 26px;
+	}
+	h3 {
+		font-size: 1.1rem;
+		margin: 0;
+	}
+	p {
+		font-size: 0.92rem;
+		color: var(--cp-text-muted);
+		margin: 0;
+	}
+	.more {
+		margin-top: auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+		min-height: var(--tap-min);
+	}
+	.more :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+
+	@media (max-width: 1024px) {
+		.cp-service-cards {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.cp-service-cards {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

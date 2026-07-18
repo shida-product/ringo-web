@@ -1,0 +1,174 @@
+---
+// Claude デザイン試作 2/4：Community Care（本番採用候補・親しみ案）
+// コンセプト：「りんごちゃん」の名前に寄せた暖色×丸ゴシック。
+// 地域のかかりつけ感・話しかけやすさを最優先。
+import '../../../styles/claude/themes/community-care.css';
+import { Image } from 'astro:assets';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import SectionHeader from '../../../components/claude/SectionHeader.astro';
+import ActionLinks from '../../../components/claude/ActionLinks.astro';
+import ServiceCards from '../../../components/claude/ServiceCards.astro';
+import HoursPanel from '../../../components/claude/HoursPanel.astro';
+import AccessPanel from '../../../components/claude/AccessPanel.astro';
+import CtaBand from '../../../components/claude/CtaBand.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { getAllProducts } from '../../../data/products';
+import { SITE } from '../../../data/site';
+import photoSupport from '../../../assets/images/Support.jpg';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+---
+
+<ClaudePreviewLayout title="Community Care" theme="community-care">
+	<PreviewPatternNav current="community-care" />
+
+	<section class="hero">
+		<div class="cp-container hero-inner">
+			<div class="hero-photo cp-fade-in">
+				<Image
+					src={photoSupport}
+					alt="薬剤師による服薬相談の様子"
+					widths={[480, 800]}
+					sizes="(max-width: 900px) 80vw, 420px"
+				/>
+			</div>
+			<div class="hero-copy cp-fade-in">
+				<p class="cp-eyebrow">まちの、かかりつけ。</p>
+				<h1 class="text-balance">
+					こんにちは、<br class="br-sp-only" />町屋の<br class="br-pc-only" />りんごちゃん薬局です。
+				</h1>
+				<p class="lead text-pretty">
+					処方箋のこと、市販薬のこと、なんとなく気になる体調のこと。
+					荒川区・町屋駅から徒歩5分、土日も開いている薬局に、ふらっと相談しに来てください。
+				</p>
+				<div class="hero-badges">
+					<span class="badge">土日も営業</span>
+					<span class="badge">LINE事前受付</span>
+					<span class="badge">町屋駅 徒歩5分</span>
+				</div>
+			</div>
+		</div>
+		<div class="cp-container hero-actions">
+			<ActionLinks />
+		</div>
+	</section>
+
+	<section class="cp-section cp-container" aria-labelledby="services">
+		<SectionHeader
+			align="center"
+			label="SERVICES"
+			title="りんごちゃん薬局でできること"
+			lead="「病院でもらった処方箋」も「ドラッグストアで迷った市販薬」も、どちらもどうぞ。"
+		/>
+		<ServiceCards baseUrl={baseUrl} />
+	</section>
+
+	<section class="cp-section cp-container" aria-labelledby="products">
+		<SectionHeader
+			align="center"
+			label="PRODUCTS"
+			title="店頭で取り扱う商品"
+			lead="よく相談いただく市販薬・ヘルスケア商品の一例です。"
+		/>
+		<div class="cp-products">
+			{products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
+		</div>
+		<p class="cp-note text-center">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<section class="cp-section cp-container info-stack" aria-label="営業時間とアクセス">
+		<SectionHeader align="center" label="HOURS & ACCESS" title="営業時間・アクセス" />
+		<HoursPanel />
+		<AccessPanel />
+	</section>
+
+	<CtaBand
+		title="お薬の相談、LINEでもお待ちしています"
+		lead={`ちょっとした疑問でも大丈夫です。お急ぎの場合は ${SITE.tel} までお電話ください。`}
+	/>
+</ClaudePreviewLayout>
+
+<style>
+	.hero {
+		position: relative;
+		padding: clamp(2.5rem, 6vw, 4rem) 0 3rem;
+		margin-bottom: var(--cp-section-gap);
+		background:
+			radial-gradient(circle at 12% 20%, var(--cp-surface-alt) 0%, transparent 32%),
+			radial-gradient(circle at 88% 75%, var(--cp-surface-alt) 0%, transparent 30%),
+			var(--cp-bg);
+	}
+	.hero-inner {
+		display: grid;
+		grid-template-columns: minmax(260px, 420px) 1fr;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: center;
+		margin-bottom: 2.5rem;
+	}
+	.hero-photo :global(img) {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 42% 58% 55% 45% / 50% 44% 56% 50%;
+		border: 6px solid var(--cp-surface);
+		box-shadow: var(--cp-shadow);
+	}
+	.cp-eyebrow {
+		color: var(--cp-primary);
+		font-weight: 700;
+		font-size: 1rem;
+		margin-bottom: 0.75rem;
+	}
+	h1 {
+		font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+		line-height: 1.4;
+		margin-bottom: 1rem;
+	}
+	.lead {
+		margin-bottom: 1.5rem;
+		max-width: 34em;
+	}
+	.hero-badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+	.badge {
+		background: var(--cp-surface);
+		border: 2px solid var(--cp-primary);
+		color: var(--cp-primary);
+		font-weight: 700;
+		font-size: 0.88rem;
+		padding: 0.35rem 1rem;
+		border-radius: 9999px;
+	}
+	.info-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		max-width: 900px;
+	}
+	.text-center {
+		text-align: center;
+	}
+
+	@media (max-width: 900px) {
+		.hero-inner {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+		.hero-photo {
+			max-width: 300px;
+			margin: 0 auto;
+		}
+		.hero-badges {
+			justify-content: center;
+		}
+		.lead {
+			margin-inline: auto;
+		}
+	}
+</style>

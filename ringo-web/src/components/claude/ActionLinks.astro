@@ -1,0 +1,100 @@
+---
+// Claude デザイン試作：ファーストアクション導線（電話・LINE・地図）
+// どのパターンでもファーストビュー直下に置く前提の共通部品
+import { SITE } from '../../data/site';
+---
+
+<div class="cp-action-links">
+	<a href={SITE.telLink} class="action action-tel">
+		<i data-lucide="phone" aria-hidden="true"></i>
+		<span class="label">電話で相談する</span>
+		<span class="sub">{SITE.tel}</span>
+	</a>
+	<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="action action-line">
+		<i data-lucide="message-circle" aria-hidden="true"></i>
+		<span class="label">LINEで事前受付</span>
+		<span class="sub">処方箋の送信もOK</span>
+	</a>
+	<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="action action-map">
+		<i data-lucide="map-pin" aria-hidden="true"></i>
+		<span class="label">地図をひらく</span>
+		<span class="sub">町屋駅 徒歩5分</span>
+	</a>
+</div>
+
+<style>
+	.cp-action-links {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+	.action {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.35rem;
+		text-align: center;
+		padding: 1.15rem 1rem;
+		min-height: 92px;
+		border-radius: var(--cp-radius);
+		background: var(--cp-surface);
+		border: 2px solid var(--cp-border);
+		box-shadow: var(--cp-shadow);
+		color: var(--cp-text);
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	.action:hover {
+		transform: translateY(-3px);
+		opacity: 1;
+	}
+	.action :global(svg) {
+		width: 26px;
+		height: 26px;
+	}
+	.label {
+		font-weight: 700;
+		font-size: 1.02rem;
+	}
+	.sub {
+		font-size: 0.82rem;
+		color: var(--cp-text-muted);
+	}
+	.action-tel {
+		border-color: var(--cp-accent);
+		color: var(--cp-accent);
+	}
+	.action-tel .label {
+		color: var(--cp-accent);
+	}
+	.action-line {
+		border-color: var(--cp-line);
+		color: var(--cp-line);
+	}
+	.action-line .label {
+		color: #059140;
+	}
+	.action-map {
+		border-color: var(--cp-primary);
+		color: var(--cp-primary);
+	}
+	.action-map .label {
+		color: var(--cp-primary);
+	}
+
+	@media (max-width: 768px) {
+		.cp-action-links {
+			grid-template-columns: 1fr;
+		}
+		.action {
+			flex-direction: row;
+			justify-content: flex-start;
+			text-align: left;
+			min-height: var(--tap-min);
+			padding: 0.9rem 1.15rem;
+		}
+		.sub {
+			margin-left: auto;
+		}
+	}
+</style>

@@ -1,0 +1,154 @@
+---
+// Claude デザイン試作 4/4：Wellness Brand（表現検証案・ブランド寄り）
+// コンセプト：セージグリーン×余白×英字ラベルで「表現の上限」を確認する案。
+// 採用前提ではないが、営業時間・電話・LINE・アクセスの必須情報は維持する。
+import '../../../styles/claude/themes/wellness-brand.css';
+import { Image } from 'astro:assets';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import SectionHeader from '../../../components/claude/SectionHeader.astro';
+import ActionLinks from '../../../components/claude/ActionLinks.astro';
+import ServiceCards from '../../../components/claude/ServiceCards.astro';
+import HoursPanel from '../../../components/claude/HoursPanel.astro';
+import AccessPanel from '../../../components/claude/AccessPanel.astro';
+import CtaBand from '../../../components/claude/CtaBand.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { getAllProducts } from '../../../data/products';
+import { SITE } from '../../../data/site';
+import photoIntrospection from '../../../assets/images/Introspection.jpg';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+---
+
+<ClaudePreviewLayout title="Wellness Brand" theme="wellness-brand">
+	<PreviewPatternNav current="wellness-brand" />
+
+	<section class="hero">
+		<Image
+			src={photoIntrospection}
+			alt=""
+			class="hero-bg"
+			widths={[800, 1200, 1920]}
+			sizes="100vw"
+			loading="eager"
+		/>
+		<div class="hero-overlay"></div>
+		<div class="cp-container hero-content cp-fade-in">
+			<p class="cp-eyebrow">Everyday Wellness, Machiya</p>
+			<h1 class="text-balance">健やかな毎日は、<br class="br-sp-only" />近所の薬局から。</h1>
+			<p class="lead text-pretty">
+				{SITE.name}｜荒川区・町屋駅徒歩5分。土日も営業、LINEでお薬の事前受付ができます。
+			</p>
+		</div>
+	</section>
+
+	<section class="actions-float cp-container">
+		<ActionLinks />
+	</section>
+
+	<section class="cp-section cp-container" aria-labelledby="services">
+		<SectionHeader
+			align="center"
+			label="Our Services"
+			title="日々の健康を、静かに支える"
+			lead="処方箋の受付、ジェネリックの相談、市販薬・栄養の相談まで。暮らしのそばで続けられるケアを。"
+		/>
+		<ServiceCards baseUrl={baseUrl} />
+	</section>
+
+	<section class="cp-section cp-container" aria-labelledby="products">
+		<SectionHeader
+			align="center"
+			label="Selected Items"
+			title="取扱い商品"
+			lead="店頭で取り扱う市販薬・ヘルスケア商品の一例です。"
+		/>
+		<div class="cp-products">
+			{products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
+		</div>
+		<p class="cp-note text-center">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<section class="cp-section cp-container info-grid" aria-label="営業時間とアクセス">
+		<HoursPanel />
+		<AccessPanel />
+	</section>
+
+	<CtaBand title="今日の不調も、明日の予防も" lead="LINEでの事前受付、お電話でのご相談をお待ちしています。" />
+</ClaudePreviewLayout>
+
+<style>
+	.hero {
+		position: relative;
+		min-height: clamp(420px, 62vh, 620px);
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		margin-bottom: 5.5rem;
+	}
+	.hero :global(.hero-bg) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.hero-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(100deg, rgba(26, 36, 31, 0.92) 0%, rgba(26, 36, 31, 0.72) 55%, rgba(26, 36, 31, 0.45) 100%);
+	}
+	.hero-content {
+		position: relative;
+		width: 100%;
+		color: #f4f6f2;
+		padding-top: 2rem;
+		padding-bottom: 2rem;
+	}
+	.hero-content .cp-eyebrow {
+		color: #d8c9a8;
+		letter-spacing: var(--cp-eyebrow-tracking);
+		text-transform: uppercase;
+		font-size: 0.95rem;
+		margin-bottom: 1rem;
+	}
+	.hero-content h1 {
+		color: #ffffff;
+		font-size: clamp(2rem, 5vw, 3.2rem);
+		font-weight: 700;
+		line-height: 1.45;
+		letter-spacing: 0.06em;
+		margin-bottom: 1.25rem;
+		text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+	}
+	.lead {
+		max-width: 34em;
+		opacity: 0.95;
+		text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+	}
+	.actions-float {
+		margin-top: -3.5rem;
+		margin-bottom: var(--cp-section-gap);
+		position: relative;
+		z-index: 1;
+	}
+	.info-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		align-items: start;
+	}
+	.text-center {
+		text-align: center;
+	}
+
+	@media (max-width: 900px) {
+		.info-grid {
+			grid-template-columns: 1fr;
+		}
+		.actions-float {
+			margin-top: -2.5rem;
+		}
+	}
+</style>

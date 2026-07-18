@@ -1,0 +1,183 @@
+---
+// Claude デザイン試作 3/4：Local Editorial（表現検証案・雑誌風）
+// コンセプト：「町屋の健康情報誌」。生成り背景×明朝見出し×細罫線で
+// 地域性と読みものらしさを演出する。営業時間・電話・LINE・アクセスは削らない。
+import '../../../styles/claude/themes/local-editorial.css';
+import { Image } from 'astro:assets';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import SectionHeader from '../../../components/claude/SectionHeader.astro';
+import ActionLinks from '../../../components/claude/ActionLinks.astro';
+import ServiceCards from '../../../components/claude/ServiceCards.astro';
+import HoursPanel from '../../../components/claude/HoursPanel.astro';
+import AccessPanel from '../../../components/claude/AccessPanel.astro';
+import CtaBand from '../../../components/claude/CtaBand.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { getAllProducts } from '../../../data/products';
+import { SITE } from '../../../data/site';
+import photoSignboard from '../../../assets/images/Exterior_02.jpg';
+import photoIntrospection from '../../../assets/images/Introspection.jpg';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+---
+
+<ClaudePreviewLayout title="Local Editorial" theme="local-editorial">
+	<PreviewPatternNav current="local-editorial" />
+
+	<section class="masthead cp-container">
+		<p class="issue-line">
+			<span>MACHIYA HEALTH JOURNAL</span>
+			<span>荒川区荒川・町屋駅 徒歩5分</span>
+		</p>
+		<h1 class="cp-fade-in text-balance">薬局は、<br class="br-sp-only" />町の保健室。</h1>
+		<p class="masthead-lead text-pretty cp-fade-in">
+			{SITE.name}は、処方箋のお薬から市販薬、日々の健康の相談ごとまで受けとめる、
+			荒川区・町屋の調剤薬局です。土曜日・日曜日も営業しています。
+		</p>
+	</section>
+
+	<section class="feature cp-container">
+		<figure class="feature-photo cp-fade-in">
+			<Image
+				src={photoSignboard}
+				alt="りんごちゃん薬局の外観"
+				widths={[600, 1000, 1400]}
+				sizes="(max-width: 900px) 100vw, 70vw"
+			/>
+			<figcaption>荒川区荒川5-11-18。千代田線・さくらトラム 町屋駅から徒歩5分。</figcaption>
+		</figure>
+		<div class="feature-actions">
+			<p class="feature-actions-title">まずはここから</p>
+			<ActionLinks />
+		</div>
+	</section>
+
+	<section class="cp-section cp-container numbered" aria-labelledby="services">
+		<SectionHeader
+			label="01 — SERVICES"
+			title="この薬局でできること"
+			lead="処方箋の受付、ジェネリックの相談、市販薬選び。窓口はぜんぶ同じカウンターです。"
+		/>
+		<ServiceCards baseUrl={baseUrl} />
+	</section>
+
+	<section class="cp-section cp-container numbered" aria-labelledby="products">
+		<SectionHeader
+			label="02 — PRODUCTS"
+			title="棚の上の、頼れる常備薬"
+			lead="店頭で取り扱う市販薬・ヘルスケア商品から、相談の多いものを紹介します。"
+		/>
+		<div class="cp-products">
+			{products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
+		</div>
+		<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<section class="cp-section cp-container numbered interior" aria-label="店内紹介">
+		<div class="interior-grid">
+			<figure class="cp-fade-in">
+				<Image
+					src={photoIntrospection}
+					alt="りんごちゃん薬局の店内"
+					widths={[480, 800]}
+					sizes="(max-width: 900px) 100vw, 40vw"
+				/>
+				<figcaption>ゆっくり相談できる店内。</figcaption>
+			</figure>
+			<div>
+				<SectionHeader
+					label="03 — HOURS & ACCESS"
+					title="開いている時間と、行き方"
+					lead="平日は18:30まで。土曜は13:00まで、日曜は12:30まで開いています。"
+				/>
+				<HoursPanel />
+			</div>
+		</div>
+	</section>
+
+	<section class="cp-section cp-container" aria-label="アクセス">
+		<AccessPanel />
+	</section>
+
+	<CtaBand title="次の号を待たずに、いつでも相談を" lead="LINEなら処方箋の事前送信もできます。お急ぎの方はお電話でどうぞ。" />
+</ClaudePreviewLayout>
+
+<style>
+	.masthead {
+		padding-top: clamp(2.5rem, 6vw, 4.5rem);
+		margin-bottom: 3rem;
+	}
+	.issue-line {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+		font-size: 0.78rem;
+		letter-spacing: 0.22em;
+		color: var(--cp-text-muted);
+		border-top: 2px solid var(--cp-border);
+		border-bottom: 1px solid var(--cp-border);
+		padding: 0.6rem 0;
+		margin-bottom: clamp(2rem, 5vw, 3.5rem);
+	}
+	h1 {
+		font-size: clamp(2.6rem, 8vw, 5rem);
+		line-height: 1.2;
+		letter-spacing: 0.04em;
+		margin-bottom: 1.25rem;
+	}
+	.masthead-lead {
+		max-width: 38em;
+		font-size: 1.02rem;
+	}
+	.feature {
+		margin-bottom: var(--cp-section-gap);
+		display: grid;
+		grid-template-columns: 1.6fr 1fr;
+		gap: 2rem;
+		align-items: end;
+	}
+	.feature-photo :global(img) {
+		width: 100%;
+		height: auto;
+		border-radius: var(--cp-radius);
+	}
+	.feature-photo figcaption,
+	.interior figcaption {
+		font-size: 0.82rem;
+		color: var(--cp-text-muted);
+		border-left: 3px solid var(--cp-accent);
+		padding-left: 0.7rem;
+		margin-top: 0.7rem;
+	}
+	.feature-actions-title {
+		font-family: var(--cp-font-display);
+		font-weight: 700;
+		font-size: 1.05rem;
+		margin-bottom: 1rem;
+		color: var(--cp-heading);
+	}
+	.numbered {
+		border-top: 1px solid var(--cp-border);
+		padding-top: 2.5rem;
+	}
+	.interior-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.4fr;
+		gap: 2rem;
+		align-items: start;
+	}
+	.interior-grid :global(img) {
+		width: 100%;
+		height: auto;
+		border-radius: var(--cp-radius);
+	}
+
+	@media (max-width: 900px) {
+		.feature,
+		.interior-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,114 @@
+/* =========================================================
+   Claude デザイン試作：共通トークン
+   - /design-preview/claude/ 配下のページ専用
+   - 変数は --cp-*（Claude Preview）で名前空間を分離し、
+     本番の global.css のトークンと衝突させない
+   ========================================================= */
+
+:root {
+  /* 色（デフォルト値。各テーマCSSで上書きする） */
+  --cp-bg: #f8f9fa;
+  --cp-surface: #ffffff;
+  --cp-surface-alt: #eef1f0;
+  --cp-text: #2b2d42;
+  --cp-text-muted: #5f6b6a;
+  --cp-heading: #1f2933;
+  --cp-primary: #2a9d8f;
+  --cp-primary-contrast: #ffffff;
+  --cp-accent: #e63946;
+  --cp-accent-contrast: #ffffff;
+  --cp-line: #06c755;
+  --cp-border: #dfe5e3;
+
+  /* タイポグラフィ */
+  --cp-font-body: 'Noto Sans JP', sans-serif;
+  --cp-font-display: 'Noto Sans JP', sans-serif;
+  --cp-eyebrow-tracking: 0.18em;
+
+  /* 形状・影 */
+  --cp-radius: 14px;
+  --cp-radius-lg: 22px;
+  --cp-shadow: 0 8px 28px rgba(15, 41, 38, 0.08);
+
+  /* レイアウト */
+  --cp-container-max: 1120px;
+  --cp-section-gap: clamp(4rem, 8vw, 6.5rem);
+}
+
+/* =========================================================
+   プレビュー共通ベース
+   ========================================================= */
+.cp-page {
+  background-color: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: var(--cp-font-body);
+}
+
+.cp-page h1,
+.cp-page h2,
+.cp-page h3 {
+  color: var(--cp-heading);
+  font-family: var(--cp-font-display);
+}
+
+.cp-container {
+  max-width: var(--cp-container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad-x);
+}
+
+.cp-section {
+  margin-bottom: var(--cp-section-gap);
+}
+
+.cp-products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .cp-products {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+    margin-inline: auto;
+  }
+}
+
+/* microCMS差し替え予定などの注記 */
+.cp-note {
+  margin-top: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--cp-text-muted);
+}
+
+/* =========================================================
+   ふわっと表示（prefers-reduced-motion 対応）
+   ========================================================= */
+.cp-fade-in {
+  animation: cp-fade-in 0.7s ease both;
+}
+
+@keyframes cp-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-fade-in {
+    animation: none;
+  }
+  .cp-page *,
+  .cp-page *::before,
+  .cp-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

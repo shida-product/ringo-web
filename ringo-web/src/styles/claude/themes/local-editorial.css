@@ -1,0 +1,29 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Local Editorial
+   - 表現検証案（雑誌・タウン誌風）
+   - 紙のような生成り背景×明朝見出し×細罫線
+   - 「町屋の健康情報誌」のトーンで地域性を演出
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&display=swap');
+
+:root[data-cp-theme='local-editorial'] {
+  --cp-bg: #f7f3ec;
+  --cp-surface: #fffdf8;
+  --cp-surface-alt: #efe8db;
+  --cp-text: #2a2722;
+  --cp-text-muted: #6f675c;
+  --cp-heading: #1e3a34;
+  --cp-primary: #1e3a34;
+  --cp-primary-contrast: #f7f3ec;
+  --cp-accent: #b4552d;
+  --cp-accent-contrast: #ffffff;
+  --cp-border: #2a2722;
+
+  --cp-font-display: 'Shippori Mincho', 'Noto Sans JP', serif;
+  --cp-eyebrow-tracking: 0.32em;
+
+  --cp-radius: 4px;
+  --cp-radius-lg: 6px;
+  --cp-shadow: 0 6px 20px rgba(42, 39, 34, 0.08);
+}

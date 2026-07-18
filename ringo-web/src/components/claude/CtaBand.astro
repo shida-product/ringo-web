@@ -1,0 +1,93 @@
+---
+// Claude デザイン試作：ページ下部CTAバンド（LINE事前受付・電話）
+import { SITE } from '../../data/site';
+
+interface Props {
+	title?: string;
+	lead?: string;
+}
+
+const {
+	title = 'お薬のこと、LINEで気軽にご相談ください',
+	lead = '処方箋の事前送信で、店頭での待ち時間を短くできます。お急ぎの場合はお電話でどうぞ。',
+} = Astro.props;
+---
+
+<section class="cp-cta-band">
+	<div class="inner cp-container">
+		<h2>{title}</h2>
+		<p class="text-pretty">{lead}</p>
+		<div class="buttons">
+			<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="btn btn-line">
+				<i data-lucide="message-circle" aria-hidden="true"></i>
+				LINEで事前受付する
+			</a>
+			<a href={SITE.telLink} class="btn btn-tel">
+				<i data-lucide="phone" aria-hidden="true"></i>
+				{SITE.tel}
+			</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.cp-cta-band {
+		background: var(--cp-primary);
+		color: var(--cp-primary-contrast);
+		padding: clamp(3rem, 6vw, 4.5rem) 0;
+	}
+	.inner {
+		text-align: center;
+	}
+	.cp-cta-band h2 {
+		color: var(--cp-primary-contrast);
+		font-size: clamp(1.4rem, 3vw, 1.9rem);
+		margin-bottom: 0.75rem;
+	}
+	p {
+		opacity: 0.9;
+		max-width: 36em;
+		margin: 0 auto 1.75rem;
+	}
+	.buttons {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		font-weight: 700;
+		font-size: 1.05rem;
+		min-height: var(--tap-min);
+		padding: 0.8rem 2rem;
+		border-radius: 9999px;
+		transition: transform 0.2s ease;
+	}
+	.btn:hover {
+		transform: translateY(-2px);
+		opacity: 1;
+	}
+	.btn :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+	.btn-line {
+		background: var(--cp-line);
+		color: #ffffff;
+	}
+	.btn-tel {
+		background: #ffffff;
+		color: var(--cp-primary);
+	}
+
+	@media (max-width: 600px) {
+		.btn {
+			width: 100%;
+			max-width: 340px;
+		}
+	}
+</style>

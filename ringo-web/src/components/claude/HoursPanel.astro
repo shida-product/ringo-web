@@ -1,0 +1,126 @@
+---
+// Claude デザイン試作：営業時間パネル
+// 表の内容は本番 index.astro の営業時間と同一（土日も営業が強み）
+---
+
+<div class="cp-hours-panel" id="hours">
+	<div class="hours-head">
+		<i data-lucide="clock" aria-hidden="true"></i>
+		<h3>営業時間</h3>
+		<p class="badge">土日も営業</p>
+	</div>
+	<div class="table-wrap">
+		<table aria-label="営業時間">
+			<thead>
+				<tr>
+					<th scope="col">時間</th>
+					<th scope="col">月</th>
+					<th scope="col">火</th>
+					<th scope="col">水</th>
+					<th scope="col">木</th>
+					<th scope="col">金</th>
+					<th scope="col" class="sat">土</th>
+					<th scope="col" class="sun">日</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">9:00〜12:30</th>
+					<td>〇</td><td>〇</td><td>〇</td><td>〇</td><td>〇</td>
+					<td class="sat">〇</td><td class="sun">〇</td>
+				</tr>
+				<tr>
+					<th scope="row">12:30〜13:00</th>
+					<td>〇</td><td>〇</td><td>〇</td><td>〇</td><td>〇</td>
+					<td class="sat">〇</td><td class="closed">休</td>
+				</tr>
+				<tr>
+					<th scope="row">13:00〜18:30</th>
+					<td>〇</td><td>〇</td><td>〇</td><td>〇</td><td>〇</td>
+					<td class="closed">休</td><td class="closed">休</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<p class="holiday">【定休日】無し <small>※GW、お盆、年末年始はお休み</small></p>
+</div>
+
+<style>
+	.cp-hours-panel {
+		background: var(--cp-surface);
+		border: 1px solid var(--cp-border);
+		border-radius: var(--cp-radius-lg);
+		box-shadow: var(--cp-shadow);
+		padding: 1.75rem;
+	}
+	.hours-head {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin-bottom: 1.25rem;
+	}
+	.hours-head :global(svg) {
+		width: 24px;
+		height: 24px;
+		color: var(--cp-primary);
+	}
+	h3 {
+		font-size: 1.25rem;
+		margin: 0;
+	}
+	.badge {
+		margin-left: auto;
+		background: var(--cp-accent);
+		color: var(--cp-accent-contrast);
+		font-size: 0.8rem;
+		font-weight: 700;
+		padding: 0.25rem 0.75rem;
+		border-radius: 9999px;
+	}
+	.table-wrap {
+		overflow-x: auto;
+	}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		text-align: center;
+		font-size: 0.95rem;
+		min-width: 480px;
+	}
+	th,
+	td {
+		padding: 0.55rem 0.4rem;
+		border-bottom: 1px solid var(--cp-border);
+	}
+	thead th {
+		color: var(--cp-heading);
+	}
+	tbody th {
+		font-weight: 500;
+		white-space: nowrap;
+		text-align: left;
+	}
+	.sat {
+		color: #1d6fb8;
+	}
+	.sun {
+		color: var(--cp-accent);
+	}
+	.closed {
+		color: var(--cp-text-muted);
+	}
+	.holiday {
+		margin-top: 1rem;
+		font-size: 0.92rem;
+	}
+	.holiday small {
+		display: block;
+		color: var(--cp-text-muted);
+	}
+
+	@media (max-width: 768px) {
+		.cp-hours-panel {
+			padding: 1.25rem;
+		}
+	}
+</style>
