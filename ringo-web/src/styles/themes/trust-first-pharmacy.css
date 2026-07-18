@@ -1,0 +1,8 @@
+.preview-shell[data-theme='trust-first-pharmacy'] {
+  --preview-bg: #f7fbfa;
+  --preview-surface-soft: #eaf6f2;
+  --preview-primary: #1f766e;
+  --preview-accent: #d93645;
+  --preview-text: #243334;
+  --preview-muted: #5f706e;
+}

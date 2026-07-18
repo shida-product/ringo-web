@@ -1,0 +1,8 @@
+.preview-shell[data-theme='local-editorial'] {
+  --preview-bg: #fbf8ee;
+  --preview-surface-soft: #edf5e8;
+  --preview-primary: #476f5b;
+  --preview-accent: #d94a55;
+  --preview-text: #2f342e;
+  --preview-muted: #747064;
+}

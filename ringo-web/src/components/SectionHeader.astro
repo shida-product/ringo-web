@@ -1,0 +1,6 @@
+---
+interface Props { label: string; title: string; lead?: string; align?: 'left' | 'center'; }
+const { label, title, lead, align = 'left' } = Astro.props;
+---
+<header class:list={['preview-section-header', `is-${align}`]}><p>{label}</p><h2>{title}</h2>{lead && <div>{lead}</div>}</header>
+<style>.preview-section-header{max-width:760px;margin-bottom:2rem}.preview-section-header.is-center{margin-inline:auto;text-align:center}.preview-section-header p{color:var(--preview-accent);font-size:.82rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.65rem}.preview-section-header h2{color:var(--preview-primary);font-size:clamp(1.8rem,4vw,3rem);line-height:1.25;margin:0}.preview-section-header div{color:var(--preview-muted);font-weight:600;margin-top:1rem}</style>

@@ -1,0 +1,8 @@
+.preview-shell[data-theme='community-care'] {
+  --preview-bg: #fff8f4;
+  --preview-surface-soft: #f6eee7;
+  --preview-primary: #5f7f60;
+  --preview-accent: #dc4c59;
+  --preview-text: #2d3329;
+  --preview-muted: #6e685f;
+}

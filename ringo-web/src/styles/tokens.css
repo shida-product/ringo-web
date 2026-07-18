@@ -1,0 +1,57 @@
+/* Codex デザインプレビュー専用トークン */
+:root {
+  --preview-font-sans: 'Noto Sans JP', sans-serif;
+  --preview-bg: #f8faf8;
+  --preview-surface: #ffffff;
+  --preview-surface-soft: #f0f7f4;
+  --preview-text: #253238;
+  --preview-muted: #64716f;
+  --preview-primary: #25796f;
+  --preview-accent: #e33f4d;
+  --preview-line: #06c755;
+  --preview-border: rgba(37, 50, 56, 0.12);
+  --preview-radius-sm: 14px;
+  --preview-radius-md: 22px;
+  --preview-radius-lg: 34px;
+  --preview-shadow: 0 22px 60px rgba(37, 50, 56, 0.12);
+  --preview-container: 1160px;
+  --preview-pad: clamp(1rem, 4vw, 2.5rem);
+  --preview-section: clamp(4rem, 8vw, 7rem);
+}
+
+.preview-shell {
+  background: var(--preview-bg);
+  color: var(--preview-text);
+  font-family: var(--preview-font-sans);
+  overflow: hidden;
+}
+
+.preview-container {
+  width: min(100% - 2rem, var(--preview-container));
+  margin-inline: auto;
+}
+
+.preview-section {
+  padding-block: var(--preview-section);
+}
+
+.preview-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: var(--preview-surface-soft);
+  color: var(--preview-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

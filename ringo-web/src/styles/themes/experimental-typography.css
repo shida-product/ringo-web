@@ -1,0 +1,10 @@
+.preview-shell[data-theme='experimental-typography'] {
+  --preview-bg: #111a1a;
+  --preview-surface: #f9fff9;
+  --preview-surface-soft: #1c2a2a;
+  --preview-primary: #d8ffe2;
+  --preview-accent: #ff5163;
+  --preview-text: #f9fff9;
+  --preview-muted: #b8cbc6;
+  --preview-border: rgba(255, 255, 255, 0.2);
+}

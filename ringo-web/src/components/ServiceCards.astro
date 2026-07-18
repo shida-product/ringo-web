@@ -1,0 +1,13 @@
+---
+interface Service { title: string; text: string; label?: string; }
+interface Props { services?: Service[]; }
+const defaultServices = [
+  { title: '処方箋受付', text: '全国の医療機関の処方箋に対応。LINEで事前送信もできます。', label: 'Prescription' },
+  { title: 'ジェネリック相談', text: '飲み慣れたお薬との違いや費用感を分かりやすく説明します。', label: 'Generic' },
+  { title: '市販薬・健康相談', text: '症状や生活に合わせ、無理のないセルフケアを一緒に考えます。', label: 'OTC' },
+  { title: '取扱い商品', text: 'ミラグレーンなど、地域名検索を意識した商品ページへ拡張予定です。', label: 'Products' },
+];
+const { services = defaultServices } = Astro.props;
+---
+<div class="service-grid">{services.map((service) => <article><span>{service.label}</span><h3>{service.title}</h3><p>{service.text}</p></article>)}</div>
+<style>.service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}.service-grid article{padding:1.35rem;border-radius:var(--preview-radius-md);background:var(--preview-surface);border:1px solid var(--preview-border);box-shadow:0 14px 34px rgba(37,50,56,.07)}.service-grid span{color:var(--preview-accent);font-size:.75rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.service-grid h3{color:var(--preview-primary);font-size:1.25rem;margin:.65rem 0}.service-grid p{color:var(--preview-muted);font-weight:600;margin:0}@media(max-width:980px){.service-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.service-grid{grid-template-columns:1fr}}</style>

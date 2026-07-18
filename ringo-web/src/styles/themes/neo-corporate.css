@@ -1,0 +1,11 @@
+.preview-shell[data-theme='neo-corporate'] {
+  --preview-bg: #f4f5f4;
+  --preview-surface: #ffffff;
+  --preview-surface-soft: #ecefec;
+  --preview-primary: #111a1a;
+  --preview-accent: #e63446;
+  --preview-text: #111a1a;
+  --preview-muted: #5b6464;
+  --preview-radius-md: 12px;
+  --preview-radius-lg: 18px;
+}

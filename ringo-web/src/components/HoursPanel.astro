@@ -1,0 +1,5 @@
+---
+const rows = [['月〜金','9:00 - 18:30'],['土曜日','9:00 - 13:00'],['日曜日','9:00 - 12:30'],['定休日','祝日']];
+---
+<section class="hours-panel" aria-label="営業時間"><p>OPEN HOURS</p><h3>営業時間</h3><dl>{rows.map(([day,time]) => <><dt>{day}</dt><dd>{time}</dd></>)}</dl><small>臨時休業・受付時間変更は店頭またはSNSでご確認ください。</small></section>
+<style>.hours-panel{padding:1.5rem;border-radius:var(--preview-radius-lg);background:var(--preview-surface);border:1px solid var(--preview-border);box-shadow:var(--preview-shadow)}.hours-panel p{color:var(--preview-accent);font-size:.78rem;font-weight:900;letter-spacing:.14em}.hours-panel h3{color:var(--preview-primary);font-size:1.55rem;margin:.2rem 0 1rem}.hours-panel dl{display:grid;grid-template-columns:1fr auto;gap:.7rem 1rem}.hours-panel dt{font-weight:800}.hours-panel dd{font-weight:900;color:var(--preview-primary)}.hours-panel small{display:block;margin-top:1rem;color:var(--preview-muted)}</style>

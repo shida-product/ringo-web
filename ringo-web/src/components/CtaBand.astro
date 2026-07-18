@@ -1,0 +1,7 @@
+---
+import { SITE } from '../data/site';
+interface Props { title?: string; text?: string; }
+const { title = '処方箋の事前受付・健康相談はLINEから', text = '来局前に送っておくと、待ち時間の短縮につながります。お急ぎの場合はお電話ください。' } = Astro.props;
+---
+<section class="cta-band"><div><p>CONTACT</p><h2>{title}</h2><span>{text}</span></div><nav><a class="line" href={SITE.lineUrl}>LINEで相談する</a><a href={SITE.telLink}>電話する {SITE.tel}</a></nav></section>
+<style>.cta-band{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;padding:clamp(1.5rem,4vw,2.5rem);border-radius:var(--preview-radius-lg);background:var(--preview-primary);color:#fff;box-shadow:var(--preview-shadow)}.cta-band p{font-size:.78rem;font-weight:900;letter-spacing:.16em;color:rgba(255,255,255,.78)}.cta-band h2{color:#fff;font-size:clamp(1.5rem,3vw,2.35rem);margin:.3rem 0}.cta-band span{display:block;color:rgba(255,255,255,.85);font-weight:600}.cta-band nav{display:flex;gap:.75rem;flex-wrap:wrap}.cta-band a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.75rem 1.1rem;border-radius:999px;background:#fff;color:var(--preview-primary);font-weight:900}.cta-band a.line{background:#06c755;color:#fff}@media(max-width:780px){.cta-band{grid-template-columns:1fr}.cta-band nav{flex-direction:column}}</style>

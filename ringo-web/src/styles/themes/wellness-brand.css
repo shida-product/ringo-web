@@ -1,0 +1,8 @@
+.preview-shell[data-theme='wellness-brand'] {
+  --preview-bg: #f6fbf7;
+  --preview-surface-soft: #e4f4ec;
+  --preview-primary: #16845f;
+  --preview-accent: #e33143;
+  --preview-text: #15322a;
+  --preview-muted: #557067;
+}
