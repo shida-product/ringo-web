@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getAllProducts } from '../../data/products';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+---
+
+<Layout title="取扱い商品" description="荒川区・町屋のりんごちゃん薬局で取り扱う市販薬・衛生用品・健康関連商品の一部をご紹介します。">
+  <div class="page-header"><div class="container"><h1>取扱い商品</h1></div></div>
+  <section class="container page-content">
+    <div class="products-lead glass-panel"><p class="text-pretty">荒川区・町屋のりんごちゃん薬局で取り扱う市販薬・健康関連商品の一部をご紹介します。現在はmicroCMS登録前のサンプル表示です。公開時には正式な商品情報へ差し替えます。</p></div>
+    <div class="products-grid" aria-label="取扱い商品一覧">
+      {products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .products-lead { margin-bottom: 2rem; }
+  .products-lead p { margin: 0; }
+  .products-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  @media (max-width: 1024px) { .products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 768px) { .products-grid { grid-template-columns: 1fr; gap: 1rem; } }
+</style>

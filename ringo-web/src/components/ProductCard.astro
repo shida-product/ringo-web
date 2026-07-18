@@ -1,0 +1,38 @@
+---
+import type { Product } from '../data/products';
+import { formatPrice, productImageAlt } from '../data/products';
+import sampleImage from '../assets/images/product-sample.svg';
+import ProductBadge from './ProductBadge.astro';
+
+interface Props { product: Product; baseUrl: string; }
+const { product, baseUrl } = Astro.props;
+const productHref = `${baseUrl}products/${product.slug}`;
+---
+
+<article class="product-card glass-panel">
+  <a href={productHref} class="product-image-link" aria-label={`${product.name}の詳細を見る`}>
+    <img src={sampleImage.src} alt={productImageAlt(product)} class="product-image" loading="lazy" />
+  </a>
+  <div class="product-card-body">
+    <div class="badge-row"><ProductBadge label={product.category} /><ProductBadge label={product.medClass} variant="class" /></div>
+    <h2 class="product-title"><a href={productHref}>{product.name}</a></h2>
+    <p class="product-summary text-pretty">{product.summary}</p>
+    <p class="product-price">{formatPrice(product.price)}</p>
+    <a class="detail-link" href={productHref}>詳しく見る <i data-lucide="chevron-right" aria-hidden="true"></i></a>
+  </div>
+</article>
+
+<style>
+  .product-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .product-image-link { display: block; background: var(--color-surface); }
+  .product-image { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .product-card-body { padding: 1.4rem; display: flex; flex-direction: column; gap: 0.85rem; flex: 1; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .product-title { font-size: 1.15rem; margin: 0; }
+  .product-title a { color: var(--color-primary); }
+  .product-summary { color: var(--color-text-light); font-size: 0.95rem; margin: 0; }
+  .product-price { font-weight: 700; margin-top: auto; }
+  .detail-link { min-height: var(--tap-min); display: inline-flex; align-items: center; gap: 0.2rem; font-weight: 700; }
+  .detail-link :global(svg) { width: 18px; height: 18px; }
+  @media (max-width: 768px) { .product-card-body { padding: 1.1rem; } }
+</style>

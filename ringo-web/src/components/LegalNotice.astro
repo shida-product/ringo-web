@@ -1,0 +1,14 @@
+---
+interface Props { isSample?: boolean; }
+const { isSample = true } = Astro.props;
+---
+
+<div class="notice">
+  <p class="text-pretty">※本ページは商品情報の紹介です。ご使用の際は添付文書をよく読み、用法・用量を守ってください。ご不明点は薬剤師にご相談ください。</p>
+  {isSample && <p class="text-pretty">※現在はサンプルデータです。microCMSで正式な商品情報を登録後、内容を差し替えます。</p>}
+</div>
+
+<style>
+  .notice { background: var(--color-background); border-left: 4px solid var(--color-accent); border-radius: 12px; padding: 1rem; margin-top: 2rem; font-size: 0.92rem; color: var(--color-text-light); }
+  .notice p + p { margin-top: 0.5rem; }
+</style>
