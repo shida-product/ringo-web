@@ -1,0 +1,33 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Ringo Pop
+   - 表現検証案（ポップ）
+   - りんごの赤×葉の緑×値札の黄色。店頭POPの楽しさをWebに
+   - 見出しは Mochiy Pop One、本文は丸ゴシック
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
+
+:root[data-cp-theme='ringo-pop'] {
+  --cp-bg: #fff6ec;
+  --cp-surface: #ffffff;
+  --cp-surface-alt: #ffe9d2;
+  --cp-text: #3a2e2a;
+  --cp-text-muted: #8c7a6e;
+  --cp-heading: #d2372e;
+  --cp-primary: #d2372e;
+  --cp-primary-contrast: #ffffff;
+  --cp-accent: #3e9b4f;
+  --cp-accent-contrast: #ffffff;
+  --cp-border: #f0d3b4;
+
+  --cp-font-body: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  --cp-font-display: 'Mochiy Pop One', 'M PLUS Rounded 1c', sans-serif;
+
+  --cp-radius: 20px;
+  --cp-radius-lg: 32px;
+  --cp-shadow: 0 8px 0 rgba(210, 55, 46, 0.12);
+
+  /* テーマ固有 */
+  --pop-yellow: #ffc53d;
+  --pop-leaf: #3e9b4f;
+}

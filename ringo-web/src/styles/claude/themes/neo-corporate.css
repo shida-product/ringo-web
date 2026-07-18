@@ -1,0 +1,33 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Neo Corporate
+   - 表現検証案（モダン企業サイト）
+   - 濃紺×ティール。固定サイドバー、モノスペースのラベル、
+     数値と仕様表で「機能する企業サイト」の顔をつくる
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root[data-cp-theme='neo-corporate'] {
+  --cp-bg: #f4f6f7;
+  --cp-surface: #ffffff;
+  --cp-surface-alt: #e8edef;
+  --cp-text: #1c2b33;
+  --cp-text-muted: #5e7079;
+  --cp-heading: #0b2545;
+  --cp-primary: #0b2545;
+  --cp-primary-contrast: #ffffff;
+  --cp-accent: #0fb5ae;
+  --cp-accent-contrast: #062a28;
+  --cp-border: #d3dce0;
+
+  --cp-font-body: 'IBM Plex Sans JP', 'Noto Sans JP', sans-serif;
+  --cp-font-display: 'IBM Plex Sans JP', 'Noto Sans JP', sans-serif;
+  --cp-eyebrow-tracking: 0.16em;
+
+  --cp-radius: 6px;
+  --cp-radius-lg: 10px;
+  --cp-shadow: 0 1px 2px rgba(11, 37, 69, 0.08);
+
+  /* テーマ固有：データラベル用モノスペース */
+  --neo-mono: 'IBM Plex Mono', monospace;
+}

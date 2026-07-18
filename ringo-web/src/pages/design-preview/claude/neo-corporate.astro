@@ -1,0 +1,605 @@
+---
+// Claude デザイン試作 7/8：Neo Corporate（表現検証）
+// コンセプト：固定サイドバー＋スクロールする本文の2ペイン構成。
+// モノスペースのデータラベル、数値、仕様表で
+// 「機能する企業サイト」の顔をつくる。カードUIは使わない。
+import '../../../styles/claude/themes/neo-corporate.css';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import { getAllProducts, formatPrice } from '../../../data/products';
+import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
+import { SITE } from '../../../data/site';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+
+const stats = [
+	{ value: '5', unit: 'min', label: '町屋駅から徒歩' },
+	{ value: '7', unit: 'days', label: '週7日オープン' },
+	{ value: '18:30', unit: '', label: '平日の最終受付' },
+];
+
+const anchors = [
+	{ href: '#nc-services', label: 'Services' },
+	{ href: '#nc-products', label: 'Products' },
+	{ href: '#nc-hours', label: 'Hours' },
+	{ href: '#nc-access', label: 'Access' },
+];
+---
+
+<ClaudePreviewLayout title="Neo Corporate" theme="neo-corporate">
+	<PreviewPatternNav current="neo-corporate" />
+
+	<div class="split">
+		<!-- 固定サイドバー -->
+		<aside class="side">
+			<div class="side-top">
+				<p class="side-brand">{SITE.name}</p>
+				<p class="side-mono mono">RINGO PHARMACY — MACHIYA, ARAKAWA, TOKYO</p>
+			</div>
+			<nav class="side-nav" aria-label="ページ内メニュー">
+				{
+					anchors.map((anchor, i) => (
+						<a href={anchor.href}>
+							<span class="mono">{String(i + 1).padStart(2, '0')}</span>
+							{anchor.label}
+						</a>
+					))
+				}
+			</nav>
+			<div class="side-facts mono">
+				<p><span>WEEKDAY</span>9:00–18:30</p>
+				<p><span>SAT</span>9:00–13:00</p>
+				<p><span>SUN</span>9:00–12:30</p>
+				<p><span>TEL</span><a href={SITE.telLink}>{SITE.tel}</a></p>
+			</div>
+			<a class="side-line" href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+				<i data-lucide="message-circle" aria-hidden="true"></i>LINEで事前受付
+			</a>
+		</aside>
+
+		<!-- 本文 -->
+		<main class="body">
+			<!-- ヒーロー -->
+			<header class="nc-hero">
+				<p class="mono kicker">PHARMACY FOR THE NEIGHBORHOOD</p>
+				<h1 class="text-balance">
+					調剤も、相談も、<br />インフラとして。
+				</h1>
+				<p class="nc-lead text-pretty">
+					{SITE.name}は、荒川区・町屋の調剤薬局です。処方箋の受付、ジェネリックの相談、
+					市販薬・健康相談まで。土日も開く、暮らしのインフラとして運営しています。
+				</p>
+				<dl class="stats">
+					{
+						stats.map((stat) => (
+							<div data-reveal>
+								<dd>
+									{stat.value}
+									<small>{stat.unit}</small>
+								</dd>
+								<dt class="mono">{stat.label}</dt>
+							</div>
+						))
+					}
+				</dl>
+			</header>
+
+			<!-- Services：番号付き行 -->
+			<section class="nc-section" id="nc-services" aria-labelledby="nc-services-title">
+				<h2 id="nc-services-title"><span class="mono">01</span>Services</h2>
+				<ul class="rows">
+					{
+						SERVICES.map((service, i) => (
+							<li data-reveal>
+								<span class="mono row-no">{String(i + 1).padStart(2, '0')}</span>
+								<div>
+									<h3>{service.title}</h3>
+									<p class="text-pretty">{service.body}</p>
+								</div>
+								{service.href ? (
+									<a class="row-arrow" href={`${baseUrl}${service.href}`} aria-label={`${service.title}の詳細`}>
+										<i data-lucide="chevron-right" aria-hidden="true" />
+									</a>
+								) : (
+									<span class="mono row-static">IN STORE</span>
+								)}
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<!-- Products：仕様表 -->
+			<section class="nc-section" id="nc-products" aria-labelledby="nc-products-title">
+				<h2 id="nc-products-title"><span class="mono">02</span>Products</h2>
+				<div class="spec-wrap">
+					<table class="spec">
+						<thead>
+							<tr class="mono">
+								<th scope="col">ITEM</th>
+								<th scope="col">CATEGORY</th>
+								<th scope="col">CLASS</th>
+								<th scope="col">PRICE</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								products.map((product) => (
+									<tr>
+										<th scope="row">{product.name}</th>
+										<td>{product.category}</td>
+										<td>{product.medClass}</td>
+										<td class="mono">{formatPrice(product.price)}</td>
+										<td>
+											<a href={`${baseUrl}products/${product.slug}`} class="spec-link mono">
+												VIEW
+											</a>
+										</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+				</div>
+				<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+			</section>
+
+			<!-- Hours -->
+			<section class="nc-section" id="nc-hours" aria-labelledby="nc-hours-title">
+				<h2 id="nc-hours-title"><span class="mono">03</span>Hours</h2>
+				<div class="spec-wrap">
+					<table class="spec hours-table">
+						<thead>
+							<tr class="mono">
+								<th scope="col">TIME</th>
+								{HOURS.days.map((d) => <th scope="col">{d}</th>)}
+							</tr>
+						</thead>
+						<tbody>
+							{
+								HOURS.rows.map((row) => (
+									<tr>
+										<th scope="row" class="mono">
+											{row.time}
+										</th>
+										{row.open.map((open) => <td class={open ? 'open' : 'closed'}>{open ? '●' : '－'}</td>)}
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+				</div>
+				<p class="hours-note">{HOURS.holiday} {HOURS.holidayNote}</p>
+			</section>
+
+			<!-- Access -->
+			<section class="nc-section" id="nc-access" aria-labelledby="nc-access-title">
+				<h2 id="nc-access-title"><span class="mono">04</span>Access</h2>
+				<div class="access-grid">
+					<dl class="access-data">
+						<div data-reveal>
+							<dt class="mono">STATION</dt>
+							<dd>町屋駅（千代田線・さくらトラム）徒歩5分</dd>
+						</div>
+						<div data-reveal>
+							<dt class="mono">ADDRESS</dt>
+							<dd>
+								{SITE.postalCode}
+								<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer">
+									{SITE.address} <i data-lucide="external-link" aria-hidden="true"></i>
+								</a>
+							</dd>
+						</div>
+						<div data-reveal>
+							<dt class="mono">CONTACT</dt>
+							<dd><a href={SITE.telLink}>{SITE.tel}</a>／LINE事前受付対応</dd>
+						</div>
+					</dl>
+					<div class="map-embed">
+						<iframe
+							src={MAP_EMBED_SRC}
+							title="りんごちゃん薬局 地図"
+							loading="lazy"
+							referrerpolicy="no-referrer-when-downgrade"></iframe>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA -->
+			<section class="nc-cta">
+				<p class="mono">GET STARTED</p>
+				<h2>処方箋を、先に送っておく。</h2>
+				<div class="nc-cta-actions">
+					<a class="cta-primary" href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+						<i data-lucide="message-circle" aria-hidden="true"></i>LINEで事前受付
+					</a>
+					<a class="cta-secondary" href={SITE.telLink}>
+						<i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}
+					</a>
+				</div>
+			</section>
+		</main>
+	</div>
+</ClaudePreviewLayout>
+
+<style>
+	.mono {
+		font-family: var(--neo-mono);
+		letter-spacing: 0.08em;
+	}
+
+	/* ---- 2ペイン ---- */
+	.split {
+		display: grid;
+		grid-template-columns: 300px 1fr;
+		min-height: 100vh;
+	}
+	.side {
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		background: var(--cp-primary);
+		color: #dfe8ef;
+		display: flex;
+		flex-direction: column;
+		padding: 2rem 1.75rem;
+		gap: 2rem;
+	}
+	.side-brand {
+		font-size: 1.35rem;
+		font-weight: 700;
+		color: #fff;
+	}
+	.side-mono {
+		font-size: 0.7rem;
+		opacity: 0.6;
+		margin-top: 0.5rem;
+	}
+	.side-nav {
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid rgba(255, 255, 255, 0.18);
+	}
+	.side-nav a {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		color: #dfe8ef;
+		padding: 0.85rem 0.25rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+		font-weight: 500;
+		min-height: var(--tap-min);
+	}
+	.side-nav a:hover {
+		color: var(--cp-accent);
+		opacity: 1;
+	}
+	.side-nav .mono {
+		font-size: 0.75rem;
+		color: var(--cp-accent);
+	}
+	.side-facts {
+		margin-top: auto;
+		font-size: 0.8rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+	}
+	.side-facts span {
+		display: inline-block;
+		width: 84px;
+		color: var(--cp-accent);
+	}
+	.side-facts a {
+		color: #fff;
+	}
+	.side-line {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		background: var(--cp-accent);
+		color: var(--cp-accent-contrast);
+		font-weight: 700;
+		min-height: var(--tap-min);
+		padding: 0.8rem 1rem;
+		border-radius: var(--cp-radius);
+	}
+	.side-line :global(svg) {
+		width: 19px;
+		height: 19px;
+	}
+
+	/* ---- 本文 ---- */
+	.body {
+		padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 5vw, 5rem);
+		background:
+			linear-gradient(var(--cp-border) 1px, transparent 1px) 0 0 / 100% 96px,
+			var(--cp-bg);
+	}
+	.kicker {
+		color: var(--cp-accent);
+		font-size: 0.8rem;
+		margin-bottom: 1rem;
+	}
+	h1 {
+		font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+		line-height: 1.25;
+		margin-bottom: 1.25rem;
+	}
+	.nc-lead {
+		max-width: 38em;
+		color: var(--cp-text-muted);
+		margin-bottom: 2.5rem;
+	}
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(160px, 220px));
+		width: fit-content;
+		gap: 1px;
+		background: var(--cp-border);
+		border: 1px solid var(--cp-border);
+		margin-bottom: 1rem;
+	}
+	.stats div {
+		background: var(--cp-surface);
+		padding: 1.25rem 1.4rem;
+	}
+	.stats dd {
+		font-size: 2.3rem;
+		font-weight: 700;
+		color: var(--cp-heading);
+		font-variant-numeric: tabular-nums;
+	}
+	.stats dd small {
+		font-size: 0.9rem;
+		color: var(--cp-accent);
+		margin-left: 0.2rem;
+	}
+	.stats dt {
+		font-size: 0.72rem;
+		color: var(--cp-text-muted);
+		margin-top: 0.3rem;
+	}
+
+	/* ---- セクション共通 ---- */
+	.nc-section {
+		margin-top: clamp(4rem, 8vw, 6rem);
+	}
+	.nc-section h2 {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		font-size: clamp(1.5rem, 3vw, 2rem);
+		margin-bottom: 1.75rem;
+	}
+	.nc-section h2 .mono {
+		color: var(--cp-accent);
+		font-size: 0.85rem;
+	}
+
+	/* ---- Services 行 ---- */
+	.rows {
+		list-style: none;
+		border-top: 1px solid var(--cp-heading);
+	}
+	.rows li {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: 1.5rem;
+		align-items: center;
+		padding: 1.4rem 0.25rem;
+		border-bottom: 1px solid var(--cp-border);
+	}
+	.row-no {
+		color: var(--cp-accent);
+		font-size: 0.85rem;
+	}
+	.rows h3 {
+		font-size: 1.15rem;
+		margin-bottom: 0.3rem;
+	}
+	.rows p {
+		font-size: 0.92rem;
+		color: var(--cp-text-muted);
+		max-width: 46em;
+		margin: 0;
+	}
+	.row-arrow {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		border: 1px solid var(--cp-heading);
+		border-radius: 50%;
+		color: var(--cp-heading);
+		transition: background 0.2s ease, color 0.2s ease;
+	}
+	.row-arrow:hover {
+		background: var(--cp-heading);
+		color: #fff;
+		opacity: 1;
+	}
+	.row-arrow :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+	.row-static {
+		font-size: 0.72rem;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- 仕様表 ---- */
+	.spec-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--cp-border);
+		background: var(--cp-surface);
+	}
+	.spec {
+		width: 100%;
+		min-width: 560px;
+		border-collapse: collapse;
+		text-align: left;
+	}
+	.spec thead th {
+		font-size: 0.72rem;
+		font-weight: 500;
+		color: var(--cp-text-muted);
+		border-bottom: 1px solid var(--cp-heading);
+		padding: 0.8rem 1rem;
+	}
+	.spec tbody th,
+	.spec tbody td {
+		padding: 1rem;
+		border-bottom: 1px solid var(--cp-border);
+		font-size: 0.95rem;
+	}
+	.spec tbody th {
+		font-weight: 700;
+	}
+	.spec-link {
+		color: var(--cp-heading);
+		font-size: 0.78rem;
+		border-bottom: 2px solid var(--cp-accent);
+		padding-bottom: 0.15rem;
+	}
+	.hours-table {
+		text-align: center;
+	}
+	.hours-table tbody th {
+		text-align: left;
+		white-space: nowrap;
+		font-weight: 500;
+		font-size: 0.85rem;
+	}
+	.hours-table td.open {
+		color: var(--cp-accent);
+	}
+	.hours-table td.closed {
+		color: var(--cp-text-muted);
+	}
+	.hours-note {
+		margin-top: 0.8rem;
+		font-size: 0.9rem;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- Access ---- */
+	.access-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.4fr;
+		gap: 2rem;
+		align-items: start;
+	}
+	.access-data div {
+		border-top: 1px solid var(--cp-border);
+		padding: 1.1rem 0.25rem;
+	}
+	.access-data div:first-child {
+		border-top: 1px solid var(--cp-heading);
+	}
+	.access-data dt {
+		font-size: 0.72rem;
+		color: var(--cp-accent);
+		margin-bottom: 0.35rem;
+	}
+	.access-data dd a {
+		color: var(--cp-text);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+	}
+	.access-data :global(svg) {
+		width: 15px;
+		height: 15px;
+	}
+	.map-embed {
+		border: 1px solid var(--cp-border);
+		min-height: 320px;
+	}
+	.map-embed iframe {
+		width: 100%;
+		height: 100%;
+		min-height: 320px;
+		border: 0;
+		display: block;
+	}
+
+	/* ---- CTA ---- */
+	.nc-cta {
+		margin-top: clamp(4rem, 8vw, 6rem);
+		background: var(--cp-primary);
+		color: #fff;
+		padding: clamp(2.5rem, 5vw, 4rem);
+		border-radius: var(--cp-radius-lg);
+	}
+	.nc-cta .mono {
+		color: var(--cp-accent);
+		font-size: 0.8rem;
+	}
+	.nc-cta h2 {
+		color: #fff;
+		font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+		margin: 0.75rem 0 1.75rem;
+	}
+	.nc-cta-actions {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.cta-primary,
+	.cta-secondary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 700;
+		min-height: var(--tap-min);
+		padding: 0.85rem 1.9rem;
+		border-radius: var(--cp-radius);
+	}
+	.cta-primary {
+		background: var(--cp-accent);
+		color: var(--cp-accent-contrast);
+	}
+	.cta-secondary {
+		border: 1px solid rgba(255, 255, 255, 0.5);
+		color: #fff;
+	}
+	.nc-cta :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	@media (max-width: 1024px) {
+		.split {
+			grid-template-columns: 1fr;
+		}
+		.side {
+			position: static;
+			height: auto;
+			gap: 1.25rem;
+		}
+		.side-facts {
+			margin-top: 0;
+		}
+		.stats {
+			grid-template-columns: 1fr;
+		}
+		.access-grid {
+			grid-template-columns: 1fr;
+		}
+		.rows li {
+			grid-template-columns: auto 1fr;
+		}
+		.row-arrow,
+		.row-static {
+			grid-column: 2;
+			justify-self: start;
+		}
+	}
+</style>

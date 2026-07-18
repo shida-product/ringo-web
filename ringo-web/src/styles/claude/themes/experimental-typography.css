@@ -1,0 +1,30 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Experimental Typography
+   - 完全実験枠（本番採用前提ではない）
+   - 文字が主役。生成りの紙×墨×朱。縦書き・アウトライン文字・
+     極端なスケール差で表現の上限を確認する
+   - 実験案でも営業時間・電話・LINE・アクセスは削らない
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@700;900&display=swap');
+
+:root[data-cp-theme='experimental-typography'] {
+  --cp-bg: #f1efe9;
+  --cp-surface: #f7f5f0;
+  --cp-surface-alt: #e6e2d8;
+  --cp-text: #141414;
+  --cp-text-muted: #5c584f;
+  --cp-heading: #141414;
+  --cp-primary: #141414;
+  --cp-primary-contrast: #f1efe9;
+  --cp-accent: #d43a2f;
+  --cp-accent-contrast: #ffffff;
+  --cp-border: #141414;
+
+  --cp-font-display: 'Zen Old Mincho', serif;
+  --cp-eyebrow-tracking: 0.4em;
+
+  --cp-radius: 0px;
+  --cp-radius-lg: 0px;
+  --cp-shadow: none;
+}

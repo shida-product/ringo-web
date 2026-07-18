@@ -1,0 +1,495 @@
+---
+// Claude デザイン試作 8/8：Experimental Typography（完全実験枠）
+// コンセプト：文字が主役。縦書き・アウトライン文字・極端なスケール差で
+// 表現の上限を確認する。写真・カード・装飾は使わない。
+// 実験案だが、営業時間・電話・LINE・アクセスの必須情報は落とさない。
+import '../../../styles/claude/themes/experimental-typography.css';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import TateText from '../../../components/claude/TateText.astro';
+import { getAllProducts, formatPrice } from '../../../data/products';
+import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
+import { SITE } from '../../../data/site';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+
+const words = [
+	{ big: '処方箋', small: '医療機関の処方箋を受付。LINEで写真を送れば、待たずに受け取れます。', href: 'prescription' },
+	{ big: '相談', small: '市販薬の選び方から、なんとなく続く不調まで。カウンターでどうぞ。', href: null },
+	{ big: '後発薬', small: 'ジェネリックへの変更で、お薬代を抑える相談ができます。', href: 'generic' },
+	{ big: '商品', small: '市販薬・ヘルスケア用品。店頭にないものは取り寄せも。', href: 'products' },
+];
+---
+
+<ClaudePreviewLayout title="Experimental Typography" theme="experimental-typography">
+	<PreviewPatternNav current="experimental-typography" />
+
+	<!-- 冒頭：文字の見開き -->
+	<header class="opening">
+		<p class="opening-side" aria-hidden="true"><TateText text="荒川区荒川五丁目十一番十八号" /></p>
+		<div class="opening-main cp-container">
+			<h1>
+				<span class="outline">くすり</span>
+				<span class="filled">と、まちの<em>保健室<span class="dot">。</span></em></span>
+			</h1>
+			<p class="opening-sub">
+				りんごちゃん薬局｜町屋駅 徒歩5分｜<b>土日も営業</b>
+			</p>
+		</div>
+		<p class="opening-side is-right" aria-hidden="true"><TateText text="千代田線・さくらトラム町屋駅" /></p>
+	</header>
+
+	<!-- 情報の帯（静的） -->
+	<div class="strip" role="region" aria-label="連絡先の概要">
+		<span>平日 9:00–18:30</span>
+		<span>土 9:00–13:00</span>
+		<span>日 9:00–12:30</span>
+		<a href={SITE.telLink}>TEL {SITE.tel}</a>
+		<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">LINE 事前受付</a>
+	</div>
+
+	<!-- 一：できること（巨大語） -->
+	<section class="chapter cp-container" aria-labelledby="ch1">
+		<h2 class="chapter-no" id="ch1"><span class="outline">壹</span>できること</h2>
+		<ul class="words">
+			{
+				words.map((word) => (
+					<li data-reveal>
+						{word.href ? (
+							<a class="word" href={`${baseUrl}${word.href}`}>
+								{word.big}
+								<i data-lucide="chevron-right" aria-hidden="true" />
+							</a>
+						) : (
+							<span class="word is-static">{word.big}</span>
+						)}
+						<p class="word-note text-pretty">{word.small}</p>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<!-- 二：商品（文字の棚） -->
+	<section class="chapter cp-container" aria-labelledby="ch2">
+		<h2 class="chapter-no" id="ch2"><span class="outline">貳</span>取扱い商品</h2>
+		<ol class="type-list">
+			{
+				products.map((product) => (
+					<li data-reveal>
+						<a href={`${baseUrl}products/${product.slug}`}>
+							<span class="tl-name">{product.name.replace('（サンプル）', '')}</span>
+							<span class="tl-meta"><TateText text={product.category} /></span>
+							<span class="tl-price">{formatPrice(product.price)}</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+		<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<!-- 三：営業時間（数字を主役に） -->
+	<section class="chapter is-dark" aria-labelledby="ch3">
+		<div class="cp-container">
+			<h2 class="chapter-no" id="ch3"><span class="outline">參</span>営業時間</h2>
+			<div class="big-hours">
+				{
+					HOURS.summary.map((s) => (
+						<p data-reveal>
+							<span class="bh-label"><TateText text={s.label} /></span>
+							<span class="bh-time">{s.value.replace('〜', '—')}</span>
+						</p>
+					))
+				}
+			</div>
+			<p class="dark-note">{HOURS.holiday}（{HOURS.holidayNote.replace('※', '')}）</p>
+		</div>
+	</section>
+
+	<!-- 四：場所 -->
+	<section class="chapter cp-container" aria-labelledby="ch4">
+		<h2 class="chapter-no" id="ch4"><span class="outline">肆</span>場所</h2>
+		<p class="place-line" data-reveal>
+			町屋駅から<span class="place-big">徒歩五分<span class="dot">。</span></span>
+		</p>
+		<p class="place-addr">
+			{SITE.postalCode}
+			<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer">
+				{SITE.address} <i data-lucide="external-link" aria-hidden="true"></i>
+			</a>
+		</p>
+		<div class="map-embed">
+			<iframe
+				src={MAP_EMBED_SRC}
+				title="りんごちゃん薬局 地図"
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"></iframe>
+		</div>
+	</section>
+
+	<!-- 結：CTA -->
+	<section class="ending cp-container">
+		<p class="ending-line" data-reveal>
+			<span class="outline">相談は、</span><br />
+			<span class="filled">今日でいい<span class="dot">。</span></span>
+		</p>
+		<div class="ending-actions">
+			<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">LINEで事前受付</a>
+			<a href={SITE.telLink}>電話 {SITE.tel}</a>
+		</div>
+	</section>
+</ClaudePreviewLayout>
+
+<style>
+	.outline {
+		color: transparent;
+		-webkit-text-stroke: 2px var(--cp-text);
+	}
+	@supports not (-webkit-text-stroke: 2px black) {
+		.outline {
+			color: var(--cp-text);
+		}
+	}
+	.dot {
+		color: var(--cp-accent);
+	}
+
+	/* ---- 冒頭 ---- */
+	.opening {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: stretch;
+		min-height: min(86vh, 760px);
+		border-bottom: 3px solid var(--cp-border);
+	}
+	.opening-side {
+		font-family: var(--cp-font-display);
+		font-size: 0.85rem;
+		--tate-gap: 0.5em;
+		color: var(--cp-text-muted);
+		padding: 2rem 1.1rem;
+		border-right: 1px solid var(--cp-surface-alt);
+	}
+	.opening-side.is-right {
+		border-right: 0;
+		border-left: 1px solid var(--cp-surface-alt);
+	}
+	.opening-main {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-top: 3rem;
+		padding-bottom: 3rem;
+	}
+	h1 {
+		font-family: var(--cp-font-display);
+		font-weight: 900;
+		line-height: 1.12;
+		margin-bottom: 2rem;
+	}
+	h1 .outline {
+		display: block;
+		font-size: clamp(4.5rem, 16vw, 11rem);
+		letter-spacing: 0.02em;
+	}
+	h1 .filled {
+		display: block;
+		font-size: clamp(2rem, 6.5vw, 4.2rem);
+		letter-spacing: 0.08em;
+		margin-top: 0.5rem;
+	}
+	h1 em {
+		font-style: normal;
+		border-bottom: 6px solid var(--cp-accent);
+	}
+	.opening-sub {
+		font-size: clamp(0.95rem, 2vw, 1.15rem);
+		letter-spacing: 0.14em;
+	}
+	.opening-sub b {
+		color: var(--cp-accent);
+	}
+
+	/* ---- 情報の帯 ---- */
+	.strip {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 2.5rem;
+		justify-content: center;
+		background: var(--cp-text);
+		color: var(--cp-primary-contrast);
+		font-family: var(--cp-font-display);
+		letter-spacing: 0.14em;
+		padding: 0.8rem var(--container-pad-x);
+		margin-bottom: var(--cp-section-gap);
+	}
+	.strip a {
+		color: var(--cp-primary-contrast);
+		text-decoration: underline;
+		text-underline-offset: 5px;
+		text-decoration-color: var(--cp-accent);
+		min-height: var(--tap-min);
+		display: inline-flex;
+		align-items: center;
+	}
+	.strip span {
+		min-height: var(--tap-min);
+		display: inline-flex;
+		align-items: center;
+	}
+
+	/* ---- 章 ---- */
+	.chapter {
+		margin-bottom: var(--cp-section-gap);
+	}
+	.chapter-no {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		font-family: var(--cp-font-display);
+		font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+		letter-spacing: 0.3em;
+		margin-bottom: 2.5rem;
+	}
+	.chapter-no .outline {
+		font-size: 2.2em;
+		-webkit-text-stroke-color: var(--cp-accent);
+	}
+	@supports not (-webkit-text-stroke: 2px black) {
+		.chapter-no .outline {
+			color: var(--cp-accent);
+		}
+	}
+
+	/* ---- できること：巨大語 ---- */
+	.words {
+		list-style: none;
+		border-top: 3px solid var(--cp-border);
+	}
+	.words li {
+		display: grid;
+		grid-template-columns: 1fr minmax(0, 34em);
+		gap: 1rem 3rem;
+		align-items: center;
+		border-bottom: 1px solid var(--cp-border);
+		padding: 1.5rem 0;
+	}
+	.word {
+		font-family: var(--cp-font-display);
+		font-weight: 900;
+		font-size: clamp(2.6rem, 8vw, 5.5rem);
+		line-height: 1.15;
+		color: var(--cp-text);
+		display: inline-flex;
+		align-items: center;
+		gap: 1rem;
+		transition: color 0.2s ease, transform 0.25s ease;
+	}
+	a.word:hover {
+		color: var(--cp-accent);
+		transform: translateX(0.35em);
+		opacity: 1;
+	}
+	.word :global(svg) {
+		width: 0.35em;
+		height: 0.35em;
+		stroke-width: 3px;
+	}
+	.word.is-static {
+		color: var(--cp-text);
+	}
+	.word-note {
+		color: var(--cp-text-muted);
+		font-size: 0.98rem;
+		line-height: 2;
+	}
+
+	/* ---- 商品：文字の棚 ---- */
+	.type-list {
+		list-style: none;
+		counter-reset: item;
+		border-top: 3px solid var(--cp-border);
+	}
+	.type-list a {
+		display: flex;
+		align-items: center;
+		gap: 1.75rem;
+		padding: 1.75rem 0;
+		border-bottom: 1px solid var(--cp-border);
+		color: var(--cp-text);
+		counter-increment: item;
+	}
+	.type-list a::before {
+		content: counter(item, decimal-leading-zero);
+		font-family: var(--cp-font-display);
+		color: var(--cp-accent);
+		font-size: 1.1rem;
+		letter-spacing: 0.1em;
+	}
+	.type-list a:hover .tl-name {
+		text-decoration: underline;
+		text-decoration-thickness: 4px;
+		text-underline-offset: 8px;
+		text-decoration-color: var(--cp-accent);
+	}
+	.type-list a:hover {
+		opacity: 1;
+	}
+	.tl-name {
+		font-family: var(--cp-font-display);
+		font-weight: 700;
+		font-size: clamp(1.5rem, 4.2vw, 2.6rem);
+	}
+	.tl-meta {
+		font-size: 0.78rem;
+		--tate-gap: 0.3em;
+		color: var(--cp-text-muted);
+		border-left: 1px solid var(--cp-border);
+		padding-left: 0.5rem;
+	}
+	.tl-price {
+		margin-left: auto;
+		font-family: var(--cp-font-display);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
+
+	/* ---- 営業時間 ---- */
+	.chapter.is-dark {
+		background: var(--cp-text);
+		color: var(--cp-primary-contrast);
+		padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+	}
+	.chapter.is-dark .chapter-no {
+		color: var(--cp-primary-contrast);
+	}
+	.big-hours p {
+		display: flex;
+		align-items: center;
+		gap: 1.75rem;
+		border-bottom: 1px solid rgba(241, 239, 233, 0.25);
+		padding: 1.25rem 0;
+	}
+	.bh-label {
+		font-family: var(--cp-font-display);
+		--tate-gap: 0.35em;
+		font-size: 0.95rem;
+		color: var(--cp-accent);
+	}
+	.bh-time {
+		font-family: var(--cp-font-display);
+		font-weight: 900;
+		font-size: clamp(2.2rem, 7.5vw, 4.8rem);
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.04em;
+	}
+	.dark-note {
+		margin-top: 1.5rem;
+		font-size: 0.9rem;
+		opacity: 0.7;
+	}
+
+	/* ---- 場所 ---- */
+	.place-line {
+		font-family: var(--cp-font-display);
+		font-size: clamp(1.4rem, 3.4vw, 2rem);
+		margin-bottom: 0.75rem;
+	}
+	.place-big {
+		display: block;
+		font-weight: 900;
+		font-size: clamp(3rem, 10vw, 6.5rem);
+		line-height: 1.2;
+	}
+	.place-addr {
+		margin-bottom: 2rem;
+		letter-spacing: 0.08em;
+	}
+	.place-addr a {
+		color: var(--cp-text);
+		text-decoration: underline;
+		text-underline-offset: 5px;
+		text-decoration-color: var(--cp-accent);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+	}
+	.place-addr :global(svg) {
+		width: 15px;
+		height: 15px;
+	}
+	.map-embed {
+		border: 3px solid var(--cp-text);
+		min-height: 340px;
+		filter: grayscale(1) contrast(1.05);
+	}
+	.map-embed iframe {
+		width: 100%;
+		height: 100%;
+		min-height: 340px;
+		border: 0;
+		display: block;
+	}
+
+	/* ---- 結 ---- */
+	.ending {
+		text-align: center;
+		margin-bottom: var(--cp-section-gap);
+	}
+	.ending-line {
+		font-family: var(--cp-font-display);
+		font-weight: 900;
+		font-size: clamp(2.6rem, 9vw, 6rem);
+		line-height: 1.3;
+		margin-bottom: 2.5rem;
+	}
+	.ending-actions {
+		display: flex;
+		justify-content: center;
+		gap: 1.25rem;
+		flex-wrap: wrap;
+	}
+	.ending-actions a {
+		font-family: var(--cp-font-display);
+		font-weight: 700;
+		font-size: 1.1rem;
+		letter-spacing: 0.1em;
+		color: var(--cp-primary-contrast);
+		background: var(--cp-text);
+		padding: 1rem 2.4rem;
+		min-height: var(--tap-min);
+		display: inline-flex;
+		align-items: center;
+		transition: background 0.2s ease;
+	}
+	.ending-actions a:hover {
+		background: var(--cp-accent);
+		opacity: 1;
+	}
+
+	@media (max-width: 900px) {
+		.opening {
+			grid-template-columns: 1fr;
+		}
+		.opening-side {
+			display: none;
+		}
+		.words li {
+			grid-template-columns: 1fr;
+			gap: 0.6rem;
+		}
+		.tl-meta {
+			display: none;
+		}
+		.big-hours p {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.3rem;
+		}
+		.bh-label :global(.cp-tate) {
+			flex-direction: row;
+		}
+	}
+</style>

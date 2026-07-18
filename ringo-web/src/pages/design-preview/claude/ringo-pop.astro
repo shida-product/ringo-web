@@ -1,0 +1,634 @@
+---
+// Claude デザイン試作 4/8：Ringo Pop（表現検証）
+// コンセプト：「りんごちゃん」全開のポップ案。店頭POPの文法
+// （マーキー・ステッカー・値札・手描き風の傾き）をWebに持ち込む。
+// 派手だが、点滅や過度な動きは使わない（reduced-motion対応）。
+import '../../../styles/claude/themes/ringo-pop.css';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import { getAllProducts, formatPrice } from '../../../data/products';
+import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
+import { SITE } from '../../../data/site';
+import sampleImage from '../../../assets/images/product-sample.svg';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+
+const marqueeItems = ['土日も営業', 'LINEで事前受付', '町屋駅 徒歩5分', '処方箋受付', '市販薬の相談OK'];
+const serviceColors = ['is-red', 'is-green', 'is-yellow', 'is-cream'];
+---
+
+<ClaudePreviewLayout title="Ringo Pop" theme="ringo-pop">
+	<PreviewPatternNav current="ringo-pop" />
+
+	<!-- マーキー -->
+	<div class="marquee" aria-hidden="true">
+		<div class="marquee-track">
+			{[0, 1].map(() => marqueeItems.map((item) => <span>{item} 🍎</span>))}
+		</div>
+	</div>
+
+	<!-- ヒーロー：CSSりんご＋ステッカー -->
+	<header class="hero cp-container">
+		<div class="hero-copy">
+			<h1>
+				<span class="hero-small">まちの元気は、</span>
+				りんごちゃん<br />薬局から！
+			</h1>
+			<p class="hero-lead text-pretty">
+				荒川区・町屋駅から徒歩5分。処方箋も市販薬の相談も、土日だって受付中。
+				LINEで処方箋を送れば、待ち時間もぐっと短く。
+			</p>
+			<div class="hero-btns">
+				<a class="pop-btn is-line" href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+					<i data-lucide="message-circle" aria-hidden="true"></i>LINEで事前受付
+				</a>
+				<a class="pop-btn is-tel" href={SITE.telLink}>
+					<i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}
+				</a>
+			</div>
+		</div>
+		<div class="hero-apple" aria-hidden="true">
+			<span class="apple">
+				<span class="leaf"></span>
+				<span class="shine"></span>
+			</span>
+			<span class="sticker st-1">土日も<br />営業!</span>
+			<span class="sticker st-2">駅チカ<br />徒歩5分</span>
+		</div>
+	</header>
+
+	<!-- サービス：色ちがいのビッグブロック -->
+	<section class="cp-section cp-container" aria-labelledby="pop-services">
+		<h2 id="pop-services" class="pop-title">できること、ぜんぶ！</h2>
+		<div class="blocks">
+			{
+				SERVICES.map((service, i) => (
+					<div class:list={['block', serviceColors[i % serviceColors.length]]} data-reveal>
+						<i data-lucide={service.icon} aria-hidden="true" />
+						<h3>{service.title}</h3>
+						<p class="text-pretty">{service.body}</p>
+						{service.href && (
+							<a href={`${baseUrl}${service.href}`}>
+								くわしく <i data-lucide="chevron-right" aria-hidden="true" />
+							</a>
+						)}
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	<!-- 商品：値札 -->
+	<section class="cp-section cp-container" aria-labelledby="pop-products">
+		<h2 id="pop-products" class="pop-title">きょうのおすすめ</h2>
+		<div class="tags">
+			{
+				products.map((product, i) => (
+					<a
+						class="tag"
+						style={`--tilt:${[-2.4, 1.8, -1.2][i % 3]}deg`}
+						href={`${baseUrl}products/${product.slug}`}
+						data-reveal
+					>
+						<span class="tag-hole" aria-hidden="true" />
+						<img src={sampleImage.src} alt="" loading="lazy" />
+						<b class="tag-name">{product.name}</b>
+						<span class="tag-cat">
+							{product.category}／{product.medClass}
+						</span>
+						<span class="tag-price">{formatPrice(product.price)}</span>
+					</a>
+				))
+			}
+		</div>
+		<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<!-- 営業時間：黒板POP風 -->
+	<section class="cp-section cp-container" aria-labelledby="pop-hours">
+		<h2 id="pop-hours" class="pop-title">あいてる時間</h2>
+		<div class="hours-board" data-reveal>
+			<div class="board-summary">
+				{
+					HOURS.summary.map((s) => (
+						<p>
+							<b>{s.label}</b>
+							<span>{s.value}</span>
+						</p>
+					))
+				}
+			</div>
+			<div class="table-wrap">
+				<table aria-label="営業時間">
+					<thead>
+						<tr>
+							<th scope="col">時間</th>
+							{HOURS.days.map((d) => <th scope="col">{d}</th>)}
+						</tr>
+					</thead>
+					<tbody>
+						{
+							HOURS.rows.map((row) => (
+								<tr>
+									<th scope="row">{row.time}</th>
+									{row.open.map((open) => <td class={open ? 'open' : 'closed'}>{open ? '〇' : '休'}</td>)}
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
+			<p class="holiday">{HOURS.holiday} <small>{HOURS.holidayNote}</small></p>
+		</div>
+	</section>
+
+	<!-- アクセス -->
+	<section class="cp-section cp-container" aria-labelledby="pop-access">
+		<h2 id="pop-access" class="pop-title">お店はここ！</h2>
+		<div class="access">
+			<div class="access-note" data-reveal>
+				<p class="a-station">町屋駅から<br /><b>徒歩5分</b></p>
+				<p class="a-lines">千代田線・さくらトラム（都電荒川線）</p>
+				<p class="a-addr">
+					{SITE.postalCode}<br />
+					<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer">
+						{SITE.address} <i data-lucide="external-link" aria-hidden="true"></i>
+					</a>
+				</p>
+			</div>
+			<div class="map-embed">
+				<iframe
+					src={MAP_EMBED_SRC}
+					title="りんごちゃん薬局 地図"
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade"></iframe>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA -->
+	<section class="cta">
+		<div class="cp-container cta-inner">
+			<h2>お薬のこと、<br class="br-sp-only" />りんごちゃんに聞いてみて！</h2>
+			<div class="hero-btns">
+				<a class="pop-btn is-line" href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+					<i data-lucide="message-circle" aria-hidden="true"></i>LINEでともだち登録
+				</a>
+				<a class="pop-btn is-white" href={SITE.telLink}>
+					<i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}
+				</a>
+			</div>
+		</div>
+	</section>
+</ClaudePreviewLayout>
+
+<style>
+	/* ---- マーキー ---- */
+	.marquee {
+		overflow: hidden;
+		background: var(--cp-primary);
+		color: #fff;
+		font-family: var(--cp-font-display);
+		font-size: 0.95rem;
+		padding: 0.55rem 0;
+	}
+	.marquee-track {
+		display: flex;
+		gap: 2.5rem;
+		width: max-content;
+		animation: marquee 22s linear infinite;
+	}
+	.marquee-track span {
+		white-space: nowrap;
+	}
+	@keyframes marquee {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.marquee-track {
+			animation: none;
+		}
+	}
+
+	/* ---- ヒーロー ---- */
+	.hero {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr;
+		gap: 2rem;
+		align-items: center;
+		padding-top: clamp(2.5rem, 6vw, 4.5rem);
+		margin-bottom: var(--cp-section-gap);
+	}
+	h1 {
+		font-family: var(--cp-font-display);
+		font-size: clamp(2.2rem, 6vw, 3.8rem);
+		line-height: 1.3;
+		margin-bottom: 1.25rem;
+		font-weight: 400;
+	}
+	.hero-small {
+		display: block;
+		font-size: 0.45em;
+		color: var(--cp-accent);
+		margin-bottom: 0.4rem;
+	}
+	.hero-lead {
+		max-width: 30em;
+		margin-bottom: 1.75rem;
+		font-weight: 700;
+	}
+	.hero-btns {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.pop-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 800;
+		font-size: 1.05rem;
+		min-height: var(--tap-min);
+		padding: 0.85rem 1.9rem;
+		border-radius: 9999px;
+		border-bottom: 4px solid rgba(0, 0, 0, 0.22);
+		transition: transform 0.15s ease;
+	}
+	.pop-btn:hover {
+		transform: translateY(-3px) rotate(-1deg);
+		opacity: 1;
+	}
+	.pop-btn :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+	.is-line {
+		background: #06c755;
+		color: #fff;
+	}
+	.is-tel {
+		background: var(--pop-yellow);
+		color: var(--cp-text);
+	}
+	.is-white {
+		background: #fff;
+		color: var(--cp-primary);
+	}
+
+	/* CSSりんご */
+	.hero-apple {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: 280px;
+	}
+	.apple {
+		position: relative;
+		width: clamp(200px, 24vw, 300px);
+		aspect-ratio: 1;
+		background: radial-gradient(circle at 32% 30%, #e85a4b 0%, var(--cp-primary) 62%);
+		border-radius: 48% 52% 46% 54% / 56% 56% 44% 44%;
+		box-shadow: 0 14px 0 rgba(210, 55, 46, 0.15);
+	}
+	.leaf {
+		position: absolute;
+		top: -9%;
+		left: 58%;
+		width: 34%;
+		height: 22%;
+		background: var(--pop-leaf);
+		border-radius: 0 70% 0 70%;
+		transform: rotate(-24deg);
+	}
+	.shine {
+		position: absolute;
+		top: 16%;
+		left: 20%;
+		width: 16%;
+		height: 24%;
+		background: rgba(255, 255, 255, 0.55);
+		border-radius: 50%;
+		transform: rotate(18deg);
+	}
+	.sticker {
+		position: absolute;
+		display: grid;
+		place-items: center;
+		text-align: center;
+		font-family: var(--cp-font-display);
+		font-size: 0.95rem;
+		line-height: 1.3;
+		width: 92px;
+		height: 92px;
+		border-radius: 50%;
+		background: var(--pop-yellow);
+		color: var(--cp-text);
+		box-shadow: var(--cp-shadow);
+	}
+	.st-1 {
+		top: 4%;
+		left: 6%;
+		transform: rotate(-10deg);
+		background: var(--pop-leaf);
+		color: #fff;
+	}
+	.st-2 {
+		bottom: 4%;
+		right: 4%;
+		transform: rotate(8deg);
+	}
+
+	/* ---- 見出し ---- */
+	.pop-title {
+		font-family: var(--cp-font-display);
+		font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+		font-weight: 400;
+		margin-bottom: 1.75rem;
+		display: inline-block;
+		background: linear-gradient(transparent 62%, var(--pop-yellow) 62% 88%, transparent 88%);
+		padding: 0 0.35em;
+		transform: rotate(-1deg);
+	}
+
+	/* ---- サービスブロック ---- */
+	.blocks {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.25rem;
+	}
+	.block {
+		border-radius: var(--cp-radius-lg);
+		padding: 1.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.block:nth-child(odd) {
+		transform: rotate(-0.6deg);
+	}
+	.block:nth-child(even) {
+		transform: rotate(0.6deg);
+	}
+	.block :global(svg) {
+		width: 34px;
+		height: 34px;
+	}
+	.block h3 {
+		font-family: var(--cp-font-display);
+		font-size: 1.3rem;
+		font-weight: 400;
+		margin: 0;
+		color: inherit;
+	}
+	.block p {
+		margin: 0;
+		font-size: 0.95rem;
+	}
+	.block a {
+		align-self: flex-start;
+		display: inline-flex;
+		align-items: center;
+		font-weight: 800;
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		min-height: var(--tap-min);
+	}
+	.block a :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+	.is-red {
+		background: var(--cp-primary);
+		color: #fff;
+	}
+	.is-red h3 {
+		color: #fff;
+	}
+	.is-green {
+		background: var(--pop-leaf);
+		color: #fff;
+	}
+	.is-green h3 {
+		color: #fff;
+	}
+	.is-yellow {
+		background: var(--pop-yellow);
+		color: var(--cp-text);
+	}
+	.is-cream {
+		background: var(--cp-surface-alt);
+		color: var(--cp-text);
+	}
+
+	/* ---- 値札 ---- */
+	.tags {
+		display: flex;
+		gap: 2rem;
+		flex-wrap: wrap;
+	}
+	.tag {
+		position: relative;
+		flex: 1 1 240px;
+		max-width: 300px;
+		background: var(--cp-surface);
+		border: 3px dashed var(--cp-primary);
+		border-radius: 14px;
+		padding: 2rem 1.4rem 1.4rem;
+		color: var(--cp-text);
+		transform: rotate(var(--tilt, 0deg));
+		transition: transform 0.2s ease;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+	.tag:hover {
+		transform: rotate(0deg) translateY(-6px);
+		opacity: 1;
+	}
+	.tag-hole {
+		position: absolute;
+		top: -14px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: var(--cp-bg);
+		border: 3px solid var(--cp-primary);
+	}
+	.tag img {
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		border-radius: 8px;
+		margin-bottom: 0.5rem;
+	}
+	.tag-name {
+		font-size: 1.05rem;
+		font-weight: 800;
+	}
+	.tag-cat {
+		font-size: 0.78rem;
+		color: var(--cp-text-muted);
+	}
+	.tag-price {
+		font-family: var(--cp-font-display);
+		font-size: 1.3rem;
+		color: var(--cp-primary);
+	}
+
+	/* ---- 営業時間ボード ---- */
+	.hours-board {
+		background: var(--cp-surface);
+		border: 4px solid var(--cp-primary);
+		border-radius: var(--cp-radius-lg);
+		padding: 1.75rem;
+	}
+	.board-summary {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 1.25rem;
+	}
+	.board-summary p {
+		background: var(--cp-surface-alt);
+		border-radius: 14px;
+		padding: 0.8rem 1.3rem;
+		display: flex;
+		flex-direction: column;
+	}
+	.board-summary b {
+		color: var(--cp-primary);
+		font-size: 0.88rem;
+	}
+	.board-summary span {
+		font-size: 1.3rem;
+		font-weight: 800;
+		font-variant-numeric: tabular-nums;
+	}
+	.table-wrap {
+		overflow-x: auto;
+	}
+	table {
+		width: 100%;
+		min-width: 520px;
+		border-collapse: collapse;
+		text-align: center;
+	}
+	th,
+	td {
+		padding: 0.55rem 0.4rem;
+		border-bottom: 2px dotted var(--cp-border);
+	}
+	td.open {
+		color: var(--cp-accent);
+		font-weight: 800;
+	}
+	td.closed {
+		color: var(--cp-text-muted);
+	}
+	.holiday {
+		margin-top: 0.9rem;
+	}
+	.holiday small {
+		display: block;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- アクセス ---- */
+	.access {
+		display: grid;
+		grid-template-columns: 1fr 1.5fr;
+		gap: 1.75rem;
+		align-items: stretch;
+	}
+	.access-note {
+		background: var(--pop-yellow);
+		border-radius: var(--cp-radius-lg);
+		padding: 1.75rem;
+		transform: rotate(-1deg);
+	}
+	.a-station {
+		font-family: var(--cp-font-display);
+		font-size: 1.2rem;
+		line-height: 1.5;
+	}
+	.a-station b {
+		font-size: 2rem;
+	}
+	.a-lines {
+		font-size: 0.88rem;
+		margin: 0.6rem 0 1rem;
+	}
+	.a-addr a {
+		color: var(--cp-text);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-weight: 700;
+	}
+	.a-addr :global(svg) {
+		width: 15px;
+		height: 15px;
+	}
+	.map-embed {
+		border-radius: var(--cp-radius-lg);
+		overflow: hidden;
+		border: 4px solid var(--cp-primary);
+		min-height: 300px;
+	}
+	.map-embed iframe {
+		width: 100%;
+		height: 100%;
+		min-height: 300px;
+		border: 0;
+		display: block;
+	}
+
+	/* ---- CTA ---- */
+	.cta {
+		background: var(--cp-primary);
+		padding: clamp(3rem, 6vw, 4.5rem) 0;
+	}
+	.cta-inner {
+		text-align: center;
+	}
+	.cta h2 {
+		font-family: var(--cp-font-display);
+		font-weight: 400;
+		color: #fff;
+		font-size: clamp(1.5rem, 3.6vw, 2.3rem);
+		margin-bottom: 1.75rem;
+	}
+	.cta .hero-btns {
+		justify-content: center;
+	}
+
+	@media (max-width: 900px) {
+		.hero {
+			grid-template-columns: 1fr;
+		}
+		.hero-apple {
+			order: -1;
+			min-height: 230px;
+		}
+		.apple {
+			width: 180px;
+		}
+		.blocks {
+			grid-template-columns: 1fr;
+		}
+		.access {
+			grid-template-columns: 1fr;
+		}
+		.tag {
+			max-width: none;
+		}
+	}
+</style>

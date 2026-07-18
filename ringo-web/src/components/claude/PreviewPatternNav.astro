@@ -1,6 +1,8 @@
 ---
 // Claude デザイン試作：パターン切り替えナビ
 // 各試作ページの最上部に表示し、試作同士を行き来できるようにする
+import { PATTERNS } from '../../data/claude/preview';
+
 interface Props {
 	current?: string;
 }
@@ -8,22 +10,15 @@ interface Props {
 const { current } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const previewBase = `${baseUrl}design-preview/claude/`;
-
-const patterns = [
-	{ slug: 'trust-first-pharmacy', label: 'Trust First' },
-	{ slug: 'community-care', label: 'Community Care' },
-	{ slug: 'local-editorial', label: 'Local Editorial' },
-	{ slug: 'wellness-brand', label: 'Wellness Brand' },
-];
 ---
 
 <nav class="cp-pattern-nav" aria-label="デザイン試作の切り替え">
 	<a class="nav-home" href={previewBase}>CLAUDE DESIGN PREVIEW</a>
 	<div class="nav-links">
 		{
-			patterns.map((pattern) => (
+			PATTERNS.map((pattern) => (
 				<a href={`${previewBase}${pattern.slug}`} aria-current={pattern.slug === current ? 'page' : undefined}>
-					{pattern.label}
+					{pattern.short}
 				</a>
 			))
 		}
@@ -35,7 +30,6 @@ const patterns = [
 		display: flex;
 		align-items: center;
 		gap: 1.25rem;
-		flex-wrap: wrap;
 		background: #14211d;
 		color: #e8ede9;
 		padding: 0.6rem var(--container-pad-x);
@@ -48,6 +42,7 @@ const patterns = [
 		min-height: var(--tap-min);
 		display: inline-flex;
 		align-items: center;
+		white-space: nowrap;
 	}
 	.nav-links {
 		display: flex;
@@ -72,5 +67,16 @@ const patterns = [
 		background: rgba(255, 209, 102, 0.18);
 		color: #ffd166;
 		font-weight: 700;
+	}
+
+	@media (max-width: 768px) {
+		.cp-pattern-nav {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0;
+		}
+		.nav-links {
+			width: 100%;
+		}
 	}
 </style>

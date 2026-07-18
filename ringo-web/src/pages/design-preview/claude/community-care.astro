@@ -1,174 +1,656 @@
 ---
-// Claude デザイン試作 2/4：Community Care（本番採用候補・親しみ案）
-// コンセプト：「りんごちゃん」の名前に寄せた暖色×丸ゴシック。
-// 地域のかかりつけ感・話しかけやすさを最優先。
+// Claude デザイン試作 2/8：Community Care（本番採用候補）
+// コンセプト：会話でつくるUI。来局前の不安を吹き出しのQ&Aで解消し、
+// 商品は「お店の棚」メタファーの横スクロールで見せる。
+// カード型グリッドは使わない。
 import '../../../styles/claude/themes/community-care.css';
 import { Image } from 'astro:assets';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
 import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
-import SectionHeader from '../../../components/claude/SectionHeader.astro';
-import ActionLinks from '../../../components/claude/ActionLinks.astro';
-import ServiceCards from '../../../components/claude/ServiceCards.astro';
-import HoursPanel from '../../../components/claude/HoursPanel.astro';
-import AccessPanel from '../../../components/claude/AccessPanel.astro';
-import CtaBand from '../../../components/claude/CtaBand.astro';
-import ProductCard from '../../../components/ProductCard.astro';
-import { getAllProducts } from '../../../data/products';
+import { getAllProducts, formatPrice } from '../../../data/products';
+import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
 import photoSupport from '../../../assets/images/Support.jpg';
+import sampleImage from '../../../assets/images/product-sample.svg';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const products = getAllProducts();
+
+// 来局前によくある会話（吹き出しQ&A）
+const talks = [
+	{
+		q: '処方箋をもらったけど、待つのは苦手で…',
+		a: 'LINEで処方箋の写真を送っておいてください。お薬を準備してお待ちしています。',
+	},
+	{
+		q: '日曜の午前しか時間がないんです。',
+		a: '日曜も9:00〜12:30まで開いています。土曜は13:00まで、平日は18:30までどうぞ。',
+	},
+	{
+		q: '薬局で市販薬の相談だけしてもいいの？',
+		a: 'もちろんです。かぜ薬やビタミン剤選び、体調の気がかりだけでも大丈夫ですよ。',
+	},
+	{
+		q: 'お薬代、すこし抑えたいなと思っていて…',
+		a: 'ジェネリック医薬品への変更をご案内できます。薬剤師がその場でご説明しますね。',
+	},
+];
+
+const walkSteps = [
+	{ label: '1', text: '町屋駅（千代田線・さくらトラム）を出ます' },
+	{ label: '2', text: '大通り沿いに荒川方面へ歩きます' },
+	{ label: '3', text: '徒歩5分、りんごの看板が目印です' },
+];
 ---
 
 <ClaudePreviewLayout title="Community Care" theme="community-care">
 	<PreviewPatternNav current="community-care" />
 
-	<section class="hero">
-		<div class="cp-container hero-inner">
-			<div class="hero-photo cp-fade-in">
-				<Image
-					src={photoSupport}
-					alt="薬剤師による服薬相談の様子"
-					widths={[480, 800]}
-					sizes="(max-width: 900px) 80vw, 420px"
-				/>
-			</div>
-			<div class="hero-copy cp-fade-in">
-				<p class="cp-eyebrow">まちの、かかりつけ。</p>
-				<h1 class="text-balance">
-					こんにちは、<br class="br-sp-only" />町屋の<br class="br-pc-only" />りんごちゃん薬局です。
-				</h1>
-				<p class="lead text-pretty">
-					処方箋のこと、市販薬のこと、なんとなく気になる体調のこと。
-					荒川区・町屋駅から徒歩5分、土日も開いている薬局に、ふらっと相談しに来てください。
+	<header class="hero">
+		<div class="cp-container hero-grid">
+			<div class="hero-copy">
+				<h1 class="text-balance">こんにちは、<br />りんごちゃん薬局です。</h1>
+				<p class="hero-lead text-pretty">
+					荒川区・町屋のかかりつけ薬局。処方箋も、市販薬のことも、
+					なんとなく気になる体調のことも、まずは声をかけてください。
 				</p>
-				<div class="hero-badges">
-					<span class="badge">土日も営業</span>
-					<span class="badge">LINE事前受付</span>
-					<span class="badge">町屋駅 徒歩5分</span>
+				<div class="hero-hello" aria-hidden="true">
+					<span class="bubble from-user">日曜もやってますか？</span>
+					<span class="bubble from-shop">午前中、開いてますよ🍎</span>
 				</div>
 			</div>
+			<figure class="hero-photo">
+				<Image src={photoSupport} alt="薬剤師による服薬相談の様子" widths={[480, 800]} sizes="(max-width: 900px) 86vw, 460px" />
+			</figure>
 		</div>
+
+		<!-- 導線：文章のなかのボタン（カードにしない） -->
 		<div class="cp-container hero-actions">
-			<ActionLinks />
+			<p>
+				ご相談は
+				<a class="inline-btn is-tel" href={SITE.telLink}><i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}</a>
+				か
+				<a class="inline-btn is-line" href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+					<i data-lucide="message-circle" aria-hidden="true"></i>LINE
+				</a>
+				で。場所は
+				<a class="inline-btn is-map" href="#access"><i data-lucide="map-pin" aria-hidden="true"></i>町屋駅から徒歩5分</a>
+				です。
+			</p>
+		</div>
+	</header>
+
+	<!-- 会話Q&A -->
+	<section class="cp-section talk" aria-labelledby="talk-title">
+		<div class="cp-container">
+			<h2 id="talk-title" class="hand-title">こんなとき、来てください</h2>
+			<div class="talk-list">
+				{
+					talks.map((talk) => (
+						<div class="talk-pair" data-reveal>
+							<p class="bubble from-user">{talk.q}</p>
+							<div class="answer">
+								<span class="avatar" aria-hidden="true">
+									🍎
+								</span>
+								<p class="bubble from-shop">{talk.a}</p>
+							</div>
+						</div>
+					))
+				}
+			</div>
 		</div>
 	</section>
 
-	<section class="cp-section cp-container" aria-labelledby="services">
-		<SectionHeader
-			align="center"
-			label="SERVICES"
-			title="りんごちゃん薬局でできること"
-			lead="「病院でもらった処方箋」も「ドラッグストアで迷った市販薬」も、どちらもどうぞ。"
-		/>
-		<ServiceCards baseUrl={baseUrl} />
-	</section>
-
-	<section class="cp-section cp-container" aria-labelledby="products">
-		<SectionHeader
-			align="center"
-			label="PRODUCTS"
-			title="店頭で取り扱う商品"
-			lead="よく相談いただく市販薬・ヘルスケア商品の一例です。"
-		/>
-		<div class="cp-products">
-			{products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
+	<!-- 商品棚：横スクロール -->
+	<section class="cp-section shelf-section" aria-labelledby="shelf-title">
+		<div class="cp-container">
+			<h2 id="shelf-title" class="hand-title">きょうの棚から</h2>
+			<p class="shelf-lead">店頭で取り扱う市販薬・ヘルスケア商品の一例です。横にスクロールしてご覧ください。</p>
 		</div>
-		<p class="cp-note text-center">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+		<div class="shelf" tabindex="0" role="region" aria-label="取扱い商品の一覧（横スクロール）">
+			{
+				products.map((product) => (
+					<a class="shelf-item" href={`${baseUrl}products/${product.slug}`}>
+						<img src={sampleImage.src} alt="" loading="lazy" />
+						<span class="shelf-cat">{product.category}</span>
+						<span class="shelf-name">{product.name}</span>
+						<span class="shelf-price">{formatPrice(product.price)}</span>
+					</a>
+				))
+			}
+			<a class="shelf-item shelf-more" href={`${baseUrl}products`}>
+				<span>ぜんぶ見る</span>
+				<i data-lucide="chevron-right" aria-hidden="true"></i>
+			</a>
+		</div>
+		<p class="cp-container cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
 	</section>
 
-	<section class="cp-section cp-container info-stack" aria-label="営業時間とアクセス">
-		<SectionHeader align="center" label="HOURS & ACCESS" title="営業時間・アクセス" />
-		<HoursPanel />
-		<AccessPanel />
+	<!-- 営業時間：ことばで先に、表は補足 -->
+	<section class="cp-section cp-container hours" aria-labelledby="hours-title">
+		<h2 id="hours-title" class="hand-title">開いている時間</h2>
+		<div class="hours-words">
+			{
+				HOURS.summary.map((s) => (
+					<p data-reveal>
+						<b>{s.label}</b>
+						<span>{s.value}</span>
+					</p>
+				))
+			}
+		</div>
+		<details class="hours-detail">
+			<summary>くわしい時間割を見る<i data-lucide="chevron-right" aria-hidden="true"></i></summary>
+			<div class="table-wrap">
+				<table aria-label="営業時間">
+					<thead>
+						<tr>
+							<th scope="col">時間</th>
+							{HOURS.days.map((d) => <th scope="col">{d}</th>)}
+						</tr>
+					</thead>
+					<tbody>
+						{
+							HOURS.rows.map((row) => (
+								<tr>
+									<th scope="row">{row.time}</th>
+									{row.open.map((open) => <td class={open ? '' : 'closed'}>{open ? '〇' : '休'}</td>)}
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
+			<p class="holiday">{HOURS.holiday} <small>{HOURS.holidayNote}</small></p>
+		</details>
 	</section>
 
-	<CtaBand
-		title="お薬の相談、LINEでもお待ちしています"
-		lead={`ちょっとした疑問でも大丈夫です。お急ぎの場合は ${SITE.tel} までお電話ください。`}
-	/>
+	<!-- アクセス：道順ステップ＋地図 -->
+	<section class="cp-section cp-container" id="access" aria-labelledby="access-title">
+		<h2 id="access-title" class="hand-title">お店までの道</h2>
+		<div class="access-grid">
+			<ol class="walk">
+				{
+					walkSteps.map((step) => (
+						<li data-reveal>
+							<span class="walk-num" aria-hidden="true">
+								{step.label}
+							</span>
+							<p>{step.text}</p>
+						</li>
+					))
+				}
+				<li class="walk-goal" data-reveal>
+					<span class="walk-num is-goal" aria-hidden="true">🍎</span>
+					<p>
+						<b>{SITE.name}</b>
+						<br />
+						{SITE.postalCode}
+						<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="addr">
+							{SITE.address} <i data-lucide="external-link" aria-hidden="true"></i>
+						</a>
+					</p>
+				</li>
+			</ol>
+			<div class="map-embed">
+				<iframe
+					src={MAP_EMBED_SRC}
+					title="りんごちゃん薬局 地図"
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade"></iframe>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA：大きな吹き出し -->
+	<section class="cta cp-container">
+		<div class="cta-bubble" data-reveal>
+			<p class="cta-line1">はじめまして、でも大丈夫。</p>
+			<p class="cta-line2">LINEのともだち登録から、気軽にどうぞ。</p>
+			<div class="cta-actions">
+				<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="cta-btn is-line">
+					<i data-lucide="message-circle" aria-hidden="true"></i>LINEで相談する
+				</a>
+				<a href={SITE.telLink} class="cta-btn is-tel"><i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}</a>
+			</div>
+		</div>
+		<span class="cta-avatar" aria-hidden="true">🍎</span>
+	</section>
 </ClaudePreviewLayout>
 
 <style>
+	/* ---- ヒーロー ---- */
 	.hero {
-		position: relative;
-		padding: clamp(2.5rem, 6vw, 4rem) 0 3rem;
-		margin-bottom: var(--cp-section-gap);
 		background:
-			radial-gradient(circle at 12% 20%, var(--cp-surface-alt) 0%, transparent 32%),
-			radial-gradient(circle at 88% 75%, var(--cp-surface-alt) 0%, transparent 30%),
+			radial-gradient(circle at 90% 10%, var(--cp-surface-alt) 0%, transparent 34%),
+			radial-gradient(circle at 4% 80%, var(--cp-surface-alt) 0%, transparent 26%),
 			var(--cp-bg);
+		padding: clamp(2.5rem, 6vw, 4.5rem) 0 2rem;
+		margin-bottom: var(--cp-section-gap);
 	}
-	.hero-inner {
+	.hero-grid {
 		display: grid;
-		grid-template-columns: minmax(260px, 420px) 1fr;
+		grid-template-columns: 1.15fr 1fr;
 		gap: clamp(2rem, 5vw, 4rem);
 		align-items: center;
-		margin-bottom: 2.5rem;
+		margin-bottom: 2rem;
+	}
+	h1 {
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 1.4;
+		margin-bottom: 1rem;
+	}
+	.hero-lead {
+		max-width: 32em;
+		margin-bottom: 1.75rem;
 	}
 	.hero-photo :global(img) {
 		width: 100%;
 		height: auto;
 		aspect-ratio: 1;
 		object-fit: cover;
-		border-radius: 42% 58% 55% 45% / 50% 44% 56% 50%;
+		border-radius: 46% 54% 58% 42% / 52% 46% 54% 48%;
 		border: 6px solid var(--cp-surface);
 		box-shadow: var(--cp-shadow);
 	}
-	.cp-eyebrow {
-		color: var(--cp-primary);
-		font-weight: 700;
-		font-size: 1rem;
-		margin-bottom: 0.75rem;
+
+	/* ---- 吹き出し（共通） ---- */
+	.bubble {
+		display: inline-block;
+		padding: 0.75rem 1.15rem;
+		border-radius: 20px;
+		line-height: 1.6;
+		max-width: 30em;
 	}
-	h1 {
-		font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-		line-height: 1.4;
-		margin-bottom: 1rem;
-	}
-	.lead {
-		margin-bottom: 1.5rem;
-		max-width: 34em;
-	}
-	.hero-badges {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.6rem;
-	}
-	.badge {
+	.from-user {
 		background: var(--cp-surface);
-		border: 2px solid var(--cp-primary);
-		color: var(--cp-primary);
-		font-weight: 700;
-		font-size: 0.88rem;
-		padding: 0.35rem 1rem;
-		border-radius: 9999px;
+		border: 2px solid var(--cp-border);
+		border-bottom-right-radius: 6px;
 	}
-	.info-stack {
+	.from-shop {
+		background: var(--cp-primary);
+		color: #fff;
+		border-bottom-left-radius: 6px;
+	}
+
+	.hero-hello {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		max-width: 900px;
+		gap: 0.5rem;
+		align-items: flex-start;
 	}
-	.text-center {
+	.hero-hello .from-user {
+		align-self: flex-end;
+	}
+
+	/* ---- 文中ボタン ---- */
+	.hero-actions p {
+		font-size: 1.05rem;
+		line-height: 2.4;
+		max-width: 44em;
+	}
+	.inline-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-weight: 700;
+		padding: 0.35rem 1rem;
+		border-radius: 9999px;
+		margin: 0 0.2rem;
+		min-height: var(--tap-min);
+		vertical-align: middle;
+	}
+	.inline-btn :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+	.is-tel {
+		background: #fff;
+		border: 2px solid var(--cp-heading);
+		color: var(--cp-heading);
+	}
+	.is-line {
+		background: #06c755;
+		color: #fff;
+	}
+	.is-map {
+		background: var(--cp-surface-alt);
+		color: var(--cp-heading);
+	}
+
+	/* ---- 手書き風タイトル ---- */
+	.hand-title {
+		font-size: clamp(1.5rem, 3vw, 2rem);
+		margin-bottom: 1.75rem;
+		display: inline-block;
+		background: linear-gradient(transparent 68%, var(--cp-surface-alt) 68%);
+		padding: 0 0.3em;
+	}
+
+	/* ---- 会話Q&A ---- */
+	.talk-list {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		max-width: 720px;
+	}
+	.talk-pair {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.talk-pair .from-user {
+		align-self: flex-end;
+	}
+	.answer {
+		display: flex;
+		align-items: flex-end;
+		gap: 0.6rem;
+	}
+	.avatar {
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		background: var(--cp-surface);
+		border: 2px solid var(--cp-border);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.3rem;
+	}
+
+	/* ---- 商品棚 ---- */
+	.shelf-lead {
+		color: var(--cp-text-muted);
+		margin-bottom: 1.5rem;
+	}
+	.shelf {
+		display: flex;
+		gap: 1.25rem;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		padding: 0 var(--container-pad-x) 2.25rem;
+		/* 棚板 */
+		background: linear-gradient(to top, var(--cp-border) 0 10px, transparent 10px);
+	}
+	.shelf-item {
+		scroll-snap-align: start;
+		flex: 0 0 220px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		color: var(--cp-text);
+		background: var(--cp-surface);
+		border: 2px solid var(--cp-border);
+		border-radius: 18px 18px 6px 6px;
+		padding: 1rem 1rem 0.9rem;
+		transition: transform 0.2s ease;
+	}
+	.shelf-item:hover {
+		transform: translateY(-6px);
+		opacity: 1;
+	}
+	.shelf-item img {
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		border-radius: 10px;
+		margin-bottom: 0.4rem;
+	}
+	.shelf-cat {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+	}
+	.shelf-name {
+		font-weight: 700;
+		font-size: 0.98rem;
+	}
+	.shelf-price {
+		font-size: 0.85rem;
+		color: var(--cp-text-muted);
+	}
+	.shelf-more {
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+		gap: 0.2rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+		border-style: dashed;
+	}
+	.shelf-more :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	/* ---- 営業時間 ---- */
+	.hours-words {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 1.25rem;
+	}
+	.hours-words p {
+		background: var(--cp-surface);
+		border: 2px solid var(--cp-border);
+		border-radius: 16px;
+		padding: 0.9rem 1.4rem;
+		display: flex;
+		flex-direction: column;
+	}
+	.hours-words b {
+		color: var(--cp-primary);
+		font-size: 0.9rem;
+	}
+	.hours-words span {
+		font-size: 1.35rem;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+	.hours-detail summary {
+		cursor: pointer;
+		list-style: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+		min-height: var(--tap-min);
+	}
+	.hours-detail summary::-webkit-details-marker {
+		display: none;
+	}
+	.hours-detail summary :global(svg) {
+		width: 18px;
+		height: 18px;
+		transition: transform 0.2s ease;
+	}
+	.hours-detail[open] summary :global(svg) {
+		transform: rotate(90deg);
+	}
+	.table-wrap {
+		overflow-x: auto;
+		margin-top: 1rem;
+	}
+	.hours-detail table {
+		width: 100%;
+		min-width: 520px;
+		border-collapse: collapse;
 		text-align: center;
+		background: var(--cp-surface);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+	.hours-detail th,
+	.hours-detail td {
+		padding: 0.6rem 0.4rem;
+		border-bottom: 1px solid var(--cp-border);
+	}
+	.hours-detail td.closed {
+		color: var(--cp-text-muted);
+	}
+	.holiday {
+		margin-top: 0.75rem;
+	}
+	.holiday small {
+		display: block;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- アクセス ---- */
+	.access-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.3fr;
+		gap: 2rem;
+		align-items: start;
+	}
+	.walk {
+		list-style: none;
+		position: relative;
+	}
+	.walk li {
+		display: flex;
+		gap: 1rem;
+		padding-bottom: 1.75rem;
+		position: relative;
+	}
+	.walk li:not(:last-child)::before {
+		content: '';
+		position: absolute;
+		left: 21px;
+		top: 44px;
+		bottom: 0;
+		border-left: 3px dotted var(--cp-border);
+	}
+	.walk-num {
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		background: var(--cp-primary);
+		color: #fff;
+		font-weight: 700;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.walk-num.is-goal {
+		background: var(--cp-surface);
+		border: 2px solid var(--cp-primary);
+		font-size: 1.2rem;
+	}
+	.walk p {
+		padding-top: 0.55rem;
+	}
+	.addr {
+		color: var(--cp-text);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+	}
+	.addr :global(svg) {
+		width: 15px;
+		height: 15px;
+	}
+	.map-embed {
+		border-radius: var(--cp-radius-lg);
+		overflow: hidden;
+		border: 2px solid var(--cp-border);
+		min-height: 320px;
+	}
+	.map-embed iframe {
+		width: 100%;
+		height: 100%;
+		min-height: 320px;
+		border: 0;
+		display: block;
+	}
+
+	/* ---- CTA ---- */
+	.cta {
+		margin-bottom: var(--cp-section-gap);
+		text-align: center;
+	}
+	.cta-bubble {
+		position: relative;
+		background: var(--cp-surface);
+		border: 3px solid var(--cp-heading);
+		border-radius: var(--cp-radius-lg);
+		padding: clamp(2rem, 5vw, 3.25rem);
+		max-width: 640px;
+		margin: 0 auto;
+	}
+	.cta-bubble::after {
+		content: '';
+		position: absolute;
+		bottom: -16px;
+		left: 50%;
+		transform: translateX(-50%) rotate(45deg);
+		width: 26px;
+		height: 26px;
+		background: var(--cp-surface);
+		border-right: 3px solid var(--cp-heading);
+		border-bottom: 3px solid var(--cp-heading);
+	}
+	.cta-line1 {
+		font-size: 1.05rem;
+		color: var(--cp-text-muted);
+	}
+	.cta-line2 {
+		font-size: clamp(1.25rem, 3vw, 1.6rem);
+		font-weight: 700;
+		color: var(--cp-heading);
+		margin: 0.4rem 0 1.5rem;
+	}
+	.cta-actions {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.cta-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 700;
+		min-height: var(--tap-min);
+		padding: 0.8rem 1.75rem;
+		border-radius: 9999px;
+	}
+	.cta-btn.is-line {
+		background: #06c755;
+		color: #fff;
+	}
+	.cta-btn.is-tel {
+		background: #fff;
+		border: 2px solid var(--cp-heading);
+		color: var(--cp-heading);
+	}
+	.cta-btn :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+	.cta-avatar {
+		display: block;
+		font-size: 2.25rem;
+		margin-top: 1.5rem;
 	}
 
 	@media (max-width: 900px) {
-		.hero-inner {
+		.hero-grid {
 			grid-template-columns: 1fr;
-			text-align: center;
 		}
 		.hero-photo {
-			max-width: 300px;
+			max-width: 320px;
 			margin: 0 auto;
 		}
-		.hero-badges {
-			justify-content: center;
-		}
-		.lead {
-			margin-inline: auto;
+		.access-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

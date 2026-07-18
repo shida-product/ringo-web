@@ -1,0 +1,32 @@
+/* =========================================================
+   Claude デザイン試作テーマ：Pharmacy Magazine
+   - 表現検証案（雑誌の表紙とモザイク特集）
+   - 白×黒×雑誌の赤。セリフ見出し＋コンデンス系英字ラベル
+   - 罫線とグリッドで「誌面」をつくる
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;900&family=Oswald:wght@500;600&display=swap');
+
+:root[data-cp-theme='pharmacy-magazine'] {
+  --cp-bg: #ffffff;
+  --cp-surface: #ffffff;
+  --cp-surface-alt: #f2f0ec;
+  --cp-text: #17181a;
+  --cp-text-muted: #63666b;
+  --cp-heading: #17181a;
+  --cp-primary: #17181a;
+  --cp-primary-contrast: #ffffff;
+  --cp-accent: #e5322d;
+  --cp-accent-contrast: #ffffff;
+  --cp-border: #17181a;
+
+  --cp-font-display: 'Noto Serif JP', serif;
+  --cp-eyebrow-tracking: 0.24em;
+
+  --cp-radius: 0px;
+  --cp-radius-lg: 0px;
+  --cp-shadow: none;
+
+  /* テーマ固有：英字ラベル用フォント */
+  --mag-label-font: 'Oswald', sans-serif;
+}

@@ -1,0 +1,41 @@
+---
+// Claude デザイン試作:疑似縦書きテキスト
+// writing-mode: vertical-rl はレンダリング環境によって縦メトリクスが
+// 効かず文字が重なる事故があるため、短い見出し・ラベル用途には
+// 「1文字ずつ縦に積む」方式で確実に縦組みの見た目をつくる。
+// 句読点は縦組みの位置(右上寄り)に補正する。
+interface Props {
+	text: string;
+	class?: string;
+}
+
+const { text, class: className } = Astro.props;
+const chars = [...text];
+const puncts = new Set(['、', '。']);
+const smalls = new Set(['ょ', 'ゃ', 'ゅ', 'っ', 'ォ', 'ャ', 'ュ', 'ョ', 'ッ']);
+---
+
+<span class:list={['cp-tate', className]}>
+	{chars.map((ch) => <span class:list={['ch', { 'is-punct': puncts.has(ch), 'is-small': smalls.has(ch) }]}>{ch}</span>)}
+</span>
+
+<style>
+	.cp-tate {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		line-height: 1.14;
+		gap: var(--tate-gap, 0);
+	}
+	.ch {
+		display: block;
+		text-align: center;
+	}
+	.ch.is-punct {
+		transform: translate(0.52em, -0.5em);
+		height: 0.6em;
+	}
+	.ch.is-small {
+		transform: translate(0.14em, -0.14em);
+	}
+</style>

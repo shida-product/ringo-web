@@ -1,0 +1,598 @@
+---
+// Claude デザイン試作 5/8：Pharmacy Magazine（表現検証）
+// コンセプト：健康雑誌の一冊。表紙（カバーライン）→モザイク特集→
+// バイヤーズガイド→インフォメーション欄、の誌面構成。
+// 白×黒×赤、セリフ見出し、罫線グリッド。カードUIは使わない。
+import '../../../styles/claude/themes/pharmacy-magazine.css';
+import { Image } from 'astro:assets';
+import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
+import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
+import { getAllProducts, formatPrice } from '../../../data/products';
+import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
+import { SITE } from '../../../data/site';
+import photoExterior from '../../../assets/images/Exterior_01.jpg';
+import photoSupport from '../../../assets/images/Support.jpg';
+import photoProducts from '../../../assets/images/Products.jpg';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const products = getAllProducts();
+
+const features = [
+	{
+		size: 'lg',
+		kicker: 'FEATURE 01',
+		title: '処方箋、待たない主義。',
+		lead: 'LINEで処方箋の写真を送っておけば、来局前にお薬の準備が始まる。店頭での時間は、飲み方の説明と相談のために使う。',
+		photo: photoSupport,
+		alt: '薬剤師による服薬相談の様子',
+		href: 'prescription',
+	},
+	{
+		size: 'sm',
+		kicker: 'FEATURE 02',
+		title: 'ジェネリックという選択。',
+		lead: 'お薬代を抑えたいなら、まず薬剤師に相談。変更の可否も費用感も、その場でわかる。',
+		photo: null,
+		href: 'generic',
+	},
+	{
+		size: 'sm',
+		kicker: 'FEATURE 03',
+		title: '市販薬は、聞いて選ぶ。',
+		lead: 'かぜ薬もビタミン剤も、体質と飲み合わせで選び方が変わる。棚の前で迷う前に、カウンターへ。',
+		photo: photoProducts,
+		alt: '店内の市販薬陳列棚',
+		href: 'products',
+	},
+];
+---
+
+<ClaudePreviewLayout title="Pharmacy Magazine" theme="pharmacy-magazine">
+	<PreviewPatternNav current="pharmacy-magazine" />
+
+	<!-- 表紙 -->
+	<header class="cover cp-container">
+		<div class="cover-frame">
+			<p class="cover-top">
+				<span class="mag-label">PHARMACY MAGAZINE</span>
+				<span class="mag-label">MACHIYA / ARAKAWA — WEEKEND OPEN</span>
+			</p>
+			<div class="cover-main">
+				<h1>
+					<span class="cover-kicker mag-label">今月の特集</span>
+					薬局を、<br />使いこなす。
+				</h1>
+				<figure class="cover-photo">
+					<Image src={photoExterior} alt="りんごちゃん薬局の外観" widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 56vw" />
+				</figure>
+				<ul class="cover-lines">
+					<li><b>P.01</b> 処方箋、待たない主義。<span class="mag-label">LINE受付</span></li>
+					<li><b>P.02</b> ジェネリックという選択。</li>
+					<li><b>P.03</b> 市販薬は、聞いて選ぶ。</li>
+					<li class="cover-cta">
+						<a href={SITE.telLink}><i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}</a>
+						<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+							<i data-lucide="message-circle" aria-hidden="true"></i>LINEで事前受付
+						</a>
+					</li>
+				</ul>
+			</div>
+			<p class="cover-bottom">
+				<span>{SITE.name}｜{SITE.address}</span>
+				<span class="barcode" aria-hidden="true"></span>
+			</p>
+		</div>
+	</header>
+
+	<!-- モザイク特集 -->
+	<section class="cp-section cp-container" aria-labelledby="features-title">
+		<h2 id="features-title" class="rubric"><span class="mag-label">CONTENTS</span>特集記事</h2>
+		<div class="mosaic">
+			{
+				features.map((feature) => (
+					<a
+						class:list={['feature', feature.size === 'lg' ? 'is-lg' : 'is-sm']}
+						href={`${baseUrl}${feature.href}`}
+						data-reveal
+					>
+						{feature.photo && (
+							<figure>
+								<Image
+									src={feature.photo}
+									alt={feature.alt ?? ''}
+									widths={[480, 800, 1200]}
+									sizes="(max-width: 900px) 100vw, 50vw"
+								/>
+							</figure>
+						)}
+						<div class="feature-text">
+							<span class="mag-label kicker">{feature.kicker}</span>
+							<h3>{feature.title}</h3>
+							<p class="text-pretty">{feature.lead}</p>
+							<span class="readmore mag-label">
+								READ <i data-lucide="chevron-right" aria-hidden="true" />
+							</span>
+						</div>
+					</a>
+				))
+			}
+			<blockquote class="pull-quote" data-reveal>
+				<p>「病院に行くほどでは」の、受け皿になる。</p>
+				<cite class="mag-label">— {SITE.name}</cite>
+			</blockquote>
+		</div>
+	</section>
+
+	<!-- バイヤーズガイド -->
+	<section class="cp-section cp-container" aria-labelledby="guide-title">
+		<h2 id="guide-title" class="rubric"><span class="mag-label">BUYER'S GUIDE</span>薬剤師と選ぶ、今月の3本</h2>
+		<div class="guide">
+			{
+				products.map((product, i) => (
+					<article class="guide-item" data-reveal>
+						<span class="guide-no" aria-hidden="true">
+							{String(i + 1).padStart(2, '0')}
+						</span>
+						<div class="guide-body">
+							<p class="mag-label guide-meta">
+								{product.category} / {product.medClass}
+							</p>
+							<h3>
+								<a href={`${baseUrl}products/${product.slug}`}>{product.name}</a>
+							</h3>
+							<p class="guide-summary text-pretty">{product.summary}</p>
+							<p class="guide-price">{formatPrice(product.price)}</p>
+						</div>
+					</article>
+				))
+			}
+		</div>
+		<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
+	</section>
+
+	<!-- INFORMATION：営業時間・アクセス -->
+	<section class="cp-section cp-container info" aria-labelledby="info-title">
+		<h2 id="info-title" class="rubric"><span class="mag-label">INFORMATION</span>営業時間とアクセス</h2>
+		<div class="info-grid">
+			<div class="info-col" data-reveal>
+				<h3 class="mag-label">OPENING HOURS</h3>
+				<table aria-label="営業時間">
+					<thead>
+						<tr>
+							<th scope="col">時間</th>
+							{HOURS.days.map((d) => <th scope="col">{d}</th>)}
+						</tr>
+					</thead>
+					<tbody>
+						{
+							HOURS.rows.map((row) => (
+								<tr>
+									<th scope="row">{row.time}</th>
+									{row.open.map((open) => <td class={open ? '' : 'closed'}>{open ? '●' : '—'}</td>)}
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+				<p class="info-note">{HOURS.holiday} {HOURS.holidayNote}</p>
+				<h3 class="mag-label">CONTACT</h3>
+				<p class="info-contact">
+					<a href={SITE.telLink}>{SITE.tel}</a><br />
+					<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">LINEで処方箋の事前送信</a>
+				</p>
+			</div>
+			<div class="info-col" data-reveal>
+				<h3 class="mag-label">ACCESS</h3>
+				<p class="info-access">
+					町屋駅（千代田線・さくらトラム）徒歩5分<br />
+					{SITE.postalCode}
+					<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer">{SITE.address}</a>
+				</p>
+				<div class="map-embed">
+					<iframe
+						src={MAP_EMBED_SRC}
+						title="りんごちゃん薬局 地図"
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"></iframe>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 裏表紙CTA -->
+	<section class="backcover">
+		<div class="cp-container backcover-inner">
+			<p class="mag-label">NEXT ISSUE — いつでも店頭で</p>
+			<h2>続きは、カウンターで。</h2>
+			<div class="backcover-links">
+				<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer">
+					<i data-lucide="message-circle" aria-hidden="true"></i>LINEで相談する
+				</a>
+				<a href={SITE.telLink}><i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}</a>
+			</div>
+		</div>
+	</section>
+</ClaudePreviewLayout>
+
+<style>
+	.mag-label {
+		font-family: var(--mag-label-font);
+		letter-spacing: var(--cp-eyebrow-tracking);
+		text-transform: uppercase;
+		font-weight: 500;
+		font-size: 0.78rem;
+	}
+
+	/* ---- 表紙 ---- */
+	.cover {
+		padding-top: 2rem;
+		margin-bottom: var(--cp-section-gap);
+	}
+	.cover-frame {
+		border: 3px solid var(--cp-border);
+		padding: clamp(1.25rem, 3vw, 2.5rem);
+	}
+	.cover-top,
+	.cover-bottom {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+	.cover-top {
+		border-bottom: 1px solid var(--cp-border);
+		padding-bottom: 0.9rem;
+		margin-bottom: 2rem;
+	}
+	.cover-main {
+		display: grid;
+		grid-template-columns: auto minmax(280px, 1fr) 250px;
+		gap: clamp(1.5rem, 4vw, 3rem);
+		align-items: stretch;
+		margin-bottom: 2rem;
+	}
+	h1 {
+		font-size: clamp(2.4rem, 5.2vw, 3.9rem);
+		line-height: 1.15;
+		margin: 0;
+		align-self: center;
+	}
+	.cover-kicker {
+		display: block;
+		color: var(--cp-accent);
+		margin-bottom: 1rem;
+	}
+	.cover-photo {
+		margin: 0;
+		min-width: 0;
+	}
+	.cover-photo :global(img) {
+		width: 100%;
+		height: 100%;
+		min-height: 320px;
+		object-fit: cover;
+	}
+	.cover-lines {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 1.1rem;
+		border-left: 1px solid var(--cp-border);
+		padding-left: 1.5rem;
+	}
+	.cover-lines li {
+		font-family: var(--cp-font-display);
+		font-weight: 600;
+		line-height: 1.6;
+	}
+	.cover-lines b {
+		color: var(--cp-accent);
+		font-family: var(--mag-label-font);
+		margin-right: 0.4em;
+	}
+	.cover-lines .mag-label {
+		display: inline-block;
+		background: var(--cp-accent);
+		color: #fff;
+		padding: 0.1rem 0.5rem;
+		margin-left: 0.4em;
+	}
+	.cover-cta {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		border-top: 1px solid var(--cp-border);
+		padding-top: 1rem;
+	}
+	.cover-cta a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--cp-text);
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		text-decoration-color: var(--cp-accent);
+		min-height: var(--tap-min);
+	}
+	.cover-cta :global(svg) {
+		width: 17px;
+		height: 17px;
+		color: var(--cp-accent);
+	}
+	.cover-bottom {
+		border-top: 1px solid var(--cp-border);
+		padding-top: 0.9rem;
+		font-size: 0.82rem;
+		color: var(--cp-text-muted);
+	}
+	.barcode {
+		width: 90px;
+		height: 30px;
+		background: repeating-linear-gradient(90deg, var(--cp-border) 0 2px, transparent 2px 5px, var(--cp-border) 5px 6px, transparent 6px 9px);
+	}
+
+	/* ---- 見出しルーブリック ---- */
+	.rubric {
+		display: flex;
+		align-items: baseline;
+		gap: 1.25rem;
+		font-size: clamp(1.4rem, 3vw, 1.9rem);
+		border-bottom: 3px solid var(--cp-border);
+		padding-bottom: 0.7rem;
+		margin-bottom: 2rem;
+	}
+	.rubric .mag-label {
+		color: var(--cp-accent);
+	}
+
+	/* ---- モザイク特集 ---- */
+	.mosaic {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem;
+	}
+	.feature {
+		color: var(--cp-text);
+		display: flex;
+		flex-direction: column;
+	}
+	.feature.is-lg {
+		grid-row: span 2;
+	}
+	.feature figure {
+		margin: 0 0 1.1rem;
+		overflow: hidden;
+	}
+	.feature :global(img) {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		transition: transform 0.4s ease;
+	}
+	.feature:hover :global(img) {
+		transform: scale(1.04);
+	}
+	.feature:hover {
+		opacity: 1;
+	}
+	.feature.is-sm {
+		border-top: 1px solid var(--cp-border);
+		padding-top: 1.25rem;
+	}
+	.kicker {
+		color: var(--cp-accent);
+	}
+	.feature h3 {
+		font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+		margin: 0.5rem 0 0.6rem;
+	}
+	.feature p {
+		color: var(--cp-text-muted);
+		font-size: 0.95rem;
+		max-width: 34em;
+		margin-bottom: 0.9rem;
+	}
+	.readmore {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		color: var(--cp-text);
+		border-bottom: 2px solid var(--cp-accent);
+		align-self: flex-start;
+		padding-bottom: 0.2rem;
+	}
+	.readmore :global(svg) {
+		width: 14px;
+		height: 14px;
+	}
+	.pull-quote {
+		border-top: 1px solid var(--cp-border);
+		padding-top: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	.pull-quote p {
+		font-family: var(--cp-font-display);
+		font-weight: 900;
+		font-size: clamp(1.4rem, 3vw, 2rem);
+		line-height: 1.6;
+	}
+	.pull-quote cite {
+		color: var(--cp-text-muted);
+		font-style: normal;
+		margin-top: 0.75rem;
+	}
+
+	/* ---- バイヤーズガイド ---- */
+	.guide {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0 2.5rem;
+	}
+	.guide-item {
+		display: flex;
+		gap: 1.1rem;
+		border-top: 1px solid var(--cp-border);
+		padding: 1.5rem 0;
+	}
+	.guide-no {
+		font-family: var(--mag-label-font);
+		font-size: 2.8rem;
+		line-height: 1;
+		color: var(--cp-surface-alt);
+		-webkit-text-stroke: 1.5px var(--cp-text);
+	}
+	.guide-meta {
+		color: var(--cp-accent);
+	}
+	.guide h3 {
+		font-size: 1.2rem;
+		margin: 0.3rem 0 0.5rem;
+	}
+	.guide h3 a {
+		color: var(--cp-text);
+	}
+	.guide h3 a:hover {
+		color: var(--cp-accent);
+		opacity: 1;
+	}
+	.guide-summary {
+		font-size: 0.88rem;
+		color: var(--cp-text-muted);
+		margin-bottom: 0.6rem;
+	}
+	.guide-price {
+		font-family: var(--mag-label-font);
+		font-weight: 600;
+	}
+
+	/* ---- INFORMATION ---- */
+	.info-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+	}
+	.info-col h3 {
+		color: var(--cp-accent);
+		margin-bottom: 0.9rem;
+	}
+	.info-col h3:not(:first-child) {
+		margin-top: 1.75rem;
+	}
+	.info-col table {
+		width: 100%;
+		border-collapse: collapse;
+		text-align: center;
+		font-size: 0.92rem;
+	}
+	.info-col th,
+	.info-col td {
+		border: 1px solid var(--cp-border);
+		padding: 0.5rem 0.3rem;
+	}
+	.info-col td.closed {
+		color: var(--cp-text-muted);
+	}
+	.info-note {
+		font-size: 0.85rem;
+		color: var(--cp-text-muted);
+		margin-top: 0.6rem;
+	}
+	.info-contact a {
+		color: var(--cp-text);
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		text-decoration-color: var(--cp-accent);
+		line-height: 2.2;
+	}
+	.info-access {
+		line-height: 2;
+		margin-bottom: 1rem;
+	}
+	.info-access a {
+		color: var(--cp-text);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+	.map-embed {
+		border: 1px solid var(--cp-border);
+		min-height: 280px;
+	}
+	.map-embed iframe {
+		width: 100%;
+		height: 100%;
+		min-height: 280px;
+		border: 0;
+		display: block;
+	}
+
+	/* ---- 裏表紙 ---- */
+	.backcover {
+		background: var(--cp-text);
+		color: #fff;
+		padding: clamp(3rem, 6vw, 4.5rem) 0;
+	}
+	.backcover-inner {
+		text-align: center;
+	}
+	.backcover .mag-label {
+		color: var(--cp-accent);
+	}
+	.backcover h2 {
+		color: #fff;
+		font-size: clamp(1.7rem, 4vw, 2.6rem);
+		margin: 0.75rem 0 1.75rem;
+	}
+	.backcover-links {
+		display: flex;
+		justify-content: center;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+	}
+	.backcover-links a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: #fff;
+		font-weight: 700;
+		border: 1px solid #fff;
+		padding: 0.8rem 1.9rem;
+		min-height: var(--tap-min);
+	}
+	.backcover-links a:hover {
+		background: var(--cp-accent);
+		border-color: var(--cp-accent);
+		opacity: 1;
+	}
+	.backcover-links :global(svg) {
+		width: 19px;
+		height: 19px;
+	}
+
+	@media (max-width: 900px) {
+		.cover-main {
+			grid-template-columns: 1fr;
+		}
+		.cover-lines {
+			max-width: none;
+			border-left: 0;
+			border-top: 1px solid var(--cp-border);
+			padding-left: 0;
+			padding-top: 1.25rem;
+		}
+		.mosaic,
+		.guide,
+		.info-grid {
+			grid-template-columns: 1fr;
+		}
+		.guide {
+			gap: 0;
+		}
+	}
+</style>

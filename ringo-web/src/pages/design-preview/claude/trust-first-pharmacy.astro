@@ -1,162 +1,796 @@
 ---
-// Claude デザイン試作 1/4：Trust First Pharmacy（本番採用候補・堅実案）
-// コンセプト：医療の信頼感を最優先。深緑×白、大きな文字、迷わない導線。
+// Claude デザイン試作 1/8：Trust First Pharmacy（本番採用候補）
+// コンセプト：院内サイン・受付カウンターの情報設計。
+// 装飾カードを使わず、常時表示の営業ステータスバー、受付ステップ、
+// 窓口一覧（罫線リスト）、時刻表、FAQで「迷わない」を最優先する。
 import '../../../styles/claude/themes/trust-first-pharmacy.css';
 import { Image } from 'astro:assets';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
 import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
-import SectionHeader from '../../../components/claude/SectionHeader.astro';
-import ActionLinks from '../../../components/claude/ActionLinks.astro';
-import ServiceCards from '../../../components/claude/ServiceCards.astro';
-import HoursPanel from '../../../components/claude/HoursPanel.astro';
-import AccessPanel from '../../../components/claude/AccessPanel.astro';
-import CtaBand from '../../../components/claude/CtaBand.astro';
-import ProductCard from '../../../components/ProductCard.astro';
-import { getAllProducts } from '../../../data/products';
+import { getAllProducts, formatPrice } from '../../../data/products';
+import { HOURS, SERVICES } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
+import { MAP_EMBED_SRC } from '../../../data/claude/preview';
 import photoExterior from '../../../assets/images/Exterior_01.jpg';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const products = getAllProducts();
+
+const steps = [
+	{ num: '01', title: '処方箋を出す', body: '店頭カウンターへ。LINEなら写真を送るだけで事前受付できます。' },
+	{ num: '02', title: 'お薬を準備', body: '薬剤師が処方内容を確認し、お薬を調製します。' },
+	{ num: '03', title: 'お渡し・説明', body: '飲み方・注意点をご説明してお渡しします。気になることはその場でどうぞ。' },
+];
+
+const faqs = [
+	{
+		q: '処方箋を事前に送れますか？',
+		a: 'LINEで処方箋の写真を送っていただくと、ご来局前にお薬の準備を始められます。店頭での待ち時間の短縮につながります。',
+	},
+	{
+		q: '日曜日も開いていますか？',
+		a: '日曜は9:00〜12:30まで営業しています。土曜は9:00〜13:00、平日は9:00〜18:30です。',
+	},
+	{
+		q: 'ジェネリック医薬品に変更できますか？',
+		a: 'ご希望に応じて薬剤師がご説明し、変更のご相談を承ります。お薬代を抑えたい方はお気軽にお声がけください。',
+	},
+];
 ---
 
 <ClaudePreviewLayout title="Trust First Pharmacy" theme="trust-first-pharmacy">
 	<PreviewPatternNav current="trust-first-pharmacy" />
 
-	<section class="hero">
-		<div class="cp-container hero-grid">
-			<div class="hero-copy cp-fade-in">
-				<p class="cp-eyebrow">MACHIYA / ARAKAWA PHARMACY</p>
-				<h1 class="text-balance">
-					町屋で、迷わず<br class="br-pc-only" />相談できる薬局。
-				</h1>
-				<p class="lead text-pretty">
-					{SITE.name}は、荒川区荒川・町屋駅徒歩5分の調剤薬局です。
-					土曜日・日曜日も営業し、LINEからお薬の事前受付ができます。
-				</p>
-				<ul class="hero-points">
-					<li>土日も営業（日曜は午前）</li>
-					<li>LINEで処方箋の事前送信</li>
-					<li>ジェネリック・市販薬の相談</li>
-				</ul>
-			</div>
-			<div class="hero-photo cp-fade-in">
-				<Image
-					src={photoExterior}
-					alt="りんごちゃん薬局の外観"
-					widths={[480, 800, 1200]}
-					sizes="(max-width: 900px) 100vw, 50vw"
-				/>
-			</div>
+	<!-- 常時表示：営業ステータスバー -->
+	<div class="status-bar" role="region" aria-label="営業時間の概要">
+		<div class="cp-container status-inner">
+			<span class="status-title"><i data-lucide="clock" aria-hidden="true"></i>営業時間</span>
+			{
+				HOURS.summary.map((s) => (
+					<span class="status-item">
+						<b>{s.label}</b> {s.value}
+					</span>
+				))
+			}
+			<a class="status-tel" href={SITE.telLink}><i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}</a>
 		</div>
-		<div class="cp-container hero-actions">
-			<ActionLinks />
+	</div>
+
+	<header class="hero">
+		<div class="cp-container">
+			<p class="hero-place">荒川区荒川・町屋駅 徒歩5分の調剤薬局</p>
+			<h1 class="text-balance">
+				迷わない薬局へ。<br />
+				<span>処方箋も、市販薬の相談も、この窓口ひとつ。</span>
+			</h1>
 		</div>
+
+		<!-- 受付カウンター式の導線：面で押せる3ブロック -->
+		<div class="cp-container counter-row" role="navigation" aria-label="主要な連絡手段">
+			<a href={SITE.telLink} class="counter counter-tel">
+				<i data-lucide="phone" aria-hidden="true"></i>
+				<span class="c-label">電話で相談</span>
+				<span class="c-sub">{SITE.tel}</span>
+			</a>
+			<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="counter counter-line">
+				<i data-lucide="message-circle" aria-hidden="true"></i>
+				<span class="c-label">LINEで事前受付</span>
+				<span class="c-sub">処方箋の写真を送るだけ</span>
+			</a>
+			<a href="#access" class="counter counter-map">
+				<i data-lucide="map-pin" aria-hidden="true"></i>
+				<span class="c-label">アクセス</span>
+				<span class="c-sub">町屋駅 徒歩5分</span>
+			</a>
+		</div>
+	</header>
+
+	<!-- はじめての方へ：3ステップ -->
+	<section class="cp-section cp-container" aria-labelledby="flow-title">
+		<h2 id="flow-title" class="plate-title">はじめての方へ｜受付の流れ</h2>
+		<ol class="steps">
+			{
+				steps.map((step) => (
+					<li data-reveal>
+						<span class="step-num" aria-hidden="true">
+							{step.num}
+						</span>
+						<h3>{step.title}</h3>
+						<p class="text-pretty">{step.body}</p>
+					</li>
+				))
+			}
+		</ol>
 	</section>
 
-	<section class="cp-section cp-container" aria-labelledby="services">
-		<SectionHeader
-			label="SERVICES"
-			title="できること"
-			lead="処方箋の受付から市販薬の相談まで。薬のことはまとめてお任せください。"
-		/>
-		<ServiceCards baseUrl={baseUrl} />
+	<!-- 窓口一覧：カードではなく罫線のディレクトリ -->
+	<section class="cp-section cp-container" aria-labelledby="services-title">
+		<h2 id="services-title" class="plate-title">窓口のご案内</h2>
+		<ul class="directory">
+			{
+				SERVICES.map((service, i) => (
+					<li data-reveal>
+						<span class="dir-index" aria-hidden="true">
+							{String(i + 1).padStart(2, '0')}
+						</span>
+						<i data-lucide={service.icon} aria-hidden="true" class="dir-icon" />
+						<div class="dir-body">
+							<h3>{service.title}</h3>
+							<p class="text-pretty">{service.body}</p>
+						</div>
+						{service.href ? (
+							<a class="dir-link" href={`${baseUrl}${service.href}`} aria-label={`${service.title}の詳細`}>
+								詳細 <i data-lucide="chevron-right" aria-hidden="true" />
+							</a>
+						) : (
+							<span class="dir-link is-static">店頭にて</span>
+						)}
+					</li>
+				))
+			}
+		</ul>
 	</section>
 
-	<section class="cp-section cp-container" aria-labelledby="products">
-		<SectionHeader
-			label="PRODUCTS"
-			title="取扱い商品"
-			lead="店頭で取り扱う市販薬・ヘルスケア商品の一例です。"
-		/>
-		<div class="cp-products">
-			{products.map((product) => <ProductCard product={product} baseUrl={baseUrl} />)}
-		</div>
+	<!-- 取扱い商品：受付表スタイルの行 -->
+	<section class="cp-section cp-container" aria-labelledby="products-title">
+		<h2 id="products-title" class="plate-title">取扱い商品（一例）</h2>
+		<ul class="product-rows">
+			{
+				products.map((product) => (
+					<li data-reveal>
+						<a href={`${baseUrl}products/${product.slug}`} class="row-link">
+							<span class="row-cat">{product.category}</span>
+							<span class="row-name">{product.name}</span>
+							<span class="row-class">{product.medClass}</span>
+							<span class="row-price">{formatPrice(product.price)}</span>
+							<i data-lucide="chevron-right" aria-hidden="true" />
+						</a>
+					</li>
+				))
+			}
+		</ul>
 		<p class="cp-note">※商品情報はサンプルです。正式公開時にmicroCMSのデータへ差し替えます。</p>
 	</section>
 
-	<section class="cp-section cp-container info-grid" aria-label="営業時間とアクセス">
-		<HoursPanel />
-		<AccessPanel />
+	<!-- 営業時間：時刻表。今日の列をJSでハイライト -->
+	<section class="cp-section cp-container" aria-labelledby="hours-title">
+		<h2 id="hours-title" class="plate-title">営業時間</h2>
+		<div class="timetable-wrap">
+			<table class="timetable" id="cp-timetable" aria-label="営業時間">
+				<thead>
+					<tr>
+						<th scope="col">時間</th>
+						{HOURS.days.map((d) => <th scope="col">{d}</th>)}
+					</tr>
+				</thead>
+				<tbody>
+					{
+						HOURS.rows.map((row) => (
+							<tr>
+								<th scope="row">{row.time}</th>
+								{row.open.map((open) => <td class={open ? 'open' : 'closed'}>{open ? '〇' : '休'}</td>)}
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+		<p class="holiday">{HOURS.holiday}<small>{HOURS.holidayNote}</small></p>
 	</section>
 
-	<CtaBand />
+	<!-- アクセス：地図を主役に、住所パネルを重ねる -->
+	<section class="cp-section" id="access" aria-labelledby="access-title">
+		<div class="map-stage">
+			<iframe
+				src={MAP_EMBED_SRC}
+				title="りんごちゃん薬局 地図"
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"></iframe>
+			<div class="map-panel" data-reveal>
+				<h2 id="access-title">アクセス</h2>
+				<p class="strong">町屋駅より徒歩5分</p>
+				<p class="muted">千代田線、さくらトラム（都電荒川線）</p>
+				<p>
+					{SITE.postalCode}<br />
+					<a href={SITE.mapUrl} target="_blank" rel="noopener noreferrer" class="addr">
+						{SITE.address} <i data-lucide="external-link" aria-hidden="true"></i>
+					</a>
+				</p>
+				<Image src={photoExterior} alt="りんごちゃん薬局の外観" widths={[320, 640]} sizes="320px" class="map-photo" />
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ -->
+	<section class="cp-section cp-container faq" aria-labelledby="faq-title">
+		<h2 id="faq-title" class="plate-title">よくあるご質問</h2>
+		{
+			faqs.map((faq) => (
+				<details>
+					<summary>
+						{faq.q}
+						<i data-lucide="chevron-right" aria-hidden="true" />
+					</summary>
+					<p class="text-pretty">{faq.a}</p>
+				</details>
+			))
+		}
+	</section>
+
+	<!-- CTA -->
+	<section class="cta">
+		<div class="cp-container cta-inner">
+			<div>
+				<h2>受付は、来る前から始められます。</h2>
+				<p>LINEで処方箋を送っておくと、店頭での待ち時間を短くできます。</p>
+			</div>
+			<div class="cta-actions">
+				<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="cta-line">
+					<i data-lucide="message-circle" aria-hidden="true"></i>LINEで事前受付
+				</a>
+				<a href={SITE.telLink} class="cta-tel"><i data-lucide="phone" aria-hidden="true"></i>{SITE.tel}</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- モバイル固定アクションバー -->
+	<div class="mobile-bar" role="navigation" aria-label="電話とLINE">
+		<a href={SITE.telLink}><i data-lucide="phone" aria-hidden="true"></i>電話</a>
+		<a href={SITE.lineUrl} target="_blank" rel="noopener noreferrer" class="is-line">
+			<i data-lucide="message-circle" aria-hidden="true"></i>LINEで事前受付
+		</a>
+	</div>
+
+	<!-- 今日の曜日列をハイライト（軽量JS） -->
+	<script is:inline>
+		(() => {
+			const table = document.getElementById('cp-timetable');
+			if (!table) return;
+			const day = new Date().getDay(); // 0=日
+			const col = day === 0 ? 7 : day; // 表は月始まり
+			table.querySelectorAll('tr').forEach((tr) => {
+				const cell = tr.children[col];
+				if (cell) cell.classList.add('is-today');
+			});
+		})();
+	</script>
 </ClaudePreviewLayout>
 
 <style>
-	.hero {
-		padding: clamp(2.5rem, 6vw, 4.5rem) 0 3rem;
-		background: linear-gradient(180deg, var(--cp-surface-alt) 0%, var(--cp-bg) 100%);
-		margin-bottom: var(--cp-section-gap);
+	/* ---- 常時表示ステータスバー ---- */
+	.status-bar {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		background: var(--cp-heading);
+		color: #fff;
+		font-size: 0.85rem;
 	}
-	.hero-grid {
-		display: grid;
-		grid-template-columns: 1.15fr 1fr;
-		gap: 2.5rem;
-		align-items: center;
-		margin-bottom: 2.5rem;
-	}
-	h1 {
-		font-size: clamp(2rem, 5vw, 3.1rem);
-		line-height: 1.3;
-		margin-bottom: 1rem;
-	}
-	.lead {
-		font-size: 1.05rem;
-		margin-bottom: 1.5rem;
-		max-width: 34em;
-	}
-	.cp-eyebrow {
-		color: var(--cp-primary);
-		font-weight: 700;
-		font-size: 0.8rem;
-		letter-spacing: var(--cp-eyebrow-tracking);
-		margin-bottom: 0.75rem;
-	}
-	.hero-points {
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-	.hero-points li {
+	.status-inner {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		font-weight: 500;
+		gap: 1.1rem;
+		flex-wrap: wrap;
+		padding-top: 0.45rem;
+		padding-bottom: 0.45rem;
 	}
-	.hero-points li::before {
-		content: '✓';
-		flex-shrink: 0;
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-		background: var(--cp-primary);
-		color: var(--cp-primary-contrast);
-		font-size: 0.8rem;
+	.status-title {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
+		gap: 0.35rem;
+		font-weight: 700;
 	}
-	.hero-photo :global(img) {
-		width: 100%;
-		height: auto;
-		border-radius: var(--cp-radius-lg);
-		box-shadow: var(--cp-shadow);
+	.status-title :global(svg),
+	.status-tel :global(svg) {
+		width: 16px;
+		height: 16px;
 	}
-	.info-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.5rem;
-		align-items: start;
+	.status-item b {
+		color: #ffd166;
+		font-weight: 700;
+		margin-right: 0.25em;
+	}
+	.status-tel {
+		margin-left: auto;
+		color: #fff;
+		font-weight: 700;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		min-height: var(--tap-min);
 	}
 
-	@media (max-width: 900px) {
-		.hero-grid {
+	/* ---- ヒーロー ---- */
+	.hero {
+		padding: clamp(3rem, 7vw, 5.5rem) 0 0;
+		margin-bottom: var(--cp-section-gap);
+	}
+	.hero-place {
+		font-weight: 700;
+		color: var(--cp-primary);
+		margin-bottom: 1rem;
+	}
+	h1 {
+		font-size: clamp(2.2rem, 6vw, 3.6rem);
+		line-height: 1.25;
+		margin-bottom: 2.5rem;
+	}
+	h1 span {
+		display: block;
+		margin-top: 0.75rem;
+		font-size: 0.42em;
+		font-weight: 500;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- 受付カウンター（面のボタン） ---- */
+	.counter-row {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2px;
+		border-radius: var(--cp-radius);
+		overflow: hidden;
+	}
+	.counter {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		padding: 1.5rem 1.5rem 1.35rem;
+		color: #fff;
+		min-height: 116px;
+		transition: filter 0.2s ease;
+	}
+	.counter:hover {
+		filter: brightness(1.12);
+		opacity: 1;
+	}
+	.counter :global(svg) {
+		width: 26px;
+		height: 26px;
+		margin-bottom: 0.3rem;
+	}
+	.c-label {
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+	.c-sub {
+		font-size: 0.85rem;
+		opacity: 0.85;
+	}
+	.counter-tel {
+		background: var(--cp-accent);
+	}
+	.counter-line {
+		background: #059140;
+	}
+	.counter-map {
+		background: var(--cp-primary);
+	}
+
+	/* ---- 見出しプレート（サイン風） ---- */
+	.plate-title {
+		display: inline-block;
+		font-size: 1.3rem;
+		border-left: 6px solid var(--cp-primary);
+		padding: 0.2rem 0 0.2rem 0.8rem;
+		margin-bottom: 1.75rem;
+	}
+
+	/* ---- 3ステップ ---- */
+	.steps {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2.5rem;
+		counter-reset: step;
+	}
+	.steps li {
+		position: relative;
+		border-top: 2px solid var(--cp-primary);
+		padding-top: 1.1rem;
+	}
+	.steps li:not(:last-child)::after {
+		content: '';
+		position: absolute;
+		top: -2px;
+		right: -2.5rem;
+		width: 2.5rem;
+		border-top: 2px dashed var(--cp-border);
+	}
+	.step-num {
+		font-size: 2rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+		letter-spacing: 0.05em;
+	}
+	.steps h3 {
+		font-size: 1.15rem;
+		margin: 0.4rem 0 0.5rem;
+	}
+	.steps p {
+		font-size: 0.95rem;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- 窓口ディレクトリ ---- */
+	.directory {
+		list-style: none;
+		border-top: 2px solid var(--cp-heading);
+	}
+	.directory li {
+		display: grid;
+		grid-template-columns: auto auto 1fr auto;
+		align-items: center;
+		gap: 1.4rem;
+		padding: 1.4rem 0.5rem;
+		border-bottom: 1px solid var(--cp-border);
+	}
+	.dir-index {
+		font-weight: 700;
+		color: var(--cp-text-muted);
+		font-size: 0.95rem;
+	}
+	.dir-icon {
+		width: 30px;
+		height: 30px;
+		color: var(--cp-primary);
+	}
+	.dir-body h3 {
+		font-size: 1.15rem;
+		margin: 0 0 0.25rem;
+	}
+	.dir-body p {
+		font-size: 0.92rem;
+		color: var(--cp-text-muted);
+		margin: 0;
+		max-width: 44em;
+	}
+	.dir-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+		white-space: nowrap;
+		min-height: var(--tap-min);
+	}
+	.dir-link.is-static {
+		color: var(--cp-text-muted);
+		font-weight: 500;
+	}
+	.dir-link :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+
+	/* ---- 商品：受付表の行 ---- */
+	.product-rows {
+		list-style: none;
+		border-top: 2px solid var(--cp-heading);
+	}
+	.row-link {
+		display: grid;
+		grid-template-columns: 6.5em 1fr auto auto 24px;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.05rem 0.5rem;
+		border-bottom: 1px solid var(--cp-border);
+		color: var(--cp-text);
+		min-height: var(--tap-min);
+	}
+	.row-link:hover {
+		background: var(--cp-surface);
+		opacity: 1;
+	}
+	.row-cat {
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: var(--cp-primary);
+		border: 1px solid currentColor;
+		border-radius: 4px;
+		text-align: center;
+		padding: 0.15rem 0.4rem;
+	}
+	.row-name {
+		font-weight: 700;
+	}
+	.row-class {
+		font-size: 0.8rem;
+		color: var(--cp-text-muted);
+	}
+	.row-price {
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+	.row-link :global(svg) {
+		width: 18px;
+		height: 18px;
+		color: var(--cp-primary);
+	}
+
+	/* ---- 時刻表 ---- */
+	.timetable-wrap {
+		overflow-x: auto;
+	}
+	.timetable {
+		width: 100%;
+		min-width: 560px;
+		border-collapse: collapse;
+		text-align: center;
+		background: var(--cp-surface);
+		font-size: 1rem;
+	}
+	.timetable th,
+	.timetable td {
+		border: 1px solid var(--cp-border);
+		padding: 0.7rem 0.5rem;
+	}
+	.timetable thead th {
+		background: var(--cp-heading);
+		color: #fff;
+		font-weight: 700;
+	}
+	.timetable tbody th {
+		background: var(--cp-surface-alt);
+		white-space: nowrap;
+		font-weight: 500;
+	}
+	.timetable td.open {
+		color: var(--cp-primary);
+		font-weight: 700;
+	}
+	.timetable td.closed {
+		color: var(--cp-text-muted);
+		background: var(--cp-bg);
+	}
+	.timetable :global(.is-today) {
+		box-shadow: inset 0 0 0 3px var(--cp-accent);
+	}
+	.timetable thead :global(.is-today) {
+		background: var(--cp-accent);
+	}
+	.holiday {
+		margin-top: 1rem;
+	}
+	.holiday small {
+		display: block;
+		color: var(--cp-text-muted);
+	}
+
+	/* ---- アクセス：地図ステージ ---- */
+	.map-stage {
+		position: relative;
+		min-height: 480px;
+	}
+	.map-stage iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.map-panel {
+		position: relative;
+		z-index: 1;
+		width: min(360px, calc(100% - 2 * var(--container-pad-x)));
+		margin: 3rem 0 3rem auto;
+		margin-right: max(var(--container-pad-x), calc((100% - var(--cp-container-max)) / 2));
+		background: var(--cp-surface);
+		border-top: 6px solid var(--cp-primary);
+		box-shadow: var(--cp-shadow);
+		padding: 1.5rem;
+	}
+	.map-panel h2 {
+		font-size: 1.25rem;
+		margin-bottom: 0.75rem;
+	}
+	.map-panel .strong {
+		font-size: 1.1rem;
+		font-weight: 700;
+	}
+	.map-panel .muted {
+		color: var(--cp-text-muted);
+		font-size: 0.9rem;
+		margin-bottom: 0.75rem;
+	}
+	.addr {
+		color: var(--cp-text);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+	}
+	.addr :global(svg) {
+		width: 16px;
+		height: 16px;
+	}
+	.map-panel :global(.map-photo) {
+		width: 100%;
+		height: auto;
+		margin-top: 1rem;
+	}
+
+	/* ---- FAQ ---- */
+	.faq details {
+		border-bottom: 1px solid var(--cp-border);
+	}
+	.faq details:first-of-type {
+		border-top: 2px solid var(--cp-heading);
+	}
+	.faq summary {
+		cursor: pointer;
+		list-style: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		font-weight: 700;
+		font-size: 1.05rem;
+		padding: 1.1rem 0.5rem;
+		min-height: var(--tap-min);
+	}
+	.faq summary::-webkit-details-marker {
+		display: none;
+	}
+	.faq summary :global(svg) {
+		width: 20px;
+		height: 20px;
+		color: var(--cp-primary);
+		transition: transform 0.2s ease;
+		flex-shrink: 0;
+	}
+	.faq details[open] summary :global(svg) {
+		transform: rotate(90deg);
+	}
+	.faq details p {
+		padding: 0 0.5rem 1.25rem;
+		color: var(--cp-text-muted);
+		max-width: 46em;
+	}
+
+	/* ---- CTA ---- */
+	.cta {
+		background: var(--cp-primary);
+		color: #fff;
+		padding: clamp(2.5rem, 5vw, 4rem) 0;
+	}
+	.cta-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+		flex-wrap: wrap;
+	}
+	.cta h2 {
+		color: #fff;
+		font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+		margin-bottom: 0.5rem;
+	}
+	.cta p {
+		opacity: 0.88;
+		margin: 0;
+	}
+	.cta-actions {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.cta-line,
+	.cta-tel {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 700;
+		min-height: var(--tap-min);
+		padding: 0.8rem 1.75rem;
+		border-radius: 8px;
+	}
+	.cta-line {
+		background: #06c755;
+		color: #fff;
+	}
+	.cta-tel {
+		background: #fff;
+		color: var(--cp-primary);
+	}
+	.cta :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	/* ---- モバイル固定バー ---- */
+	.mobile-bar {
+		display: none;
+	}
+
+	@media (max-width: 768px) {
+		.status-item {
+			font-size: 0.78rem;
+		}
+		.counter-row {
 			grid-template-columns: 1fr;
 		}
-		.info-grid {
+		.counter {
+			flex-direction: row;
+			align-items: center;
+			min-height: var(--tap-min);
+			padding: 1rem 1.25rem;
+		}
+		.counter :global(svg) {
+			margin-bottom: 0;
+			margin-right: 0.6rem;
+		}
+		.c-sub {
+			margin-left: auto;
+			text-align: right;
+		}
+		.steps {
 			grid-template-columns: 1fr;
+			gap: 1.75rem;
+		}
+		.steps li:not(:last-child)::after {
+			display: none;
+		}
+		.directory li {
+			grid-template-columns: auto 1fr;
+			row-gap: 0.5rem;
+		}
+		.dir-icon {
+			grid-row: 1;
+		}
+		.dir-body {
+			grid-column: 1 / -1;
+		}
+		.dir-link {
+			grid-column: 1 / -1;
+			justify-self: start;
+		}
+		.row-link {
+			grid-template-columns: 1fr auto;
+			row-gap: 0.3rem;
+		}
+		.row-cat {
+			justify-self: start;
+			grid-row: 1;
+		}
+		.row-name {
+			grid-column: 1 / -1;
+		}
+		.map-panel {
+			margin: 2rem auto;
+		}
+		.mobile-bar {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 30;
+			display: grid;
+			grid-template-columns: 1fr 1.6fr;
+			gap: 1px;
+			background: var(--cp-border);
+			box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+		}
+		.mobile-bar a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.4rem;
+			min-height: 56px;
+			font-weight: 700;
+			background: var(--cp-accent);
+			color: #fff;
+		}
+		.mobile-bar a.is-line {
+			background: #059140;
+		}
+		.mobile-bar :global(svg) {
+			width: 20px;
+			height: 20px;
+		}
+		:global(.cp-preview-footer) {
+			padding-bottom: 6rem;
 		}
 	}
 </style>
