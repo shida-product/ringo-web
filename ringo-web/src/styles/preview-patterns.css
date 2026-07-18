@@ -1,0 +1,452 @@
+/* Codex 再作成版：色替えではなく、パターンごとに構造を変えるためのレイアウトCSS */
+.codex-pattern {
+  min-height: 100vh;
+}
+
+.codex-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--preview-border);
+  border-radius: 999px;
+  background: var(--preview-surface);
+  color: var(--preview-accent);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.codex-lede {
+  color: var(--preview-muted);
+  font-size: clamp(1.05rem, 1.7vw, 1.32rem);
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.codex-actions-wrap {
+  margin-block: 1.4rem 0;
+}
+
+.codex-product-strip,
+.codex-product-board,
+.codex-product-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.codex-product-strip {
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+}
+
+.codex-product-card {
+  padding: 1.2rem;
+  border: 1px solid var(--preview-border);
+  border-radius: var(--preview-radius-md);
+  background: var(--preview-surface);
+  box-shadow: 0 16px 44px rgba(37, 50, 56, 0.08);
+}
+
+.codex-product-card span {
+  color: var(--preview-accent);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.codex-product-card h3 {
+  color: var(--preview-primary);
+  margin: 0.45rem 0;
+}
+
+.codex-product-card p {
+  color: var(--preview-muted);
+  font-weight: 600;
+  margin: 0;
+}
+
+.codex-photo {
+  overflow: hidden;
+  border-radius: var(--preview-radius-lg);
+  box-shadow: var(--preview-shadow);
+}
+
+.codex-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 1. Trust First：来局前の情報をファーストビューで完結させるダッシュボード */
+.pattern-trust .trust-hero {
+  padding: clamp(2rem, 5vw, 4rem) 0 var(--preview-section);
+  background: linear-gradient(135deg, #eef8f5 0%, #ffffff 52%, #f8fbfa 100%);
+}
+.pattern-trust .trust-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(360px, 1.05fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+.pattern-trust .trust-copy,
+.pattern-trust .trust-info-card {
+  padding: clamp(1.5rem, 4vw, 2.8rem);
+  border-radius: var(--preview-radius-lg);
+  background: var(--preview-surface);
+  border: 1px solid var(--preview-border);
+  box-shadow: var(--preview-shadow);
+}
+.pattern-trust h1 {
+  color: var(--preview-primary);
+  font-size: clamp(2.3rem, 5vw, 4.8rem);
+  line-height: 1.12;
+  margin: 1rem 0;
+}
+.pattern-trust .trust-info-card {
+  display: grid;
+  gap: 1rem;
+}
+.pattern-trust .trust-photo {
+  min-height: 300px;
+}
+.pattern-trust .trust-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+/* 2. Community Care：相談シーンを時系列・関係性で見せる */
+.pattern-community .care-hero {
+  padding: clamp(2rem, 5vw, 4rem) 0;
+  background: radial-gradient(circle at top left, #fff0ea, transparent 34%), var(--preview-bg);
+}
+.pattern-community .care-message {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 2rem;
+  align-items: center;
+}
+.pattern-community h1 {
+  color: var(--preview-primary);
+  font-size: clamp(2.3rem, 6vw, 5.2rem);
+  line-height: 1.08;
+}
+.pattern-community .care-circle {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--preview-surface);
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid var(--preview-border);
+  box-shadow: var(--preview-shadow);
+}
+.pattern-community .care-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.pattern-community .care-flow article {
+  padding: 1.2rem;
+  border-left: 5px solid var(--preview-accent);
+  border-radius: var(--preview-radius-md);
+  background: var(--preview-surface);
+}
+.pattern-community .care-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+/* 3. Local Editorial：雑誌風の大判写真＋章立て */
+.pattern-local .local-cover {
+  padding: clamp(2rem, 5vw, 4rem) 0 var(--preview-section);
+  background: #fbf8ee;
+}
+.pattern-local .local-cover-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: end;
+}
+.pattern-local h1 {
+  color: var(--preview-primary);
+  font-size: clamp(2.6rem, 7vw, 6.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.06em;
+}
+.pattern-local .local-photo-main {
+  min-height: 520px;
+  border-radius: 48px 48px 8px 48px;
+}
+.pattern-local .local-toc,
+.pattern-local .local-story {
+  display: grid;
+  gap: 1rem;
+}
+.pattern-local .local-story {
+  grid-template-columns: 0.72fr 1.28fr;
+  align-items: start;
+}
+.pattern-local .local-note-card {
+  padding: 1.25rem;
+  background: var(--preview-surface);
+  border-radius: var(--preview-radius-md);
+  border: 1px solid var(--preview-border);
+}
+
+/* 4. Ringo Pop：円形グラフィックと相談カード */
+.pattern-ringo .ringo-hero {
+  position: relative;
+  padding: clamp(2rem, 5vw, 4rem) 0 var(--preview-section);
+  background: linear-gradient(160deg, #fff5f6 0%, #fff 55%, #f0f8e9 100%);
+}
+.pattern-ringo .ringo-orb {
+  position: absolute;
+  width: clamp(180px, 30vw, 380px);
+  aspect-ratio: 1;
+  border-radius: 48% 52% 45% 55%;
+  background: rgba(238, 75, 88, 0.14);
+  right: 4vw;
+  top: 110px;
+}
+.pattern-ringo .ringo-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 2rem;
+  align-items: center;
+}
+.pattern-ringo h1 {
+  color: var(--preview-primary);
+  font-size: clamp(2.5rem, 6vw, 5.8rem);
+  line-height: 1.08;
+}
+.pattern-ringo .ringo-bubbles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.pattern-ringo .ringo-bubbles article {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--preview-surface);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: var(--preview-shadow);
+}
+.pattern-ringo .ringo-layout {
+  display: grid;
+  grid-template-columns: 1fr 0.82fr;
+  gap: 1.5rem;
+}
+
+/* 5. Pharmacy Magazine：記事面・商品面・案内面 */
+.pattern-magazine .magazine-hero {
+  padding: clamp(2rem, 5vw, 4rem) 0 var(--preview-section);
+  background: #f8f5ef;
+}
+.pattern-magazine .magazine-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 1rem;
+}
+.pattern-magazine .feature-article {
+  min-height: 540px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: var(--preview-radius-lg);
+  background: linear-gradient(rgba(32,41,43,.28), rgba(32,41,43,.62)), var(--feature-image);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+}
+.pattern-magazine .feature-article h1 {
+  color: #fff;
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 1.05;
+}
+.pattern-magazine .magazine-side {
+  display: grid;
+  gap: 1rem;
+}
+.pattern-magazine .magazine-side article {
+  padding: 1.25rem;
+  background: var(--preview-surface);
+  border-radius: var(--preview-radius-md);
+  border: 1px solid var(--preview-border);
+}
+.pattern-magazine .codex-product-list {
+  grid-template-columns: 1fr;
+}
+
+/* 6. Wellness Brand：宣言・数字・流れ */
+.pattern-wellness .wellness-hero {
+  padding: clamp(2rem, 5vw, 4rem) 0 var(--preview-section);
+  background: linear-gradient(90deg, #16845f 0 48%, #f6fbf7 48% 100%);
+}
+.pattern-wellness .wellness-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 2rem;
+  align-items: center;
+}
+.pattern-wellness .wellness-declare {
+  color: #fff;
+}
+.pattern-wellness .wellness-declare h1 {
+  color: #fff;
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  line-height: 1;
+}
+.pattern-wellness .wellness-panel {
+  padding: clamp(1.5rem, 4vw, 2.8rem);
+  border-radius: var(--preview-radius-lg);
+  background: var(--preview-surface);
+  box-shadow: var(--preview-shadow);
+}
+.pattern-wellness .data-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.pattern-wellness .data-row article {
+  padding: 1.35rem;
+  background: var(--preview-surface);
+  border-radius: var(--preview-radius-md);
+  text-align: center;
+}
+.pattern-wellness .data-row strong {
+  display: block;
+  color: var(--preview-accent);
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+}
+
+/* 7. Neo Corporate：強い英字・非対称グリッド */
+.pattern-neo {
+  background: #f4f5f4;
+}
+.pattern-neo .neo-hero {
+  position: relative;
+  padding: clamp(2rem, 5vw, 4rem) 0 var(--preview-section);
+}
+.pattern-neo .neo-title {
+  color: #111a1a;
+  font-size: clamp(3.2rem, 10vw, 10rem);
+  line-height: 0.82;
+  letter-spacing: -0.09em;
+  text-transform: uppercase;
+  margin: 1rem 0 2rem;
+}
+.pattern-neo .neo-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-areas: 'copy photo' 'topics photo';
+  gap: 1rem;
+}
+.pattern-neo .neo-copy { grid-area: copy; }
+.pattern-neo .neo-topics { grid-area: topics; }
+.pattern-neo .neo-photo { grid-area: photo; min-height: 650px; border-radius: 0 90px 0 0; }
+.pattern-neo .neo-topics {
+  display: grid;
+  gap: 0.7rem;
+}
+.pattern-neo .neo-topics article,
+.pattern-neo .neo-service-board article {
+  padding: 1rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #d9dedc;
+}
+.pattern-neo .neo-service-board {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 0.8fr;
+  gap: 1rem;
+}
+
+/* 8. Experimental Typography：ポスター型。必須情報は下部に固定的に保持 */
+.pattern-experimental {
+  background: #111a1a;
+  color: #f9fff9;
+}
+.pattern-experimental .experimental-hero {
+  min-height: 78vh;
+  padding: clamp(2rem, 5vw, 4rem) 0;
+  display: grid;
+  align-items: center;
+}
+.pattern-experimental .poster-grid {
+  display: grid;
+  grid-template-columns: 0.65fr 1.35fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+.pattern-experimental .poster-title {
+  color: #f9fff9;
+  font-size: clamp(3.2rem, 12vw, 11rem);
+  line-height: 0.78;
+  letter-spacing: -0.1em;
+  text-transform: uppercase;
+  margin: 1rem 0;
+}
+.pattern-experimental .poster-photo {
+  min-height: 640px;
+  border-radius: 120px 0 120px 0;
+  filter: saturate(0.8) contrast(1.08);
+}
+.pattern-experimental .poster-info,
+.pattern-experimental .poster-block {
+  padding: 1.25rem;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 18px;
+  background: rgba(255,255,255,.07);
+}
+.pattern-experimental .poster-required {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 980px) {
+  .pattern-trust .trust-grid,
+  .pattern-community .care-message,
+  .pattern-local .local-cover-grid,
+  .pattern-local .local-story,
+  .pattern-ringo .ringo-grid,
+  .pattern-ringo .ringo-layout,
+  .pattern-magazine .magazine-grid,
+  .pattern-wellness .wellness-grid,
+  .pattern-neo .neo-grid,
+  .pattern-experimental .poster-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+  .pattern-neo .neo-copy,
+  .pattern-neo .neo-topics,
+  .pattern-neo .neo-photo { grid-area: auto; }
+  .codex-product-strip,
+  .pattern-community .care-flow,
+  .pattern-wellness .data-row,
+  .pattern-neo .neo-service-board,
+  .pattern-experimental .poster-required {
+    grid-template-columns: 1fr;
+  }
+  .pattern-ringo .ringo-bubbles {
+    grid-template-columns: 1fr;
+  }
+  .pattern-ringo .ringo-bubbles article {
+    aspect-ratio: auto;
+    border-radius: var(--preview-radius-lg);
+    min-height: 130px;
+  }
+  .pattern-wellness .wellness-hero {
+    background: linear-gradient(180deg, #16845f 0 42%, #f6fbf7 42% 100%);
+  }
+}
