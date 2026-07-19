@@ -11,7 +11,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
 const OPTIONS = [
 	{ value: 'design-preview/existing', label: '既存実装' },
-	...PATTERNS.map((p, i) => ({ value: `design-preview/claude/${p.slug}`, label: `${CIRCLED[i]} ${p.short}` })),
+	...PATTERNS.map((p, i) => ({ value: `design-preview/claude/${p.slug}`, label: `パターン${CIRCLED[i]}` })),
 ];
 ---
 
@@ -152,8 +152,12 @@ const OPTIONS = [
 				font-size: 0.82rem;
 				color: #e8ede9;
 				white-space: nowrap;
-				padding: 0.5rem 0.7rem;
+				padding: 0.5rem 0.9rem;
 				min-height: var(--tap-min);
+				min-width: var(--tap-min);
+				justify-content: center;
+				display: inline-flex;
+				align-items: center;
 				border-radius: 6px;
 				cursor: pointer;
 			}
