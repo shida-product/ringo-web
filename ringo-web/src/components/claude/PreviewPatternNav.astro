@@ -13,7 +13,7 @@ const previewBase = `${baseUrl}design-preview/claude/`;
 ---
 
 <nav class="cp-pattern-nav" aria-label="デザイン試作の切り替え">
-	<a class="nav-home" href={baseUrl}>DESIGN PREVIEW 一覧</a>
+	<a class="nav-home" href={baseUrl}>DESIGN PREVIEW</a>
 	<div class="nav-links">
 		{
 			PATTERNS.map((pattern) => (
@@ -25,7 +25,17 @@ const previewBase = `${baseUrl}design-preview/claude/`;
 	</div>
 </nav>
 
+<!-- トップページ（比較表示）のiframe内では切り替えヘッダーと二重になるため隠す -->
+<script is:inline>
+	if (window.self !== window.top) {
+		document.querySelector('.cp-pattern-nav')?.setAttribute('hidden', '');
+	}
+</script>
+
 <style>
+	.cp-pattern-nav[hidden] {
+		display: none;
+	}
 	.cp-pattern-nav {
 		display: flex;
 		align-items: center;

@@ -1,158 +1,202 @@
 ---
-// デザイン試作の選択UI（Pagesのトップページ = 一覧の入口）
-// スタッフが各パターンを見比べて採用案を判断するためのハブページ。
-import ClaudePreviewLayout from '../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../components/claude/PreviewPatternNav.astro';
+// デザインパターン比較ツール（Pagesのトップページ）
+// 上部ヘッダーでパターンを切り替え、モバイル幅・PC幅を並べて確認する。
+// 各枠は実ページのiframeなので、スクロールやクリックもそのまま操作できる。
+import '../styles/global.css';
+import '../styles/claude/preview-tokens.css';
 import { PATTERNS } from '../data/claude/preview';
+import { SITE } from '../data/site';
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const previewBase = `${baseUrl}design-preview/claude/`;
 const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
+const OPTIONS = [
+	{ value: 'design-preview/existing', label: '既存実装' },
+	...PATTERNS.map((p, i) => ({ value: `design-preview/claude/${p.slug}`, label: `${CIRCLED[i]} ${p.short}` })),
+];
 ---
 
-<ClaudePreviewLayout title="デザイン試作一覧" theme="claude-index">
-	<PreviewPatternNav />
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="デザインパターンをモバイル/PC並列表示で切り替えて比較するページ" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="noindex, nofollow" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>デザインパターン比較 | {SITE.name}</title>
+	</head>
+	<body>
+		<header class="switcher-head">
+			<p class="head-title">DESIGN PREVIEW</p>
+			<nav class="pattern-tabs" aria-label="デザインパターン切り替え">
+				{
+					OPTIONS.map((o, i) => (
+						<button type="button" data-path={o.value} aria-pressed={i === 0 ? 'true' : 'false'}>
+							{o.label}
+						</button>
+					))
+				}
+			</nav>
+		</header>
 
-	<section class="cp-container intro">
-		<p class="cp-eyebrow">DESIGN PREVIEW</p>
-		<h1>デザイン試作、8パターン。</h1>
-		<p class="lead text-pretty">
-			現行実装と、Claudeが作成した試作8パターンを見比べられます。既存実装以外は、トップページのみのデザイン例です（他ページは実装していません）。
-		</p>
-		<a class="compare-link" href={`${baseUrl}design-preview/compare`}>モバイル/PC比較表示で見る →</a>
-	</section>
+		<main class="compare-area">
+			<section class="pane mobile">
+				<h2 class="pane-label">モバイル（375px）</h2>
+				<div class="frame-wrap">
+					<iframe id="frame-mobile" title="モバイル表示"></iframe>
+				</div>
+			</section>
+			<section class="pane desktop">
+				<h2 class="pane-label">PC（1280px）</h2>
+				<div class="frame-wrap">
+					<iframe id="frame-desktop" title="PC表示"></iframe>
+				</div>
+			</section>
+		</main>
 
-	<section class="cp-container catalog" aria-label="既存実装">
-		<ol>
-			<li data-reveal>
-				<a href={`${baseUrl}design-preview/existing`}>
-					<span class="no" aria-hidden="true">−</span>
-					<span class="body">
-						<span class="head">
-							<b class="name">既存実装</b>
-							<span class="tag">現行サイト</span>
-						</span>
-					</span>
-					<i data-lucide="chevron-right" aria-hidden="true" />
-				</a>
-			</li>
-		</ol>
-	</section>
+		<script>
+			const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+			const buttons = [...document.querySelectorAll<HTMLButtonElement>('.pattern-tabs button')];
+			const mobileFrame = document.getElementById('frame-mobile') as HTMLIFrameElement;
+			const desktopFrame = document.getElementById('frame-desktop') as HTMLIFrameElement;
 
-	<section class="cp-container catalog" aria-label="パターン一覧">
-		<ol>
-			{
-				PATTERNS.map((pattern, i) => (
-					<li data-reveal>
-						<a href={`${previewBase}${pattern.slug}`}>
-							<span class="no" aria-hidden="true">{CIRCLED[i]}</span>
-							<span class="body">
-								<span class="head">
-									<b class="name">パターン{CIRCLED[i]}</b>
-									<span class:list={['tag', { 'is-exp': pattern.tag !== '本番採用候補' }]}>{pattern.tag}</span>
-								</span>
-							</span>
-							<i data-lucide="chevron-right" aria-hidden="true" />
-						</a>
-					</li>
-				))
+			let currentPath = '';
+
+			function setPath(path: string) {
+				if (path === currentPath) return;
+				currentPath = path;
+				mobileFrame.src = baseUrl + path;
+				desktopFrame.src = baseUrl + path;
+				for (const button of buttons) {
+					button.setAttribute('aria-pressed', String(button.dataset.path === path));
+				}
+				const url = new URL(location.href);
+				url.searchParams.set('p', path);
+				history.replaceState(null, '', url);
 			}
-		</ol>
-	</section>
-</ClaudePreviewLayout>
 
-<style>
-	.intro {
-		padding-top: clamp(2.5rem, 6vw, 4rem);
-		margin-bottom: 2rem;
-		max-width: 860px;
-	}
-	.cp-eyebrow {
-		color: var(--cp-primary);
-		font-weight: 700;
-		font-size: 0.8rem;
-		letter-spacing: var(--cp-eyebrow-tracking);
-		margin-bottom: 0.75rem;
-	}
-	h1 {
-		font-size: clamp(1.9rem, 4.4vw, 2.8rem);
-		margin-bottom: 1rem;
-	}
-	.lead {
-		color: var(--cp-text-muted);
-	}
-	.compare-link {
-		display: inline-block;
-		margin-top: 0.5rem;
-		font-weight: 700;
-		color: var(--cp-primary);
-	}
-	.catalog {
-		margin-bottom: 2rem;
-	}
-	.catalog:last-of-type {
-		margin-bottom: var(--cp-section-gap);
-	}
-	.catalog ol {
-		list-style: none;
-		border-top: 2px solid var(--cp-heading);
-	}
-	.catalog a {
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		align-items: center;
-		gap: 1.75rem;
-		padding: 1.5rem 0.5rem;
-		border-bottom: 1px solid var(--cp-border);
-		color: var(--cp-text);
-		transition: background 0.2s ease, padding-left 0.25s ease;
-	}
-	.catalog a:hover {
-		background: var(--cp-surface);
-		padding-left: 1.25rem;
-		opacity: 1;
-	}
-	.no {
-		font-size: 1.9rem;
-		font-weight: 700;
-		color: var(--cp-primary);
-		font-variant-numeric: tabular-nums;
-		min-width: 1.5em;
-	}
-	.head {
-		display: flex;
-		align-items: center;
-		gap: 0.9rem;
-		flex-wrap: wrap;
-	}
-	.name {
-		font-size: 1.25rem;
-		color: var(--cp-heading);
-	}
-	.tag {
-		background: var(--cp-primary);
-		color: var(--cp-primary-contrast);
-		font-size: 0.72rem;
-		font-weight: 700;
-		padding: 0.18rem 0.7rem;
-		border-radius: 9999px;
-	}
-	.tag.is-exp {
-		background: var(--cp-surface-alt);
-		color: var(--cp-text-muted);
-	}
-	.catalog :global(svg) {
-		width: 22px;
-		height: 22px;
-		color: var(--cp-primary);
-	}
+			const requested = new URLSearchParams(location.search).get('p');
+			const initial = buttons.find((b) => b.dataset.path === requested) ?? buttons[0];
+			setPath(initial.dataset.path!);
 
-	@media (max-width: 768px) {
-		.catalog a {
-			grid-template-columns: auto 1fr;
-		}
-		.catalog :global(svg) {
-			display: none;
-		}
-	}
-</style>
+			for (const button of buttons) {
+				button.addEventListener('click', () => setPath(button.dataset.path!));
+			}
+		</script>
+
+		<style>
+			html,
+			body {
+				height: 100%;
+			}
+			body {
+				display: flex;
+				flex-direction: column;
+				background: #eceff0;
+				color: var(--cp-text);
+				font-family: var(--cp-font-body);
+			}
+
+			/* 上部ヘッダー：タイトル＋パターン切り替えタブ */
+			.switcher-head {
+				flex: none;
+				display: flex;
+				align-items: center;
+				gap: 1.25rem;
+				background: #14211d;
+				color: #e8ede9;
+				padding: 0.55rem var(--container-pad-x);
+			}
+			.head-title {
+				color: #ffd166;
+				font-weight: 700;
+				font-size: 0.8rem;
+				letter-spacing: 0.14em;
+				white-space: nowrap;
+			}
+			.pattern-tabs {
+				display: flex;
+				gap: 0.25rem;
+				overflow-x: auto;
+				-webkit-overflow-scrolling: touch;
+			}
+			.pattern-tabs button {
+				appearance: none;
+				border: 0;
+				background: none;
+				font: inherit;
+				font-size: 0.82rem;
+				color: #e8ede9;
+				white-space: nowrap;
+				padding: 0.5rem 0.7rem;
+				min-height: var(--tap-min);
+				border-radius: 6px;
+				cursor: pointer;
+			}
+			.pattern-tabs button:hover {
+				background: rgba(255, 255, 255, 0.12);
+			}
+			.pattern-tabs button[aria-pressed='true'] {
+				background: rgba(255, 209, 102, 0.18);
+				color: #ffd166;
+				font-weight: 700;
+			}
+
+			/* 比較エリア：モバイル/PCを横並び（画面に収まらない分は横スクロール） */
+			.compare-area {
+				flex: 1;
+				min-height: 0;
+				display: flex;
+				align-items: stretch;
+				gap: 1.25rem;
+				overflow-x: auto;
+				padding: 1rem var(--container-pad-x) 1.25rem;
+			}
+			.pane {
+				flex: none;
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+			}
+			.pane.mobile {
+				width: 375px;
+			}
+			.pane.desktop {
+				width: 1280px;
+			}
+			.pane-label {
+				flex: none;
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: var(--cp-text-muted);
+				margin-bottom: 0.4rem;
+			}
+			.frame-wrap {
+				flex: 1;
+				min-height: 480px;
+				border: 1px solid var(--cp-border);
+				border-radius: 10px;
+				overflow: hidden;
+				background: #fff;
+				box-shadow: var(--cp-shadow);
+			}
+			.frame-wrap iframe {
+				display: block;
+				border: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			@media (max-width: 768px) {
+				.switcher-head {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 0;
+				}
+				.pattern-tabs {
+					width: 100%;
+				}
+			}
+		</style>
+	</body>
+</html>
