@@ -37,6 +37,8 @@ const OPTIONS = [
 					))
 				}
 			</nav>
+			<!-- 選択中パターンをポータルを介さず単体で開く -->
+			<a id="open-standalone" class="open-standalone" target="_blank" rel="noopener">単体で開く ↗</a>
 		</header>
 
 		<main class="compare-area">
@@ -57,6 +59,7 @@ const OPTIONS = [
 		<script>
 			const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 			const patternButtons = [...document.querySelectorAll<HTMLButtonElement>('.pattern-tabs button')];
+			const standaloneLink = document.getElementById('open-standalone') as HTMLAnchorElement;
 			const mobileFrame = document.getElementById('frame-mobile') as HTMLIFrameElement;
 			const desktopFrame = document.getElementById('frame-desktop') as HTMLIFrameElement;
 			const wraps = [...document.querySelectorAll<HTMLElement>('.frame-wrap')];
@@ -85,6 +88,7 @@ const OPTIONS = [
 				currentPath = path;
 				mobileFrame.src = baseUrl + path;
 				desktopFrame.src = baseUrl + path;
+				standaloneLink.href = baseUrl + path;
 				for (const button of patternButtons) {
 					button.setAttribute('aria-pressed', String(button.dataset.path === path));
 				}
@@ -160,6 +164,25 @@ const OPTIONS = [
 				background: rgba(255, 209, 102, 0.18);
 				color: #ffd166;
 				font-weight: 700;
+			}
+
+			/* 単体表示リンク：ヘッダー右端に控えめに配置 */
+			.open-standalone {
+				margin-left: auto;
+				flex: none;
+				display: inline-flex;
+				align-items: center;
+				min-height: var(--tap-min);
+				padding: 0.5rem 0.7rem;
+				border-radius: 6px;
+				font-size: 0.8rem;
+				color: rgba(232, 237, 233, 0.75);
+				white-space: nowrap;
+			}
+			.open-standalone:hover {
+				background: rgba(255, 255, 255, 0.12);
+				color: #e8ede9;
+				opacity: 1;
 			}
 
 			/* ============================================================
