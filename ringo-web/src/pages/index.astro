@@ -1,8 +1,9 @@
 ---
 // デザインパターン比較ツール（Pagesのトップページ）
-// 上部ヘッダーでパターンを切り替え、モバイル幅・PC幅を並べて確認する。
-// 各枠は実寸（375px / 1280px）でレンダリングした実ページのiframeを、
-// 枠の幅に合わせて縮小表示する（スクロール・クリックもそのまま操作できる）。
+// 上部ヘッダーでパターンを切り替え、モバイル幅・PC幅の実ページをiframeで確認する。
+// 閲覧環境ごとに最適なUIに分ける：
+// - PC閲覧：モバイル(375px実寸) と PC(1280px→枠幅に縮小) を並列表示
+// - モバイル閲覧：デバイストグルで1枠ずつ全画面表示
 import '../styles/global.css';
 import '../styles/claude/preview-tokens.css';
 import { PATTERNS } from '../data/claude/preview';
@@ -20,7 +21,7 @@ const OPTIONS = [
 <html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="デザインパターンをモバイル/PC並列表示で切り替えて比較するページ" />
+		<meta name="description" content="デザインパターンをモバイル/PC表示で切り替えて比較するページ" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="robots" content="noindex, nofollow" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -38,9 +39,14 @@ const OPTIONS = [
 					))
 				}
 			</nav>
+			<!-- モバイル閲覧時のみ表示：プレビューのデバイス切り替え -->
+			<div class="device-toggle" role="group" aria-label="表示デバイス切り替え">
+				<button type="button" data-device="mobile" aria-pressed="true">モバイル</button>
+				<button type="button" data-device="desktop" aria-pressed="false">PC</button>
+			</div>
 		</header>
 
-		<main class="compare-area">
+		<main class="compare-area" data-device="mobile">
 			<section class="pane mobile">
 				<h2 class="pane-label">モバイル（375px）</h2>
 				<div class="frame-wrap" data-width="375">
@@ -57,9 +63,28 @@ const OPTIONS = [
 
 		<script>
 			const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-			const buttons = [...document.querySelectorAll<HTMLButtonElement>('.pattern-tabs button')];
+			const patternButtons = [...document.querySelectorAll<HTMLButtonElement>('.pattern-tabs button')];
+			const deviceButtons = [...document.querySelectorAll<HTMLButtonElement>('.device-toggle button')];
+			const area = document.querySelector('.compare-area') as HTMLElement;
 			const mobileFrame = document.getElementById('frame-mobile') as HTMLIFrameElement;
 			const desktopFrame = document.getElementById('frame-desktop') as HTMLIFrameElement;
+			const wraps = [...document.querySelectorAll<HTMLElement>('.frame-wrap')];
+
+			// --- iframeは実寸で描画し、枠のサイズに合わせて縮小表示 ---
+			function fit(wrap: HTMLElement) {
+				const iframe = wrap.querySelector('iframe');
+				if (!iframe || wrap.clientWidth === 0) return;
+				const targetWidth = Number(wrap.dataset.width);
+				const scale = Math.min(1, wrap.clientWidth / targetWidth);
+				iframe.style.width = `${targetWidth}px`;
+				iframe.style.height = `${Math.round(wrap.clientHeight / scale)}px`;
+				iframe.style.transform = `scale(${scale})`;
+			}
+
+			const ro = new ResizeObserver((entries) => {
+				for (const entry of entries) fit(entry.target as HTMLElement);
+			});
+			for (const wrap of wraps) ro.observe(wrap);
 
 			// --- パターン切り替え ---
 			let currentPath = '';
@@ -69,7 +94,7 @@ const OPTIONS = [
 				currentPath = path;
 				mobileFrame.src = baseUrl + path;
 				desktopFrame.src = baseUrl + path;
-				for (const button of buttons) {
+				for (const button of patternButtons) {
 					button.setAttribute('aria-pressed', String(button.dataset.path === path));
 				}
 				const url = new URL(location.href);
@@ -77,32 +102,26 @@ const OPTIONS = [
 				history.replaceState(null, '', url);
 			}
 
-			const requested = new URLSearchParams(location.search).get('p');
-			const initial = buttons.find((b) => b.dataset.path === requested) ?? buttons[0];
-			setPath(initial.dataset.path!);
+			// --- デバイス切り替え（モバイル閲覧時のみ意味を持つ） ---
+			function setDevice(device: string) {
+				area.dataset.device = device;
+				for (const button of deviceButtons) {
+					button.setAttribute('aria-pressed', String(button.dataset.device === device));
+				}
+				for (const wrap of wraps) fit(wrap);
+			}
 
-			for (const button of buttons) {
+			const params = new URLSearchParams(location.search);
+			const requested = params.get('p');
+			const initial = patternButtons.find((b) => b.dataset.path === requested) ?? patternButtons[0];
+			setPath(initial.dataset.path!);
+			for (const wrap of wraps) fit(wrap);
+
+			for (const button of patternButtons) {
 				button.addEventListener('click', () => setPath(button.dataset.path!));
 			}
-
-			// --- レスポンシブ：iframeは実寸で描画し、枠に合わせて縮小表示 ---
-			function fit(wrap: HTMLElement) {
-				const iframe = wrap.querySelector('iframe');
-				if (!iframe) return;
-				const targetWidth = Number(wrap.dataset.width);
-				const scale = Math.min(1, wrap.clientWidth / targetWidth);
-				iframe.style.width = `${targetWidth}px`;
-				iframe.style.height = `${Math.round(wrap.clientHeight / scale)}px`;
-				iframe.style.transform = `scale(${scale})`;
-			}
-
-			const wraps = [...document.querySelectorAll<HTMLElement>('.frame-wrap')];
-			const ro = new ResizeObserver((entries) => {
-				for (const entry of entries) fit(entry.target as HTMLElement);
-			});
-			for (const wrap of wraps) {
-				fit(wrap);
-				ro.observe(wrap);
+			for (const button of deviceButtons) {
+				button.addEventListener('click', () => setDevice(button.dataset.device!));
 			}
 		</script>
 
@@ -142,7 +161,8 @@ const OPTIONS = [
 				overflow-x: auto;
 				-webkit-overflow-scrolling: touch;
 			}
-			.pattern-tabs button {
+			.pattern-tabs button,
+			.device-toggle button {
 				appearance: none;
 				border: 0;
 				background: none;
@@ -164,7 +184,14 @@ const OPTIONS = [
 				font-weight: 700;
 			}
 
-			/* 比較エリア：モバイル/PCを横並び。枠は画面内に収め、iframeを縮小表示 */
+			/* デバイストグル：PC閲覧では両方並ぶので不要 */
+			.device-toggle {
+				display: none;
+			}
+
+			/* ============================================================
+			   PC閲覧：モバイル(実寸) と PC(縮小) の並列表示
+			   ============================================================ */
 			.compare-area {
 				flex: 1;
 				min-height: 0;
@@ -180,8 +207,8 @@ const OPTIONS = [
 				min-width: 0;
 			}
 			.pane.mobile {
-				flex: 0 1 375px;
-				min-width: 230px;
+				flex: none;
+				width: 375px;
 			}
 			.pane.desktop {
 				flex: 1 1 0;
@@ -209,39 +236,62 @@ const OPTIONS = [
 				transform-origin: top left;
 			}
 
-			/* 狭い画面：縦積みにして、それぞれ画面の高さの一部を割り当てる */
-			@media (max-width: 800px) {
-				body {
-					height: auto;
-					min-height: 100dvh;
-				}
+			/* ============================================================
+			   モバイル閲覧：デバイストグルで1枠ずつ全画面表示
+			   ============================================================ */
+			@media (max-width: 860px) {
 				.switcher-head {
-					flex-direction: column;
-					align-items: flex-start;
-					gap: 0;
+					flex-wrap: wrap;
+					row-gap: 0.25rem;
+					padding-bottom: 0.55rem;
+				}
+				.head-title {
+					flex: 1;
+				}
+				.device-toggle {
+					display: flex;
+					gap: 0.25rem;
+					background: rgba(255, 255, 255, 0.08);
+					border-radius: 8px;
+					padding: 0.15rem;
+					order: 2;
+				}
+				.device-toggle button {
+					min-height: 36px;
+					padding: 0.25rem 0.8rem;
+				}
+				.device-toggle button[aria-pressed='true'] {
+					background: rgba(255, 209, 102, 0.22);
+					color: #ffd166;
+					font-weight: 700;
 				}
 				.pattern-tabs {
+					order: 3;
 					width: 100%;
 				}
+
 				.compare-area {
-					flex-direction: column;
-					align-items: stretch;
-					gap: 1.5rem;
+					padding: 0.6rem 0.6rem 0.75rem;
+					gap: 0;
+				}
+				/* トグルで選ばれていない方の枠は描画したまま隠す（再読み込みさせない） */
+				.compare-area[data-device='mobile'] .pane.desktop,
+				.compare-area[data-device='desktop'] .pane.mobile {
+					display: none;
 				}
 				.pane.mobile {
-					flex: none;
+					flex: 1 1 auto;
 					width: min(375px, 100%);
-					min-width: 0;
 					margin-inline: auto;
 				}
 				.pane.desktop {
-					flex: none;
+					flex: 1 1 auto;
 					width: 100%;
 					max-width: none;
 				}
-				.frame-wrap {
-					flex: none;
-					height: 70dvh;
+				/* トグルがデバイス名を示すのでラベルは省略 */
+				.pane-label {
+					display: none;
 				}
 			}
 		</style>
