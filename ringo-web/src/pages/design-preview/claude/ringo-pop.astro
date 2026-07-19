@@ -5,7 +5,6 @@
 // 派手だが、点滅や過度な動きは使わない（reduced-motion対応）。
 import '../../../styles/claude/themes/ringo-pop.css';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -19,7 +18,6 @@ const serviceColors = ['is-red', 'is-green', 'is-yellow', 'is-cream'];
 ---
 
 <ClaudePreviewLayout title="Ringo Pop" theme="ringo-pop">
-	<PreviewPatternNav current="ringo-pop" />
 
 	<!-- マーキー -->
 	<div class="marquee" aria-hidden="true">

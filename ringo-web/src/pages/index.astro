@@ -1,7 +1,8 @@
 ---
 // デザインパターン比較ツール（Pagesのトップページ）
 // 上部ヘッダーでパターンを切り替え、モバイル幅・PC幅を並べて確認する。
-// 各枠は実ページのiframeなので、スクロールやクリックもそのまま操作できる。
+// 各枠は実寸（375px / 1280px）でレンダリングした実ページのiframeを、
+// 枠の幅に合わせて縮小表示する（スクロール・クリックもそのまま操作できる）。
 import '../styles/global.css';
 import '../styles/claude/preview-tokens.css';
 import { PATTERNS } from '../data/claude/preview';
@@ -42,13 +43,13 @@ const OPTIONS = [
 		<main class="compare-area">
 			<section class="pane mobile">
 				<h2 class="pane-label">モバイル（375px）</h2>
-				<div class="frame-wrap">
+				<div class="frame-wrap" data-width="375">
 					<iframe id="frame-mobile" title="モバイル表示"></iframe>
 				</div>
 			</section>
 			<section class="pane desktop">
 				<h2 class="pane-label">PC（1280px）</h2>
-				<div class="frame-wrap">
+				<div class="frame-wrap" data-width="1280">
 					<iframe id="frame-desktop" title="PC表示"></iframe>
 				</div>
 			</section>
@@ -60,6 +61,7 @@ const OPTIONS = [
 			const mobileFrame = document.getElementById('frame-mobile') as HTMLIFrameElement;
 			const desktopFrame = document.getElementById('frame-desktop') as HTMLIFrameElement;
 
+			// --- パターン切り替え ---
 			let currentPath = '';
 
 			function setPath(path: string) {
@@ -81,6 +83,26 @@ const OPTIONS = [
 
 			for (const button of buttons) {
 				button.addEventListener('click', () => setPath(button.dataset.path!));
+			}
+
+			// --- レスポンシブ：iframeは実寸で描画し、枠に合わせて縮小表示 ---
+			function fit(wrap: HTMLElement) {
+				const iframe = wrap.querySelector('iframe');
+				if (!iframe) return;
+				const targetWidth = Number(wrap.dataset.width);
+				const scale = Math.min(1, wrap.clientWidth / targetWidth);
+				iframe.style.width = `${targetWidth}px`;
+				iframe.style.height = `${Math.round(wrap.clientHeight / scale)}px`;
+				iframe.style.transform = `scale(${scale})`;
+			}
+
+			const wraps = [...document.querySelectorAll<HTMLElement>('.frame-wrap')];
+			const ro = new ResizeObserver((entries) => {
+				for (const entry of entries) fit(entry.target as HTMLElement);
+			});
+			for (const wrap of wraps) {
+				fit(wrap);
+				ro.observe(wrap);
 			}
 		</script>
 
@@ -142,27 +164,28 @@ const OPTIONS = [
 				font-weight: 700;
 			}
 
-			/* 比較エリア：モバイル/PCを横並び（画面に収まらない分は横スクロール） */
+			/* 比較エリア：モバイル/PCを横並び。枠は画面内に収め、iframeを縮小表示 */
 			.compare-area {
 				flex: 1;
 				min-height: 0;
 				display: flex;
 				align-items: stretch;
 				gap: 1.25rem;
-				overflow-x: auto;
 				padding: 1rem var(--container-pad-x) 1.25rem;
 			}
 			.pane {
-				flex: none;
 				display: flex;
 				flex-direction: column;
 				min-height: 0;
+				min-width: 0;
 			}
 			.pane.mobile {
-				width: 375px;
+				flex: 0 1 375px;
+				min-width: 230px;
 			}
 			.pane.desktop {
-				width: 1280px;
+				flex: 1 1 0;
+				max-width: 1280px;
 			}
 			.pane-label {
 				flex: none;
@@ -173,7 +196,7 @@ const OPTIONS = [
 			}
 			.frame-wrap {
 				flex: 1;
-				min-height: 480px;
+				min-height: 0;
 				border: 1px solid var(--cp-border);
 				border-radius: 10px;
 				overflow: hidden;
@@ -183,11 +206,15 @@ const OPTIONS = [
 			.frame-wrap iframe {
 				display: block;
 				border: 0;
-				width: 100%;
-				height: 100%;
+				transform-origin: top left;
 			}
 
-			@media (max-width: 768px) {
+			/* 狭い画面：縦積みにして、それぞれ画面の高さの一部を割り当てる */
+			@media (max-width: 800px) {
+				body {
+					height: auto;
+					min-height: 100dvh;
+				}
 				.switcher-head {
 					flex-direction: column;
 					align-items: flex-start;
@@ -195,6 +222,26 @@ const OPTIONS = [
 				}
 				.pattern-tabs {
 					width: 100%;
+				}
+				.compare-area {
+					flex-direction: column;
+					align-items: stretch;
+					gap: 1.5rem;
+				}
+				.pane.mobile {
+					flex: none;
+					width: min(375px, 100%);
+					min-width: 0;
+					margin-inline: auto;
+				}
+				.pane.desktop {
+					flex: none;
+					width: 100%;
+					max-width: none;
+				}
+				.frame-wrap {
+					flex: none;
+					height: 70dvh;
 				}
 			}
 		</style>

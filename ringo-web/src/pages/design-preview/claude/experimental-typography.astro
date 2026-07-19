@@ -5,7 +5,6 @@
 // 実験案だが、営業時間・電話・LINE・アクセスの必須情報は落とさない。
 import '../../../styles/claude/themes/experimental-typography.css';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import TateText from '../../../components/claude/TateText.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
@@ -23,7 +22,6 @@ const words = [
 ---
 
 <ClaudePreviewLayout title="Experimental Typography" theme="experimental-typography">
-	<PreviewPatternNav current="experimental-typography" />
 
 	<!-- 冒頭：文字の見開き -->
 	<header class="opening">

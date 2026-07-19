@@ -5,7 +5,6 @@
 // 「機能する企業サイト」の顔をつくる。カードUIは使わない。
 import '../../../styles/claude/themes/neo-corporate.css';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -28,7 +27,6 @@ const anchors = [
 ---
 
 <ClaudePreviewLayout title="Neo Corporate" theme="neo-corporate">
-	<PreviewPatternNav current="neo-corporate" />
 
 	<div class="split">
 		<!-- 固定サイドバー -->
