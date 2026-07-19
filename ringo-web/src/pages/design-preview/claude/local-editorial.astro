@@ -597,4 +597,36 @@ const contents = [
 			grid-column: 2;
 		}
 	}
+
+	@media (max-width: 600px) {
+		/* 記事内インデックス：狭幅でもはみ出さないよう、リンクを折り返し可能に */
+		.article-index li {
+			flex-wrap: wrap;
+		}
+		.article-index b {
+			flex: 1;
+			min-width: 0;
+		}
+
+		/* 営業時間表：横スクロールさせず、375pxでも7日ぶんが収まるよう詰める */
+		.hours-box {
+			padding: 1rem 0.6rem;
+		}
+		.hours-box table {
+			min-width: 0;
+			font-size: 0.78rem;
+		}
+		.hours-box th,
+		.hours-box td {
+			padding: 0.5rem 0.1rem;
+		}
+		.hours-box tbody th {
+			white-space: nowrap;
+			text-align: left;
+			padding-right: 0.3rem;
+		}
+		.holiday {
+			padding-inline: 0.4rem;
+		}
+	}
 </style>
