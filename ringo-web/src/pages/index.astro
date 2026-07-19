@@ -19,6 +19,7 @@ const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', 
 		<p class="lead text-pretty">
 			現行実装と、Claudeが作成した試作8パターンを見比べられます。既存実装以外は、トップページのみのデザイン例です（他ページは実装していません）。
 		</p>
+		<a class="compare-link" href={`${baseUrl}design-preview/compare`}>モバイル/PC比較表示で見る →</a>
 	</section>
 
 	<section class="cp-container catalog" aria-label="既存実装">
@@ -79,6 +80,12 @@ const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', 
 	}
 	.lead {
 		color: var(--cp-text-muted);
+	}
+	.compare-link {
+		display: inline-block;
+		margin-top: 0.5rem;
+		font-weight: 700;
+		color: var(--cp-primary);
 	}
 	.catalog {
 		margin-bottom: 2rem;
