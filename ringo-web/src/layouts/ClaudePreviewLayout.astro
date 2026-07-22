@@ -37,12 +37,16 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 			<p>
 				このページは <strong>Claude</strong> が作成したデザイン試作です。掲載内容の一部はサンプルです。
 			</p>
-			<a href={baseUrl}>デザイン一覧へ戻る</a>
+			<a href={baseUrl}>パターン比較へ戻る</a>
 		</footer>
 
 		<!-- data-reveal 要素のスクロール連動表示（軽量IO・JSなしでも内容は見える） -->
 		<script is:inline>
 			document.documentElement.dataset.cpJs = '1';
+			// トップページ（比較表示）のiframe内では、戻るリンクが再帰表示になるため隠す
+			if (window.self !== window.top) {
+				document.querySelector('.cp-preview-footer')?.setAttribute('hidden', '');
+			}
 			if ('IntersectionObserver' in window) {
 				const io = new IntersectionObserver(
 					(entries) => {
@@ -95,6 +99,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 </html>
 
 <style>
+	.cp-preview-footer[hidden] {
+		display: none;
+	}
 	.cp-preview-footer {
 		border-top: 1px solid var(--cp-border);
 		padding: 2rem var(--container-pad-x) 3rem;

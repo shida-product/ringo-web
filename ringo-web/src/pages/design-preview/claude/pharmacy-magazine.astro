@@ -6,7 +6,6 @@
 import '../../../styles/claude/themes/pharmacy-magazine.css';
 import { Image } from 'astro:assets';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -48,7 +47,6 @@ const features = [
 ---
 
 <ClaudePreviewLayout title="Pharmacy Magazine" theme="pharmacy-magazine">
-	<PreviewPatternNav current="pharmacy-magazine" />
 
 	<!-- 表紙 -->
 	<header class="cover cp-container">
@@ -247,13 +245,13 @@ const features = [
 	}
 	.cover-main {
 		display: grid;
-		grid-template-columns: auto minmax(280px, 1fr) 250px;
+		grid-template-columns: auto minmax(0, 1fr) 250px;
 		gap: clamp(1.5rem, 4vw, 3rem);
 		align-items: stretch;
 		margin-bottom: 2rem;
 	}
 	h1 {
-		font-size: clamp(2.4rem, 5.2vw, 3.9rem);
+		font-size: clamp(2.2rem, 5vw, 3.6rem);
 		line-height: 1.15;
 		margin: 0;
 		align-self: center;
@@ -593,6 +591,38 @@ const features = [
 		}
 		.guide {
 			gap: 0;
+		}
+		.feature.is-lg {
+			grid-row: auto;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.cover {
+			padding-top: 1.25rem;
+		}
+		.cover-top {
+			margin-bottom: 1.5rem;
+		}
+		.cover-photo :global(img) {
+			min-height: 0;
+			aspect-ratio: 4 / 3;
+		}
+		.rubric {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.4rem;
+		}
+		.info-grid {
+			gap: 2.25rem;
+		}
+		.backcover-links {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.75rem;
+		}
+		.backcover-links a {
+			justify-content: center;
 		}
 	}
 </style>

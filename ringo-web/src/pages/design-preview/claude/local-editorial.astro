@@ -5,7 +5,6 @@
 import '../../../styles/claude/themes/local-editorial.css';
 import { Image } from 'astro:assets';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import TateText from '../../../components/claude/TateText.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
@@ -24,7 +23,6 @@ const contents = [
 ---
 
 <ClaudePreviewLayout title="Local Editorial" theme="local-editorial">
-	<PreviewPatternNav current="local-editorial" />
 
 	<!-- 表紙まわり：縦書き大見出し -->
 	<header class="masthead cp-container">
@@ -597,6 +595,38 @@ const contents = [
 		}
 		.pick-price {
 			grid-column: 2;
+		}
+	}
+
+	@media (max-width: 600px) {
+		/* 記事内インデックス：狭幅でもはみ出さないよう、リンクを折り返し可能に */
+		.article-index li {
+			flex-wrap: wrap;
+		}
+		.article-index b {
+			flex: 1;
+			min-width: 0;
+		}
+
+		/* 営業時間表：横スクロールさせず、375pxでも7日ぶんが収まるよう詰める */
+		.hours-box {
+			padding: 1rem 0.6rem;
+		}
+		.hours-box table {
+			min-width: 0;
+			font-size: 0.78rem;
+		}
+		.hours-box th,
+		.hours-box td {
+			padding: 0.5rem 0.1rem;
+		}
+		.hours-box tbody th {
+			white-space: nowrap;
+			text-align: left;
+			padding-right: 0.3rem;
+		}
+		.holiday {
+			padding-inline: 0.4rem;
 		}
 	}
 </style>

@@ -5,7 +5,6 @@
 // 「機能する企業サイト」の顔をつくる。カードUIは使わない。
 import '../../../styles/claude/themes/neo-corporate.css';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -28,7 +27,6 @@ const anchors = [
 ---
 
 <ClaudePreviewLayout title="Neo Corporate" theme="neo-corporate">
-	<PreviewPatternNav current="neo-corporate" />
 
 	<div class="split">
 		<!-- 固定サイドバー -->
@@ -314,6 +312,9 @@ const anchors = [
 
 	/* ---- 本文 ---- */
 	.body {
+		/* グリッドアイテムの min-width:auto を解除し、
+		   仕様表の固有幅で 1fr トラックが押し広げられるのを防ぐ */
+		min-width: 0;
 		padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 5vw, 5rem);
 		background:
 			linear-gradient(var(--cp-border) 1px, transparent 1px) 0 0 / 100% 96px,
@@ -589,6 +590,7 @@ const anchors = [
 		}
 		.stats {
 			grid-template-columns: 1fr;
+			width: auto;
 		}
 		.access-grid {
 			grid-template-columns: 1fr;
@@ -600,6 +602,75 @@ const anchors = [
 		.row-static {
 			grid-column: 2;
 			justify-self: start;
+		}
+	}
+
+	@media (max-width: 768px) {
+		/* 「インフラとして。」が1行に収まるサイズに */
+		h1 {
+			font-size: clamp(1.7rem, 8.4vw, 2.2rem);
+		}
+
+		/* サイドバーはコンパクトなヘッダーとして畳む */
+		.side {
+			padding: 1.5rem 1.25rem;
+			gap: 1.25rem;
+		}
+		.side-nav {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			column-gap: 1.25rem;
+		}
+		.side-nav a {
+			padding: 0.7rem 0.25rem;
+		}
+		.side-facts {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0.5rem 1.25rem;
+			font-size: 0.75rem;
+		}
+		.side-facts span {
+			width: auto;
+			display: block;
+			margin-bottom: 0.15rem;
+		}
+		.side-line {
+			width: 100%;
+		}
+
+		/* 本文・仕様表をモバイル向けに詰める */
+		.rows li {
+			gap: 0.9rem 1rem;
+			padding: 1.2rem 0.1rem;
+		}
+		.spec {
+			min-width: 520px;
+		}
+		.spec thead th {
+			padding: 0.7rem 0.75rem;
+		}
+		.spec tbody th,
+		.spec tbody td {
+			padding: 0.8rem 0.75rem;
+			font-size: 0.88rem;
+		}
+		.hours-table {
+			min-width: 480px;
+		}
+		.map-embed,
+		.map-embed iframe {
+			min-height: 260px;
+		}
+
+		/* CTAボタンは全幅で押しやすく */
+		.nc-cta-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+		.cta-primary,
+		.cta-secondary {
+			justify-content: center;
 		}
 	}
 </style>

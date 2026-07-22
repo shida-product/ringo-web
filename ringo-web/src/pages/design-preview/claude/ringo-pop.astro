@@ -5,7 +5,6 @@
 // 派手だが、点滅や過度な動きは使わない（reduced-motion対応）。
 import '../../../styles/claude/themes/ringo-pop.css';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, SERVICES, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -19,7 +18,6 @@ const serviceColors = ['is-red', 'is-green', 'is-yellow', 'is-cream'];
 ---
 
 <ClaudePreviewLayout title="Ringo Pop" theme="ringo-pop">
-	<PreviewPatternNav current="ringo-pop" />
 
 	<!-- マーキー -->
 	<div class="marquee" aria-hidden="true">
@@ -119,6 +117,7 @@ const serviceColors = ['is-red', 'is-green', 'is-yellow', 'is-cream'];
 					))
 				}
 			</div>
+			<p class="scroll-hint" aria-hidden="true">横にスクロールできます →</p>
 			<div class="table-wrap">
 				<table aria-label="営業時間">
 					<thead>
@@ -510,8 +509,17 @@ const serviceColors = ['is-red', 'is-green', 'is-yellow', 'is-cream'];
 		font-weight: 800;
 		font-variant-numeric: tabular-nums;
 	}
+	.scroll-hint {
+		display: none;
+		font-size: 0.78rem;
+		font-weight: 700;
+		color: var(--cp-text-muted);
+		text-align: right;
+		margin-bottom: 0.35rem;
+	}
 	.table-wrap {
 		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 	table {
 		width: 100%;
@@ -629,6 +637,82 @@ const serviceColors = ['is-red', 'is-green', 'is-yellow', 'is-cream'];
 		}
 		.tag {
 			max-width: none;
+		}
+	}
+
+	@media (max-width: 640px) {
+		/* ヒーロー：縦積みを引き締め、ボタンは全幅で押しやすく */
+		.hero {
+			gap: 1.25rem;
+		}
+		.hero-apple {
+			min-height: 200px;
+		}
+		.apple {
+			width: 160px;
+		}
+		.sticker {
+			width: 80px;
+			height: 80px;
+			font-size: 0.85rem;
+		}
+		.st-1 {
+			left: 3%;
+		}
+		.st-2 {
+			right: 2%;
+		}
+		.hero-lead {
+			margin-bottom: 1.4rem;
+		}
+		.hero-btns {
+			gap: 0.75rem;
+		}
+		.hero-btns .pop-btn {
+			width: 100%;
+			justify-content: center;
+		}
+		/* カード類：モバイルでは余白を少し詰める */
+		.block {
+			padding: 1.4rem 1.25rem;
+		}
+		.tags {
+			gap: 1.5rem;
+		}
+		.tag {
+			padding: 1.9rem 1.2rem 1.2rem;
+		}
+		/* 営業時間ボード：チップと表をモバイル向けに調整 */
+		.hours-board {
+			padding: 1.25rem 1rem 1.4rem;
+		}
+		.board-summary {
+			gap: 0.6rem;
+		}
+		.board-summary p {
+			flex: 1 1 100%;
+			flex-direction: row;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 0.75rem;
+			padding: 0.6rem 1rem;
+		}
+		.board-summary span {
+			font-size: 1.15rem;
+		}
+		.scroll-hint {
+			display: block;
+		}
+		table {
+			min-width: 460px;
+			font-size: 0.92rem;
+		}
+		th,
+		td {
+			padding: 0.5rem 0.3rem;
+		}
+		.access-note {
+			padding: 1.4rem 1.25rem;
 		}
 	}
 </style>

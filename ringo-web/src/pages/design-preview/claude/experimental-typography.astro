@@ -5,7 +5,6 @@
 // 実験案だが、営業時間・電話・LINE・アクセスの必須情報は落とさない。
 import '../../../styles/claude/themes/experimental-typography.css';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import TateText from '../../../components/claude/TateText.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
@@ -23,7 +22,6 @@ const words = [
 ---
 
 <ClaudePreviewLayout title="Experimental Typography" theme="experimental-typography">
-	<PreviewPatternNav current="experimental-typography" />
 
 	<!-- 冒頭：文字の見開き -->
 	<header class="opening">
@@ -490,6 +488,38 @@ const words = [
 		}
 		.bh-label :global(.cp-tate) {
 			flex-direction: row;
+		}
+
+		/* 商品の棚：価格が nowrap のまま画面外へはみ出すため、
+		   モバイルでは価格を名前の下の行に落として右寄せする */
+		.type-list a {
+			flex-wrap: wrap;
+			gap: 0.5rem 1rem;
+			padding: 1.4rem 0;
+		}
+		.tl-name {
+			min-width: 0;
+			overflow-wrap: anywhere;
+		}
+		.tl-price {
+			flex-basis: 100%;
+			margin-left: 0;
+			white-space: normal;
+			text-align: right;
+			font-size: 0.95rem;
+		}
+
+		/* 小さな字面ではアウトラインの2pxストロークが潰れて
+		   ベタ塗りに見えるため、細めのストロークに調整する */
+		.chapter-no .outline {
+			-webkit-text-stroke-width: 1.5px;
+		}
+		.ending-line {
+			font-size: clamp(3rem, 13vw, 6rem);
+			line-height: 1.35;
+		}
+		.ending-line .outline {
+			-webkit-text-stroke-width: 1.5px;
 		}
 	}
 </style>

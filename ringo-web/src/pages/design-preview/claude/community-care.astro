@@ -6,7 +6,6 @@
 import '../../../styles/claude/themes/community-care.css';
 import { Image } from 'astro:assets';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -44,7 +43,6 @@ const walkSteps = [
 ---
 
 <ClaudePreviewLayout title="Community Care" theme="community-care">
-	<PreviewPatternNav current="community-care" />
 
 	<header class="hero">
 		<div class="cp-container hero-grid">
@@ -645,12 +643,65 @@ const walkSteps = [
 		.hero-grid {
 			grid-template-columns: 1fr;
 		}
+		/* グリッド/フレックス子要素の min-width:auto による横はみ出しを防ぐ */
+		.hero-grid > *,
+		.talk-pair,
+		.answer,
+		.answer .bubble {
+			min-width: 0;
+		}
 		.hero-photo {
 			max-width: 320px;
 			margin: 0 auto;
 		}
 		.access-grid {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		/* 375px幅では 2rem(36px) の見出し1行「りんごちゃん薬局です。」が
+		   word-break: auto-phrase により分割されず画面幅を超えるため縮小する */
+		h1 {
+			font-size: clamp(1.6rem, 7.4vw, 2rem);
+		}
+		.bubble {
+			max-width: 100%;
+		}
+		.hero-actions p {
+			line-height: 2.2;
+		}
+		/* 棚メタファーは維持しつつ、375pxで隣のカードが少し見えるサイズに */
+		.shelf-item {
+			flex-basis: 190px;
+		}
+		/* 営業時間の要約は縦積みで読みやすく */
+		.hours-words {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.75rem;
+		}
+		.hours-words p {
+			flex-direction: row;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 0.75rem;
+			padding: 0.8rem 1.1rem;
+		}
+		.hours-words span {
+			font-size: 1.15rem;
+		}
+		/* 「〜登録から、」の途中で折り返さないようやや縮小 */
+		.cta-line2 {
+			font-size: 1.15rem;
+		}
+		/* CTAボタンは縦積みでタップしやすく */
+		.cta-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+		.cta-btn {
+			justify-content: center;
 		}
 	}
 </style>

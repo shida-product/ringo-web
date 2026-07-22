@@ -5,7 +5,6 @@
 import '../../../styles/claude/themes/wellness-brand.css';
 import { Image } from 'astro:assets';
 import ClaudePreviewLayout from '../../../layouts/ClaudePreviewLayout.astro';
-import PreviewPatternNav from '../../../components/claude/PreviewPatternNav.astro';
 import { getAllProducts, formatPrice } from '../../../data/products';
 import { HOURS, MAP_EMBED_SRC } from '../../../data/claude/preview';
 import { SITE } from '../../../data/site';
@@ -51,7 +50,6 @@ const chapters = [
 ---
 
 <ClaudePreviewLayout title="Wellness Brand" theme="wellness-brand">
-	<PreviewPatternNav current="wellness-brand" />
 
 	<!-- フルスクリーンヒーロー -->
 	<header class="hero">
@@ -520,6 +518,35 @@ const chapters = [
 			flex-direction: column;
 			gap: 0.2rem;
 			align-items: flex-start;
+		}
+	}
+	@media (max-width: 600px) {
+		/* 幅広トラッキングの英字見出しが375pxで窮屈になるため詰める */
+		.hero-eyebrow,
+		.chapter-no,
+		.items .cp-eyebrow,
+		.hours .cp-eyebrow,
+		.access-lines .cp-eyebrow {
+			letter-spacing: 0.16em;
+		}
+		.hero-eyebrow {
+			margin-bottom: 1.25rem;
+		}
+		/* ヒーロー下の一行情報を1行に収める */
+		.hero-foot {
+			font-size: 0.78rem;
+			letter-spacing: 0.04em;
+		}
+		/* CTA：横並びだとリンク内で改行が起きるため縦積みに */
+		.cta-links {
+			flex-direction: column;
+			gap: 1.4rem;
+		}
+		.cta-links > span[aria-hidden] {
+			display: none;
+		}
+		.cta-links a {
+			white-space: nowrap;
 		}
 	}
 </style>
