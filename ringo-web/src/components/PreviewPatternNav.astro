@@ -1,0 +1,5 @@
+---
+const patterns = [['trust-first-pharmacy','Trust First'],['community-care','Community Care'],['local-editorial','Local Editorial'],['ringo-pop','Ringo Pop'],['pharmacy-magazine','Magazine'],['wellness-brand','Wellness'],['neo-corporate','Neo Corporate'],['experimental-typography','Experimental']];
+---
+<nav class="pattern-nav" aria-label="Codexデザイン案一覧">{patterns.map(([slug,label]) => <a href={`/design-preview/${slug}`}>{label}</a>)}</nav>
+<style>.pattern-nav{display:flex;gap:.55rem;flex-wrap:wrap;padding:1rem 0}.pattern-nav a{padding:.5rem .8rem;border-radius:999px;background:var(--preview-surface);border:1px solid var(--preview-border);color:var(--preview-primary);font-size:.82rem;font-weight:900}.pattern-nav a:hover{opacity:1;background:var(--preview-primary);color:#fff}</style>

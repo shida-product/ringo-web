@@ -1,0 +1,8 @@
+.preview-shell[data-theme='pharmacy-magazine'] {
+  --preview-bg: #f8f5ef;
+  --preview-surface-soft: #ffffff;
+  --preview-primary: #284f58;
+  --preview-accent: #c9414b;
+  --preview-text: #20292b;
+  --preview-muted: #6f6a62;
+}

@@ -1,0 +1,32 @@
+---
+import Layout from './Layout.astro';
+import '../styles/tokens.css';
+import '../styles/themes/trust-first-pharmacy.css';
+import '../styles/themes/community-care.css';
+import '../styles/themes/local-editorial.css';
+import '../styles/themes/ringo-pop.css';
+import '../styles/themes/pharmacy-magazine.css';
+import '../styles/themes/wellness-brand.css';
+import '../styles/themes/neo-corporate.css';
+import '../styles/themes/experimental-typography.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  theme?: string;
+}
+
+const { title, description, theme = 'trust-first-pharmacy' } = Astro.props;
+---
+
+<Layout title={`Codexデザイン案：${title}`} description={description}>
+  <div class="preview-shell" data-theme={theme}>
+    <div class="preview-origin" aria-label="実装者表示">Created by Codex / 比較用デザインプレビュー</div>
+    <slot />
+  </div>
+</Layout>
+
+<style>
+  .preview-origin { position: sticky; top: 74px; z-index: 20; width: fit-content; margin-left: auto; padding: 0.45rem 0.9rem; border-bottom-left-radius: 16px; background: var(--preview-accent); color: #fff; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14); }
+  @media (max-width: 768px) { .preview-origin { top: 64px; font-size: 0.68rem; } }
+</style>

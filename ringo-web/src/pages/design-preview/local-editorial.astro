@@ -1,0 +1,44 @@
+---
+import PreviewLayout from '../../layouts/PreviewLayout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import ActionLinks from '../../components/ActionLinks.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import HoursPanel from '../../components/HoursPanel.astro';
+import AccessPanel from '../../components/AccessPanel.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import PreviewPatternNav from '../../components/PreviewPatternNav.astro';
+import { getAllProducts } from '../../data/products';
+import exterior from '../../assets/images/Exterior_01.jpg';
+import interior from '../../assets/images/Introspection.jpg';
+const products = getAllProducts().slice(0, 3);
+const theme = 'local-editorial';
+---
+<PreviewLayout title="Local Editorial" theme={theme} description="Codexが作成した、りんごちゃん薬局デザイン刷新の比較用プレビューです。">
+  <section class="hero">
+    <div class="preview-container">
+      <PreviewPatternNav />
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="preview-note">Codex design pattern / Local Editorial</span>
+          <h1>町屋の暮らしに寄り添う薬局</h1>
+          <p>写真と余白で地域感を出す、雑誌のように読みやすい編集型の案です。</p>
+          <ul><li>荒川区・町屋</li><li>土日営業</li><li>LINE受付</li></ul>
+        </div>
+        <div class="hero-photo"><img src={exterior.src} alt="りんごちゃん薬局の外観" /><span>Machiya / Arakawa</span></div>
+      </div>
+      <ActionLinks />
+    </div>
+  </section>
+
+  <section class="preview-section"><div class="preview-container"><SectionHeader label="Services" title="来局前に知りたいことを、先に見える化" lead="処方箋受付、市販薬相談、ジェネリック、取扱い商品の入口を固定モジュールで比較できます。" /><ServiceCards /></div></section>
+
+  <section class="preview-section products"><div class="preview-container"><SectionHeader label="Products" title="取扱い商品サンプル" lead="現在は静的サンプル。後日microCMSのproducts APIへ差し替えやすい構造です。" /><div class="product-grid">{products.map((product) => <article><span>{product.category}</span><h3>{product.name}</h3><p>{product.summary}</p><a href={`/products/${product.slug}/`}>商品ページを見る</a></article>)}</div></div></section>
+
+  <section class="preview-section info"><div class="preview-container info-grid"><div><SectionHeader label="Shop Info" title="営業時間・アクセス" lead="高齢者や初回来局者が迷わないよう、店舗情報は大きくまとめています。" /><img src={interior.src} alt="りんごちゃん薬局の店内" /></div><div class="panels"><HoursPanel /><AccessPanel /></div></div></section>
+
+  <section class="preview-section"><div class="preview-container"><CtaBand /></div></section>
+</PreviewLayout>
+
+<style>
+.hero{padding:clamp(2rem,5vw,4rem) 0 var(--preview-section);background:radial-gradient(circle at 10% 15%, var(--preview-surface-soft), transparent 32%), var(--preview-bg)}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(1.5rem,4vw,3rem);align-items:center;margin:1rem 0 1.5rem}.hero-copy h1{color:var(--preview-primary);font-size:clamp(2.5rem,7vw,5.8rem);line-height:1.04;letter-spacing:-.05em;margin:1rem 0}.hero-copy p{font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;color:var(--preview-muted);max-width:720px}.hero-copy ul{display:flex;gap:.7rem;flex-wrap:wrap;list-style:none;margin-top:1.2rem;padding:0}.hero-copy li{padding:.55rem .85rem;border-radius:999px;background:var(--preview-surface);border:1px solid var(--preview-border);font-weight:900;color:var(--preview-primary)}.hero-photo{position:relative;border-radius:var(--preview-radius-lg);overflow:hidden;box-shadow:var(--preview-shadow);min-height:380px;background:var(--preview-surface)}.hero-photo img{width:100%;height:100%;min-height:380px;object-fit:cover}.hero-photo span{position:absolute;right:1rem;bottom:1rem;padding:.5rem .8rem;border-radius:999px;background:rgba(255,255,255,.86);font-weight:900;color:var(--preview-primary)}.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.product-grid article{padding:1.25rem;border-radius:var(--preview-radius-md);background:var(--preview-surface);border:1px solid var(--preview-border)}.product-grid span{color:var(--preview-accent);font-size:.78rem;font-weight:900}.product-grid h3{color:var(--preview-primary);font-size:1.25rem;margin:.4rem 0}.product-grid p{color:var(--preview-muted);font-weight:600}.product-grid a{font-weight:900;color:var(--preview-accent)}.info-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:2rem;align-items:start}.info-grid img{border-radius:var(--preview-radius-lg);box-shadow:var(--preview-shadow)}.panels{display:grid;gap:1rem}[data-theme='neo-corporate'] .hero-copy h1,[data-theme='experimental-typography'] .hero-copy h1{text-transform:uppercase;letter-spacing:-.08em}[data-theme='experimental-typography'] .product-grid article,[data-theme='experimental-typography'] .hero-copy li{background:#f9fff9;color:#111a1a}[data-theme='experimental-typography'] .preview-section-header h2{color:#f9fff9}@media(max-width:860px){.hero-grid,.info-grid{grid-template-columns:1fr}.product-grid{grid-template-columns:1fr}}
+</style>

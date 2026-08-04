@@ -1,0 +1,10 @@
+.preview-shell[data-theme='ringo-pop'] {
+  --preview-bg: #fff5f6;
+  --preview-surface-soft: #f0f8e9;
+  --preview-primary: #3b8a62;
+  --preview-accent: #ee4b58;
+  --preview-text: #392d31;
+  --preview-muted: #76666b;
+  --preview-radius-md: 30px;
+  --preview-radius-lg: 46px;
+}

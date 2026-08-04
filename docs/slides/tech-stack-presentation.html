@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>技術スタック＆システムフロー解説資料</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      line-height: 1.5;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* A4 Landscape Settings */
+    .slide-deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      padding: 30px 0;
+    }
+
+    .slide {
+      width: 297mm;
+      height: 210mm;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16mm 20mm;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      page-break-after: always;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .slide-title-group h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-title-group p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .slide-badge {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Main Content Area */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #334155;
+      padding-top: 10px;
+      margin-top: 12px;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Component Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .card-accent-red {
+      border-left: 4px solid #f43f5e;
+    }
+
+    .card-accent-green {
+      border-left: 4px solid #10b981;
+    }
+
+    .card-accent-blue {
+      border-left: 4px solid #38bdf8;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title.red { color: #fb7185; }
+    .card-title.green { color: #34d399; }
+    .card-title.blue { color: #38bdf8; }
+
+    .card p, .card li {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .card ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .card li {
+      margin-bottom: 6px;
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .card li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #38bdf8;
+    }
+
+    /* Flowchart / Sequence Diagram Visuals */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .flow-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .flow-node {
+      flex: 1;
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .flow-node-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .flow-node-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    .flow-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 700;
+      gap: 2px;
+      min-width: 70px;
+    }
+
+    .flow-arrow-line {
+      width: 100%;
+      height: 2px;
+      background: #38bdf8;
+      position: relative;
+    }
+
+    .flow-arrow-line::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -4px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 8px solid #38bdf8;
+    }
+
+    /* Table Styles */
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .tech-table th {
+      background: #1e293b;
+      color: #38bdf8;
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid #334155;
+      font-weight: 700;
+    }
+
+    .tech-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #334155;
+      color: #cbd5e1;
+    }
+
+    .tech-table tr:nth-child(even) {
+      background: rgba(30, 41, 59, 0.4);
+    }
+
+    .cost-highlight {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Print styling override */
+    @media print {
+      body {
+        background-color: #0f172a;
+      }
+      .slide-deck {
+        gap: 0;
+        padding: 0;
+      }
+      .slide {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100vw;
+        height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="slide-deck">
+
+  <!-- ==================== SLIDE 1 ==================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="slide-title-group">
+        <h2>1. 開発構成変更の背景（note案からの転換）</h2>
+        <p>なぜ自社ドメイン ＋ microCMS 構成を選んだのか</p>
+      </div>
+      <div class="slide-badge">背景 & SEO戦略</div>
+    </div>
+
+    <div class="slide-body">
+      <div class="grid-2">
+        <!-- 従来案 -->
+        <div class="card card-accent-red">
+          <div class="card-title red">
+            <span>❌</span> 当初検討案：noteでの商品記事更新
+          </div>
+          <ul>
+            <li><strong>SEO評価の外部流出</strong>：note上でいくら高品質な商品記事を投稿しても、ドメインパワー（検索エンジン評価）は <code>note.com</code> に蓄積される。</li>
+            <li><strong>自社サイトへの非寄与</strong>：自社ドメインの検索順位やサイト自体の評価向上につながらない。</li>
+            <li><strong>デザイン・UIの制約</strong>：noteの標準フォーマットに縛られ、薬局ブランドに合わせた自由なUI表現が困難。</li>
+          </ul>
+        </div>
+
+        <!-- 決定案 -->
+        <div class="card card-accent-green">
+          <div class="card-title green">
+            <span>⭕</span> 採択案：自社ドメイン管理 ＋ microCMS
+          </div>
+          <ul>
+            <li><strong>ドメインパワーの100%集約</strong>：自社ドメイン（<code>/products/〜</code>）にすべての商品情報・検索評価を集約。</li>
+            <li><strong>「地域名×商品名」でのSEO強み</strong>：「荒川区＋取扱い商品名」等の検索で自社サイトの上位表示を強力に推進。</li>
+            <li><strong>簡単更新の維持</strong>：外部ブログサービス（note）と同等の簡単な専用入力画面をスタッフ向けに提供。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cost-highlight" style="margin-top: 10px;">
+        <span>🎯 戦略的結論：コンテンツという重要資産を自社ドメイン上に蓄積し、長期的なWeb集客基盤を作る。</span>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>薬局Webサイト リニューアル仕様書</span>
+      <span>1 / 4</span>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 2 ==================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="slide-title-group">
+        <h2>2. 技術スタック ＆ コスト構造</h2>
+        <p>各ツールの役割と、有料費用がドメインのみである理由</p>
+      </div>
+      <div class="slide-badge">技術構成 & コスト</div>
+    </div>
+
+    <div class="slide-body">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>技術 / サービス</th>
+            <th>分類・概要</th>
+            <th>採用の役割・技術的メリット</th>
+            <th>費用</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#38bdf8;">Astro</strong></td>
+            <td>フロントエンド (SSG)</td>
+            <td>サイトを静的生成。余分なJavaScriptを削ぎ落とし、表示速度とSEOを最大化。</td>
+            <td><span style="color:#34d399; font-weight:bold;">0円</span> (OSS)</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#38bdf8;">microCMS</strong></td>
+            <td>ヘッドレスCMS (SaaS)</td>
+            <td>日本製の専用管理画面。写真・商品情報を非エンジニアが直感的に更新可能。</td>
+            <td><span style="color:#34d399; font-weight:bold;">0円</span> (無料枠)</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#38bdf8;">Cloudflare Pages</strong></td>
+            <td>ホスティング / CDN</td>
+            <td>世界規模の配信網。microCMS更新時に自動ビルド・即時反映。転送量無制限。</td>
+            <td><span style="color:#34d399; font-weight:bold;">0円</span> (無料枠)</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#38bdf8;">Vanilla CSS</strong></td>
+            <td>スタイリング</td>
+            <td>ピュアCSSで軽量設計。無駄なライブラリ依存をなくし長期的な保守性を確保。</td>
+            <td><span style="color:#34d399; font-weight:bold;">0円</span> (オープン)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="cost-highlight">
+        <div>
+          <span style="font-size:16px;">💰 必要費用まとめ：</span>
+          <span style="font-size:13px; color:#e2e8f0; font-weight:normal; margin-left:8px;">サーバー代・システム月額はすべて0円。有料で必要なのは独自ドメインのみ。</span>
+        </div>
+        <span style="font-size:18px; color:#facc15;">独自ドメイン代（年額数千円のみ）</span>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>薬局Webサイト リニューアル仕様書</span>
+      <span>2 / 4</span>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3 ==================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="slide-title-group">
+        <h2>3. フロント・API・画面表示の全体フロー</h2>
+        <p>商品登録から静的HTML生成、ユーザー閲覧までのデータの流れ</p>
+      </div>
+      <div class="slide-badge">システムフロー図</div>
+    </div>
+
+    <div class="slide-body">
+      <!-- Flow 1: Build & Content Update Flow -->
+      <div class="flow-container">
+        <div class="flow-section-title">【1】商品追加・更新時のフロー（管理・生成プロセス）</div>
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="flow-node-title">① スタッフ</div>
+            <div class="flow-node-sub">専用画面で入力</div>
+          </div>
+          <div class="flow-arrow">
+            <span>管理画面登録</span>
+            <div class="flow-arrow-line"></div>
+          </div>
+          <div class="flow-node" style="border-color:#38bdf8;">
+            <div class="flow-node-title" style="color:#38bdf8;">② microCMS</div>
+            <div class="flow-node-sub">データ・画像保持</div>
+          </div>
+          <div class="flow-arrow">
+            <span>Webhook発火</span>
+            <div class="flow-arrow-line"></div>
+          </div>
+          <div class="flow-node" style="border-color:#f59e0b;">
+            <div class="flow-node-title" style="color:#f59e0b;">③ Cloudflare (Astro)</div>
+            <div class="flow-node-sub">REST APIでデータ取得</div>
+          </div>
+          <div class="flow-arrow">
+            <span>静的HTML生成</span>
+            <div class="flow-arrow-line"></div>
+          </div>
+          <div class="flow-node" style="border-color:#10b981;">
+            <div class="flow-node-title" style="color:#34d399;">④ 本番サーバー(CDN)</div>
+            <div class="flow-node-sub">即時配信準備完了</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow 2: User Access Flow -->
+      <div class="flow-container" style="margin-top: 4px;">
+        <div class="flow-section-title">【2】一般ユーザー閲覧時のフロー（表示プロセス）</div>
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="flow-node-title">一般来訪者 (スマホ/PC)</div>
+            <div class="flow-node-sub">自社ドメインへアクセス</div>
+          </div>
+          <div class="flow-arrow">
+            <span>HTTPリクエスト</span>
+            <div class="flow-arrow-line"></div>
+          </div>
+          <div class="flow-node" style="border-color:#10b981; flex: 2;">
+            <div class="flow-node-title" style="color:#34d399;">Cloudflare Pages (全球CDNエッジ)</div>
+            <div class="flow-node-sub">事前生成済みの「静的HTML/CSS」を最速レスポンス（0.1秒以下）で即座に返却</div>
+          </div>
+          <div class="flow-arrow">
+            <span>高速表示</span>
+            <div class="flow-arrow-line"></div>
+          </div>
+          <div class="flow-node">
+            <div class="flow-node-title">ブラウザ画面表示</div>
+            <div class="flow-node-sub">爆速表示完了</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-accent-blue" style="padding: 10px 14px;">
+        <div style="font-size: 12px; color: #cbd5e1;">
+          💡 <strong>ポイント</strong>: 来訪者は microCMS の API や管理画面に直接アクセスしないため、<strong>APIキーが漏洩せずセキュリティが極めて強固</strong>で、アクセスの集中で転送量上限に達するリスクもありません。
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>薬局Webサイト リニューアル仕様書</span>
+      <span>3 / 4</span>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4 ==================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="slide-title-group">
+        <h2>4. 運用・セキュリティ・パフォーマンスの成果まとめ</h2>
+        <p>新技術アーキテクチャがもたらす最終的なメリット</p>
+      </div>
+      <div class="slide-badge">まとめ</div>
+    </div>
+
+    <div class="slide-body">
+      <div class="grid-3">
+        <div class="card card-accent-green">
+          <div class="card-title green">🚀 超高速レスポンス</div>
+          <p>データベース検索を行わず、完成した静的HTMLを最寄りのCDNから直接返すため、画面表示が極めて高速。離脱率を下げSEO順位に好影響を与えます。</p>
+        </div>
+
+        <div class="card card-accent-blue">
+          <div class="card-title blue">🛡️ 万全のセキュリティ</div>
+          <p>自社Webサーバー・データベースが存在しないため、WordPress等で頻発するサーバー侵入・データベース改ざんのリスクが根本的にゼロです。</p>
+        </div>
+
+        <div class="card card-accent-blue">
+          <div class="card-title blue">⚙️ 運用コスト最小化</div>
+          <p>サーバー保守・OSアップデートの手間がゼロ。システム維持費用もドメイン更新料（年数千円）のみで、ランニングコストを最小に抑えられます。</p>
+        </div>
+      </div>
+
+      <div class="card" style="background: #0f172a; border-color: #38bdf8; margin-top: 10px;">
+        <div class="card-title blue">📌 今後のアクションステップ</div>
+        <div class="grid-2" style="margin-top: 8px;">
+          <ul>
+            <li>デザインプレビュー案（ヘッダー切り替え式）の確認・選定</li>
+            <li>独自ドメインの取得・Cloudflare DNSへの紐付け設定</li>
+          </ul>
+          <ul>
+            <li>microCMSモデル設計（商品名・画像・説明等の入力項目決定）</li>
+            <li>Cloudflare Pages への Deploy Hook 自動連携設定</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>薬局Webサイト リニューアル仕様書</span>
+      <span>4 / 4</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

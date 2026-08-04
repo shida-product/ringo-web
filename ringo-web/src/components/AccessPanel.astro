@@ -1,0 +1,5 @@
+---
+import { SITE } from '../data/site';
+---
+<section class="access-panel" aria-label="アクセス"><p>ACCESS</p><h3>店舗・アクセス</h3><address>{SITE.postalCode}<br />{SITE.address}</address><a href={SITE.mapUrl}>Google マップで経路を見る</a></section>
+<style>.access-panel{padding:1.5rem;border-radius:var(--preview-radius-lg);background:var(--preview-surface-soft);border:1px solid var(--preview-border)}.access-panel p{color:var(--preview-accent);font-size:.78rem;font-weight:900;letter-spacing:.14em}.access-panel h3{color:var(--preview-primary);font-size:1.55rem;margin:.2rem 0 1rem}.access-panel address{font-style:normal;font-weight:800;margin-bottom:1rem}.access-panel a{display:inline-flex;padding:.75rem 1rem;border-radius:999px;background:var(--preview-primary);color:#fff;font-weight:900}</style>

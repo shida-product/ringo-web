@@ -1,0 +1,8 @@
+---
+import { SITE } from '../data/site';
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+const actions = [{ label: '電話する', detail: SITE.tel, href: SITE.telLink, tone: 'tel' },{ label: 'LINE受付', detail: '処方箋を事前送信', href: SITE.lineUrl, tone: 'line' },{ label: '地図を見る', detail: '町屋駅徒歩5分', href: SITE.mapUrl, tone: 'map' }];
+---
+<nav class:list={['preview-actions', { compact }]} aria-label="主要導線">{actions.map((action) => <a class={`action-card ${action.tone}`} href={action.href}><span>{action.label}</span><strong>{action.detail}</strong></a>)}</nav>
+<style>.preview-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.action-card{min-height:88px;padding:1rem 1.1rem;border-radius:var(--preview-radius-md);background:var(--preview-surface);border:1px solid var(--preview-border);box-shadow:0 14px 34px rgba(37,50,56,.08);display:flex;flex-direction:column;justify-content:center;color:var(--preview-text)}.action-card span{font-size:.85rem;font-weight:900;color:var(--preview-muted)}.action-card strong{font-size:1.1rem;color:var(--preview-primary)}.action-card.line{background:#06c755;color:white}.action-card.line span,.action-card.line strong{color:white}.action-card.tel strong{color:var(--preview-accent)}.compact .action-card{min-height:72px}@media(max-width:760px){.preview-actions{grid-template-columns:1fr}.action-card{min-height:76px}}</style>
