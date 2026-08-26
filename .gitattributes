@@ -1,0 +1,2 @@
+# Keystone: シムの shebang を壊さないため LF 固定
+.githooks/pre-commit text eol=lf
